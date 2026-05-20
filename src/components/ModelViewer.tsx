@@ -1,37 +1,50 @@
 "use client";
 
-import React, { useRef, Suspense } from "react";
+import React, { useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, Environment, ContactShadows, Float } from "@react-three/drei";
 import * as THREE from "three";
 
-/* ── Auto-rotating GLB model ── */
+/* ── Auto-rotating GLB model — front-facing fix ── */
 function GroviceModel({ url }: { url: string }) {
   const gltf = useGLTF(url);
   const groupRef = useRef<THREE.Group>(null);
 
+  useEffect(() => {
+    if (!groupRef.current) return;
+
+    // Compute bounding box and center the model
+    const box = new THREE.Box3().setFromObject(gltf.scene);
+    const center = new THREE.Vector3();
+    const size = new THREE.Vector3();
+    box.getCenter(center);
+    box.getSize(size);
+
+    // Translate scene so it is centered at origin
+    gltf.scene.position.sub(center);
+  }, [gltf.scene]);
+
+  // Slow luxury Y-axis spin — only Y so text stays upright
   useFrame((_, delta) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y += delta * 0.4; // slow luxury spin
+      groupRef.current.rotation.y += delta * 0.35;
     }
   });
 
-  // Center the model based on its bounding box
-  const box = new THREE.Box3().setFromObject(gltf.scene);
-  const center = new THREE.Vector3();
-  box.getCenter(center);
-  gltf.scene.position.sub(center);
-
   return (
-    <group ref={groupRef}>
-      <Float speed={1.2} rotationIntensity={0.1} floatIntensity={0.3}>
+    <group
+      ref={groupRef}
+      // Rotate on X by 90° to fix the "going into screen" orientation
+      rotation={[Math.PI / 2, 0, 0]}
+    >
+      <Float speed={0.8} rotationIntensity={0.05} floatIntensity={0.25}>
         <primitive object={gltf.scene} />
       </Float>
     </group>
   );
 }
 
-/* ── Loading fallback ring spinner ── */
+/* ── Spinner while loading ── */
 function LoadingRing() {
   const meshRef = useRef<THREE.Mesh>(null);
   useFrame((_, delta) => {
@@ -39,7 +52,7 @@ function LoadingRing() {
   });
   return (
     <mesh ref={meshRef}>
-      <torusGeometry args={[0.5, 0.04, 16, 60]} />
+      <torusGeometry args={[0.45, 0.035, 16, 60]} />
       <meshBasicMaterial color="#00D2FF" transparent opacity={0.7} />
     </mesh>
   );
@@ -54,42 +67,33 @@ export default function ModelViewer({ className = "", style }: ModelViewerProps)
   return (
     <div className={className} style={style}>
       <Canvas
-        camera={{ position: [0, 0, 4], fov: 45 }}
+        camera={{ position: [0, 0, 4], fov: 42 }}
         gl={{ antialias: true, alpha: true }}
         style={{ background: "transparent" }}
       >
-        {/* Luxury lighting rig */}
-        <ambientLight intensity={0.3} color="#ffffff" />
-        <directionalLight
-          position={[5, 8, 5]}
-          intensity={1.2}
-          color="#00D2FF"
-          castShadow
-        />
-        <directionalLight
-          position={[-5, -3, -5]}
-          intensity={0.6}
-          color="#7A5CFF"
-        />
-        <pointLight position={[0, 5, 0]} intensity={0.8} color="#FF4FD8" distance={12} />
+        {/* Premium tri-colour lighting rig */}
+        <ambientLight intensity={0.4} color="#ffffff" />
+        <directionalLight position={[4, 6, 6]} intensity={1.4} color="#00D2FF" castShadow />
+        <directionalLight position={[-6, -4, -6]} intensity={0.7} color="#7A5CFF" />
+        <pointLight position={[0, 4, 3]} intensity={0.9} color="#FF4FD8" distance={14} />
+        <pointLight position={[0, -4, -3]} intensity={0.4} color="#00D2FF" distance={10} />
 
-        {/* HDRI environment for reflections */}
+        {/* HDRI city reflections */}
         <Environment preset="city" />
 
-        {/* Contact shadow beneath the model */}
+        {/* Ground contact shadow */}
         <ContactShadows
-          position={[0, -2, 0]}
-          opacity={0.4}
+          position={[0, -2.2, 0]}
+          opacity={0.45}
           scale={8}
           blur={2.5}
           far={3}
           color="#000000"
         />
 
-        {/* The GLB model with Suspense fallback */}
-        <Suspense fallback={<LoadingRing />}>
+        <React.Suspense fallback={<LoadingRing />}>
           <GroviceModel url="/untitled.glb" />
-        </Suspense>
+        </React.Suspense>
       </Canvas>
     </div>
   );
