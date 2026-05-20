@@ -3,25 +3,131 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #020914; /* Default deep ocean dark background */
+  --foreground: #f8fafc;
+  --glow-color: rgba(0, 229, 255, 0.4);
+  --glow-color-violet: rgba(139, 92, 246, 0.4);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
+html,
 body {
+  background-color: var(--background);
   color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  width: 100%;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Custom Scrollbar for premium feel */
+::-webkit-scrollbar {
+  width: 8px;
 }
+::-webkit-scrollbar-track {
+  background: #021526;
+}
+::-webkit-scrollbar-thumb {
+  background: #0d4a6e;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00E5FF;
+}
+
+/* Lenis Smooth Scroll Configuration */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis-smooth [data-lenis-prevent] {
+  overflow: clip;
+}
+
+.lenis-target {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Custom Glassmorphic Panels */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-dark {
+  background: rgba(2, 21, 38, 0.4);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel-light {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Metallic & Glow Effects */
+.metallic-text {
+  background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 50%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.metallic-blue-text {
+  background: linear-gradient(135deg, #e0f2fe 0%, #00e5ff 40%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.metallic-creative-text {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f5f4 40%, #a8a29e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glow-text {
+  text-shadow: 0 0 10px var(--glow-color);
+}
+
+.glow-text-violet {
+  text-shadow: 0 0 10px var(--glow-color-violet);
+}
+
+/* Grid & Workflow Animation Helpers */
+.grid-bg-tech {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+.grid-bg-tech-glow {
+  background-size: 80px 80px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 229, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 229, 255, 0.05) 1px, transparent 1px);
+}
+
+/* Lenis Scrolling Smoothness */
+.smooth-container {
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
