@@ -26,11 +26,12 @@ function EngineACard() {
     <div
       className="p-5 rounded-xl border transition-all duration-500 shadow-lg relative overflow-hidden"
       style={{
-        background: "rgba(7, 28, 61, 0.8)",
+        background: "rgba(7, 28, 61, 0.85)",
         backdropFilter: "blur(16px)",
         borderColor: "rgba(47, 107, 255, 0.25)",
         boxShadow: "0 10px 30px rgba(47, 107, 255, 0.15)",
-        minWidth: 260,
+        width: "100%",
+        maxWidth: 280,
       }}
     >
       <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/10 to-transparent blur-md pointer-events-none" />
@@ -75,7 +76,8 @@ function EngineBCard() {
         backdropFilter: "blur(16px)",
         borderColor: "rgba(255, 255, 255, 0.08)",
         boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
-        minWidth: 260,
+        width: "100%",
+        maxWidth: 280,
       }}
     >
       <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-500/10 to-transparent blur-md pointer-events-none" />
@@ -112,11 +114,12 @@ function SoftwareCard() {
     <div
       className="p-5 rounded-xl border transition-all duration-500 shadow-lg relative overflow-hidden"
       style={{
-        background: "rgba(7, 28, 61, 0.8)",
+        background: "rgba(7, 28, 61, 0.85)",
         backdropFilter: "blur(16px)",
         borderColor: "rgba(255, 255, 255, 0.08)",
         boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
-        minWidth: 260,
+        width: "100%",
+        maxWidth: 280,
       }}
     >
       <div className="flex items-center justify-between mb-3">
@@ -143,7 +146,7 @@ function SoftwareCard() {
 }
 
 /* ─────────────────────────────────────────────
-   SCROLL-LINKED SECTION CONTROLLER
+   SCROLL-LINKED STICKY CARD STACKING SECTION
 ───────────────────────────────────────────── */
 interface FadeBlurSectionProps {
   children: React.ReactNode;
@@ -151,6 +154,7 @@ interface FadeBlurSectionProps {
   className?: string;
   sideHeadingNum: string;
   sideHeadingText: string;
+  zIndex: number;
 }
 
 function FadeBlurSection({
@@ -159,52 +163,65 @@ function FadeBlurSection({
   className = "",
   sideHeadingNum,
   sideHeadingText,
+  zIndex,
 }: FadeBlurSectionProps) {
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Track scroll progress of this section container to trigger exit scale/fade/blur
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
+    target: containerRef,
+    offset: ["start start", "end start"],
   });
 
-  // Dynamic entry/exit transitions: Slide up, fade, and blur
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-  const blur = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], ["blur(16px)", "blur(0px)", "blur(0px)", "blur(16px)"]);
-  const y = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [50, 0, 0, -50]);
+  // When scrolling past this pinned sticky section, it fades, blurs, and scales down in place
+  const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+  const blur = useTransform(scrollYProgress, [0, 0.85], ["blur(0px)", "blur(20px)"]);
+  const scale = useTransform(scrollYProgress, [0, 0.85], [1, 0.92]);
 
   return (
-    <section
+    <div
+      ref={containerRef}
       id={id}
-      ref={sectionRef}
-      className={`min-h-screen py-20 px-6 sm:px-12 md:px-20 flex items-center justify-center relative ${className}`}
+      className="relative h-screen w-full"
+      style={{ zIndex }}
     >
       <motion.div
-        style={{ opacity, filter: blur, y }}
-        className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10"
+        style={{
+          opacity,
+          filter: blur,
+          scale,
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+        }}
+        className={`w-full flex items-center justify-center px-6 sm:px-12 md:px-20 overflow-hidden ${className}`}
       >
-        {/* ASYMMETRIC SIDE HEADING COLUMN */}
-        <div className="lg:col-span-3 flex lg:flex-col lg:items-start items-center justify-between border-b lg:border-b-0 lg:border-r border-white/10 pb-4 lg:pb-0 lg:pr-8 lg:min-h-[220px]">
-          <div className="space-y-1">
-            <span className="text-[10px] font-mono text-[#2F6BFF] uppercase tracking-[0.25em] font-bold">
-              {sideHeadingNum}
-            </span>
-            <h3 className="text-xs font-sans font-black tracking-widest text-slate-100 uppercase mt-1">
-              {sideHeadingText}
-            </h3>
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
+          {/* ASYMMETRIC SIDE HEADING COLUMN */}
+          <div className="lg:col-span-3 flex lg:flex-col lg:items-start items-center justify-between border-b lg:border-b-0 lg:border-r border-white/10 pb-4 lg:pb-0 lg:pr-8 lg:min-h-[220px]">
+            <div className="space-y-1">
+              <span className="text-[10px] font-mono text-[#2F6BFF] uppercase tracking-[0.25em] font-bold">
+                {sideHeadingNum}
+              </span>
+              <h3 className="text-xs font-sans font-black tracking-widest text-slate-100 uppercase mt-1">
+                {sideHeadingText}
+              </h3>
+            </div>
+            <div className="hidden lg:block w-[1px] h-20 bg-gradient-to-b from-[#2F6BFF]/30 to-transparent mt-8" />
           </div>
-          <div className="hidden lg:block w-[1px] h-20 bg-gradient-to-b from-[#2F6BFF]/30 to-transparent mt-8" />
-        </div>
 
-        {/* MAIN SECTION CONTENT COLUMN */}
-        <div className="lg:col-span-9 w-full">
-          {children}
+          {/* MAIN SECTION CONTENT COLUMN */}
+          <div className="lg:col-span-9 w-full">
+            {children}
+          </div>
         </div>
       </motion.div>
-    </section>
+    </div>
   );
 }
 
 /* ─────────────────────────────────────────────
-   MAIN COMPONENT
+   MAIN HOMEPAGE CONTAINER
 ───────────────────────────────────────────── */
 export default function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -235,9 +252,9 @@ export default function HomePage() {
   });
 
   // Hero animations (scales down and blurs away cleanly)
-  const heroOpacity = useTransform(heroScrollY, [0, 0.7], [1, 0]);
-  const heroBlur = useTransform(heroScrollY, [0, 0.7], ["blur(0px)", "blur(16px)"]);
-  const heroScale = useTransform(heroScrollY, [0, 0.7], [1, 0.93]);
+  const heroOpacity = useTransform(heroScrollY, [0, 0.85], [1, 0]);
+  const heroBlur = useTransform(heroScrollY, [0, 0.85], ["blur(0px)", "blur(20px)"]);
+  const heroScale = useTransform(heroScrollY, [0, 0.85], [1, 0.92]);
 
   // Mouse tilt logic for 3D coordinates
   const mouseX = useMotionValue(0);
@@ -307,131 +324,130 @@ export default function HomePage() {
       {/* ═════════════════════════════════════════════
           SECTION 1: HERO SECTION
           ═════════════════════════════════════════════ */}
-      <div ref={heroScrollProgress} className="min-h-screen relative flex items-center justify-center">
+      <div ref={heroScrollProgress} className="relative h-screen w-full" style={{ zIndex: 10 }}>
         <motion.div
           style={{
             opacity: heroOpacity,
             filter: heroBlur,
             scale: heroScale,
+            position: "sticky",
+            top: 0,
+            height: "100vh",
           }}
-          className="max-w-7xl mx-auto w-full px-6 sm:px-12 md:px-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
+          className="w-full px-6 sm:px-12 md:px-20 flex items-center justify-center overflow-hidden"
         >
-          {/* LEFT HERO METADATA */}
-          <div className="lg:col-span-7 space-y-6 text-left relative z-10">
-            <div className="inline-flex items-center gap-3">
-              <span className="w-8 h-[1px] bg-[#2F6BFF] block" />
-              <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#2F6BFF]">
-                Visakhapatnam’s First Business Operating System
-              </span>
-            </div>
+          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* LEFT HERO METADATA */}
+            <div className="lg:col-span-7 space-y-6 text-left relative z-10">
+              <div className="inline-flex items-center gap-3">
+                <span className="w-8 h-[1px] bg-[#2F6BFF] block" />
+                <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#2F6BFF]">
+                  Visakhapatnam’s First Business Operating System
+                </span>
+              </div>
 
-            <motion.h1
-              style={{
-                fontFamily: "var(--font-playfair), serif",
-                fontWeight: 900,
-                fontSize: "clamp(54px, 7vw, 105px)",
-                lineHeight: 0.95,
-                letterSpacing: "-0.03em",
-                rotateX: springY,
-                rotateY: springX,
-                transformStyle: "preserve-3d",
-              }}
-              className="text-[#071C3D] drop-shadow-sm"
-            >
-              GROVICE 2.0
-            </motion.h1>
-
-            <div className="space-y-2">
-              <h2 className="font-display font-black text-xl md:text-2xl text-[#071C3D] tracking-tight">
-                One Stop Business Solution
-              </h2>
-              <p className="font-cormorant font-normal text-lg md:text-xl text-[#2F6BFF] italic">
-                “Where AI Infrastructure Meets Creative Power.”
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-4 pt-4">
-              <button
-                onClick={() => {
-                  const targetEl = document.getElementById("vision-section");
-                  targetEl?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider text-white shadow-lg transition-all duration-300"
+              <motion.h1
                 style={{
-                  background: "#071C3D",
-                  border: "1px solid rgba(47, 107, 255, 0.15)",
+                  fontFamily: "var(--font-playfair), serif",
+                  fontWeight: 900,
+                  fontSize: "clamp(54px, 7vw, 105px)",
+                  lineHeight: 0.95,
+                  letterSpacing: "-0.03em",
+                  rotateX: springY,
+                  rotateY: springX,
+                  transformStyle: "preserve-3d",
                 }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "#2F6BFF";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "#071C3D";
-                }}
+                className="text-[#071C3D] drop-shadow-sm"
               >
-                Explore Platform
-              </button>
+                GROVICE 2.0
+              </motion.h1>
 
-              <button
-                onClick={() => window.dispatchEvent(new CustomEvent("open-chatbot"))}
-                className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider border text-[#071C3D] bg-white/20 backdrop-blur-md transition-all duration-300"
-                style={{
-                  borderColor: "rgba(7, 28, 61, 0.15)",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "rgba(7, 28, 61, 0.05)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.background = "white/20";
-                }}
-              >
-                Consulting OS
-              </button>
+              <div className="space-y-2">
+                <h2 className="font-display font-black text-xl md:text-2xl text-[#071C3D] tracking-tight">
+                  One Stop Business Solution
+                </h2>
+                <p className="font-cormorant font-normal text-lg md:text-xl text-[#2F6BFF] italic">
+                  “Where AI Infrastructure Meets Creative Power.”
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-4 pt-4">
+                <button
+                  onClick={() => {
+                    const targetEl = document.getElementById("vision-section");
+                    targetEl?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider text-white shadow-lg transition-all duration-300"
+                  style={{
+                    background: "#071C3D",
+                    border: "1px solid rgba(47, 107, 255, 0.15)",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "#2F6BFF";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "#071C3D";
+                  }}
+                >
+                  Explore Platform
+                </button>
+
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent("open-chatbot"))}
+                  className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider border text-[#071C3D] bg-white/20 backdrop-blur-md transition-all duration-300"
+                  style={{
+                    borderColor: "rgba(7, 28, 61, 0.15)",
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "rgba(7, 28, 61, 0.05)";
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "white/20";
+                  }}
+                >
+                  Consulting OS
+                </button>
+              </div>
             </div>
-          </div>
 
-          {/* RIGHT HERO 3D PARALLAX OVERLAYS */}
-          <div className="lg:col-span-5 relative h-[360px] md:h-[420px] hidden md:block">
-            <motion.div
-              style={{
-                position: "absolute",
-                top: "5%",
-                left: "10%",
-                x: springX,
-                y: springY,
-                zIndex: 10,
-              }}
-              whileHover={{ scale: 1.03, rotate: 1 }}
-            >
-              <EngineACard />
-            </motion.div>
+            {/* RIGHT HERO NON-OVERLAPPING STAGGERED COLUMN LAYOUT */}
+            <div className="lg:col-span-5 flex flex-col gap-6 justify-center items-center h-full py-4 relative hidden md:flex">
+              {/* Card 1 - Align Self Left */}
+              <motion.div
+                style={{
+                  x: springX,
+                  y: springY,
+                }}
+                className="self-start ml-2 w-full flex justify-start"
+                whileHover={{ scale: 1.02 }}
+              >
+                <EngineACard />
+              </motion.div>
 
-            <motion.div
-              style={{
-                position: "absolute",
-                bottom: "5%",
-                right: "5%",
-                x: useTransform(springX, (val) => val * -0.8),
-                y: useTransform(springY, (val) => val * -0.8),
-                zIndex: 8,
-              }}
-              whileHover={{ scale: 1.03, rotate: -1 }}
-            >
-              <EngineBCard />
-            </motion.div>
+              {/* Card 2 - Align Self Center */}
+              <motion.div
+                style={{
+                  x: useTransform(springX, (val) => val * -0.8),
+                  y: useTransform(springY, (val) => val * -0.8),
+                }}
+                className="self-center w-full flex justify-center"
+                whileHover={{ scale: 1.02 }}
+              >
+                <EngineBCard />
+              </motion.div>
 
-            <motion.div
-              style={{
-                position: "absolute",
-                top: "45%",
-                right: "12%",
-                x: useTransform(springX, (val) => val * 1.2),
-                y: useTransform(springY, (val) => val * 1.2),
-                zIndex: 9,
-              }}
-              whileHover={{ scale: 1.03, rotate: 0.5 }}
-            >
-              <SoftwareCard />
-            </motion.div>
+              {/* Card 3 - Align Self Right */}
+              <motion.div
+                style={{
+                  x: useTransform(springX, (val) => val * 1.2),
+                  y: useTransform(springY, (val) => val * 1.2),
+                }}
+                className="self-end mr-2 w-full flex justify-end"
+                whileHover={{ scale: 1.02 }}
+              >
+                <SoftwareCard />
+              </motion.div>
+            </div>
           </div>
         </motion.div>
       </div>
@@ -443,7 +459,8 @@ export default function HomePage() {
         id="vision-section"
         sideHeadingNum="01 // OVERVIEW"
         sideHeadingText="System Vision"
-        className="bg-slate-900/40 border-t border-white/5"
+        className="bg-slate-900/90 backdrop-blur-md border-t border-white/5"
+        zIndex={20}
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
@@ -485,13 +502,14 @@ export default function HomePage() {
       </FadeBlurSection>
 
       {/* ═════════════════════════════════════════════
-          SECTION 3: SELECTED PROJECTS (NEW!)
+          SECTION 3: SELECTED PROJECTS
           ═════════════════════════════════════════════ */}
       <FadeBlurSection
         id="projects-section"
         sideHeadingNum="02 // PORTFOLIO"
         sideHeadingText="Architectural Deployments"
-        className="bg-slate-950/40 border-t border-white/5"
+        className="bg-slate-950/90 backdrop-blur-md border-t border-white/5"
+        zIndex={30}
       >
         <div className="space-y-8">
           <div className="max-w-xl space-y-2">
@@ -574,7 +592,8 @@ export default function HomePage() {
         id="engine-a-section"
         sideHeadingNum="03 // ENGINE A"
         sideHeadingText="Software & Automations"
-        className="bg-slate-900/40 border-t border-white/5"
+        className="bg-slate-900/90 backdrop-blur-md border-t border-white/5"
+        zIndex={40}
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-5 space-y-4">
@@ -630,7 +649,8 @@ export default function HomePage() {
         id="engine-b-section"
         sideHeadingNum="04 // ENGINE B"
         sideHeadingText="Creative Calibration"
-        className="bg-slate-950/40 border-t border-white/5"
+        className="bg-slate-950/90 backdrop-blur-md border-t border-white/5"
+        zIndex={50}
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-5 space-y-4">
@@ -675,13 +695,14 @@ export default function HomePage() {
       </FadeBlurSection>
 
       {/* ═════════════════════════════════════════════
-          SECTION 6: CLIENT REVIEWS & VERDICT (NEW!)
+          SECTION 6: CLIENT REVIEWS & VERDICT
           ═════════════════════════════════════════════ */}
       <FadeBlurSection
         id="reviews-section"
         sideHeadingNum="05 // TRUST OS"
         sideHeadingText="Client Testimonials"
-        className="bg-slate-900/40 border-t border-white/5"
+        className="bg-slate-900/90 backdrop-blur-md border-t border-white/5"
+        zIndex={60}
       >
         <div className="space-y-8">
           <div className="max-w-xl space-y-2">
@@ -755,7 +776,8 @@ export default function HomePage() {
         id="cta-section"
         sideHeadingNum="06 // ONBOARDING"
         sideHeadingText="Deploy Ecosystem"
-        className="bg-slate-950/40 border-t border-white/5 pb-32"
+        className="bg-slate-950/90 backdrop-blur-md border-t border-white/5 pb-32"
+        zIndex={70}
       >
         <div className="max-w-xl space-y-6">
           <span className="text-[9px] uppercase tracking-[0.25em] font-bold text-[#2F6BFF] block">
@@ -806,7 +828,7 @@ export default function HomePage() {
           bottom: 24,
           left: 0,
           right: 0,
-          zIndex: 30,
+          zIndex: 100,
           display: "flex",
           justifyContent: "center",
           pointerEvents: "none",
