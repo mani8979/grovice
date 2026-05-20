@@ -173,11 +173,11 @@ function FadeBlurSection({
     offset: ["start end", "end start"],
   });
 
-  // Smooth entry and exit transitions
-  const opacity = useTransform(scrollYProgress, [0.1, 0.25, 0.75, 0.9], [0, 1, 1, 0]);
-  const blur = useTransform(scrollYProgress, [0.1, 0.25, 0.75, 0.9], ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"]);
-  const scale = useTransform(scrollYProgress, [0.1, 0.25, 0.75, 0.9], [0.95, 1, 1, 0.95]);
-  const y = useTransform(scrollYProgress, [0.1, 0.25, 0.75, 0.9], [50, 0, 0, -50]);
+  // Smooth entry transitions, stay static on exit to prevent gaps
+  const opacity = useTransform(scrollYProgress, [0.05, 0.25, 1.0], [0, 1, 1]);
+  const blur = useTransform(scrollYProgress, [0.05, 0.25, 1.0], ["blur(12px)", "blur(0px)", "blur(0px)"]);
+  const scale = useTransform(scrollYProgress, [0.05, 0.25, 1.0], [0.95, 1, 1]);
+  const y = useTransform(scrollYProgress, [0.05, 0.25, 1.0], [40, 0, 0]);
 
   return (
     <div
@@ -253,11 +253,11 @@ export default function HomePage() {
     offset: ["start start", "end start"],
   });
 
-  // Hero animations (stays pinned, then scales down and blurs away cleanly)
-  const heroOpacity = useTransform(heroScrollY, [0, 0.5, 0.85], [1, 1, 0]);
-  const heroBlur = useTransform(heroScrollY, [0, 0.5, 0.85], ["blur(0px)", "blur(0px)", "blur(15px)"]);
-  const heroScale = useTransform(heroScrollY, [0, 0.5, 0.85], [1, 1, 0.95]);
-  const heroY = useTransform(heroScrollY, [0, 0.5, 0.85], [0, 0, -40]);
+  // Hero stays pinned and solid, only fading/scaling/blurring when Section 2 covers it completely
+  const heroOpacity = useTransform(heroScrollY, [0, 0.9, 1.0], [1, 1, 0]);
+  const heroBlur = useTransform(heroScrollY, [0, 0.9, 1.0], ["blur(0px)", "blur(0px)", "blur(12px)"]);
+  const heroScale = useTransform(heroScrollY, [0, 0.9, 1.0], [1, 1, 0.98]);
+  const heroY = useTransform(heroScrollY, [0, 0.9, 1.0], [0, 0, -20]);
 
   // Mouse tilt logic for 3D coordinates
   const mouseX = useMotionValue(0);
@@ -464,7 +464,7 @@ export default function HomePage() {
         id="vision-section"
         sideHeadingNum="01 // OVERVIEW"
         sideHeadingText="System Vision"
-        className="bg-slate-900/90 backdrop-blur-md border-t border-white/5"
+        className="bg-slate-900/95 backdrop-blur-md border-t border-white/5"
         zIndex={20}
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -513,7 +513,7 @@ export default function HomePage() {
         id="projects-section"
         sideHeadingNum="02 // PORTFOLIO"
         sideHeadingText="Architectural Deployments"
-        className="bg-slate-950/90 backdrop-blur-md border-t border-white/5"
+        className="bg-slate-950/95 backdrop-blur-md border-t border-white/5"
         zIndex={30}
       >
         <div className="space-y-8">
@@ -597,7 +597,7 @@ export default function HomePage() {
         id="engine-a-section"
         sideHeadingNum="03 // ENGINE A"
         sideHeadingText="Software & Automations"
-        className="bg-slate-900/90 backdrop-blur-md border-t border-white/5"
+        className="bg-slate-900/95 backdrop-blur-md border-t border-white/5"
         zIndex={40}
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -654,7 +654,7 @@ export default function HomePage() {
         id="engine-b-section"
         sideHeadingNum="04 // ENGINE B"
         sideHeadingText="Creative Calibration"
-        className="bg-slate-950/90 backdrop-blur-md border-t border-white/5"
+        className="bg-slate-950/95 backdrop-blur-md border-t border-white/5"
         zIndex={50}
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -706,7 +706,7 @@ export default function HomePage() {
         id="reviews-section"
         sideHeadingNum="05 // TRUST OS"
         sideHeadingText="Client Testimonials"
-        className="bg-slate-900/90 backdrop-blur-md border-t border-white/5"
+        className="bg-slate-900/95 backdrop-blur-md border-t border-white/5"
         zIndex={60}
       >
         <div className="space-y-8">
@@ -781,7 +781,7 @@ export default function HomePage() {
         id="cta-section"
         sideHeadingNum="06 // ONBOARDING"
         sideHeadingText="Deploy Ecosystem"
-        className="bg-slate-950/90 backdrop-blur-md border-t border-white/5 pb-32"
+        className="bg-slate-950/95 backdrop-blur-md border-t border-white/5 pb-32"
         zIndex={70}
       >
         <div className="max-w-xl space-y-6">
