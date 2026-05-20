@@ -186,38 +186,50 @@ function FadeBlurSection({
       className="relative h-[160vh] w-full"
       style={{ zIndex }}
     >
-      <motion.div
+      {/* Sticky background wrapper - completely static and opaque */}
+      <div
         style={{
-          opacity,
-          filter: blur,
-          scale,
-          y,
           position: "sticky",
           top: 0,
           height: "100vh",
         }}
         className={`w-full flex items-center justify-center px-6 sm:px-12 md:px-20 overflow-hidden ${className}`}
       >
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
-          {/* ASYMMETRIC SIDE HEADING COLUMN */}
-          <div className="lg:col-span-3 flex lg:flex-col lg:items-start items-center justify-between border-b lg:border-b-0 lg:border-r border-white/10 pb-4 lg:pb-0 lg:pr-8 lg:min-h-[220px]">
-            <div className="space-y-1">
-              <span className="text-[10px] font-mono text-[#2F6BFF] uppercase tracking-[0.25em] font-bold">
-                {sideHeadingNum}
-              </span>
-              <h3 className="text-xs font-sans font-black tracking-widest text-slate-100 uppercase mt-1">
-                {sideHeadingText}
-              </h3>
+        {/* Animated content container */}
+        <motion.div
+          style={{
+            opacity,
+            filter: blur,
+            scale,
+            y,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
+            {/* ASYMMETRIC SIDE HEADING COLUMN */}
+            <div className="lg:col-span-3 flex lg:flex-col lg:items-start items-center justify-between border-b lg:border-b-0 lg:border-r border-white/10 pb-4 lg:pb-0 lg:pr-8 lg:min-h-[220px]">
+              <div className="space-y-1">
+                <span className="text-[10px] font-mono text-[#2F6BFF] uppercase tracking-[0.25em] font-bold">
+                  {sideHeadingNum}
+                </span>
+                <h3 className="text-xs font-sans font-black tracking-widest text-slate-100 uppercase mt-1">
+                  {sideHeadingText}
+                </h3>
+              </div>
+              <div className="hidden lg:block w-[1px] h-20 bg-gradient-to-b from-[#2F6BFF]/30 to-transparent mt-8" />
             </div>
-            <div className="hidden lg:block w-[1px] h-20 bg-gradient-to-b from-[#2F6BFF]/30 to-transparent mt-8" />
-          </div>
 
-          {/* MAIN SECTION CONTENT COLUMN */}
-          <div className="lg:col-span-9 w-full">
-            {children}
+            {/* MAIN SECTION CONTENT COLUMN */}
+            <div className="lg:col-span-9 w-full">
+              {children}
+            </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 }
