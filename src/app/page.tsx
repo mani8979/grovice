@@ -298,7 +298,7 @@ export default function HomePage() {
         background: bgGradient,
         position: "relative",
       }}
-      className="relative text-slate-100 overflow-hidden"
+      className="relative text-slate-100"
     >
       {/* ── BACKGROUND NOISE OVERLAY ── */}
       <div
