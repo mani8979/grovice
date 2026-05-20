@@ -25,6 +25,16 @@ export default function Chatbot() {
   const [formStep, setFormStep] = useState<"chat" | "lead" | "submitted">("chat");
   const [leadInfo, setLeadInfo] = useState({ name: "", email: "", phone: "", service: "" });
 
+  React.useEffect(() => {
+    const handleOpenChat = () => {
+      setIsOpen(true);
+    };
+    window.addEventListener("open-chatbot", handleOpenChat);
+    return () => {
+      window.removeEventListener("open-chatbot", handleOpenChat);
+    };
+  }, []);
+
   const addMessage = (sender: "bot" | "user", text: string | React.ReactNode) => {
     setMessages((prev) => [...prev, { sender, text, timestamp: new Date() }]);
   };

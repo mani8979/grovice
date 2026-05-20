@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Cpu, Film, Zap, Globe, Sparkles } from "lucide-react";
 import ThreeCanvas from "@/components/ThreeCanvas";
 import WaveGrid from "@/components/WaveGrid";
+import DotGridArrow from "@/components/DotGridArrow";
 
 export default function HomePage() {
   const containerVariants = {
@@ -50,7 +51,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="relative w-full bg-[#020914] text-slate-100 overflow-x-hidden">
+    <div className="relative w-full bg-[#020914] text-slate-100 overflow-x-hidden pb-12">
       {/* Premium Coastal Sunset Canvas Background */}
       <div className="absolute inset-0 w-full h-[120vh] z-0 pointer-events-none">
         <WaveGrid />
@@ -114,72 +115,120 @@ export default function HomePage() {
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {/* ENGINE A CARD */}
-          <Link href="/engine-a" className="group block text-left">
-            <div className="h-full rounded-2xl glass-panel-dark p-6 sm:p-8 relative overflow-hidden transition-all duration-300 border border-slate-900 hover:border-cyan-500/20 hover:shadow-glow">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-bl-full group-hover:bg-cyan-500/10 transition-all duration-500" />
-              <div className="absolute -bottom-16 -right-16 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl group-hover:bg-cyan-500/10" />
-
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2.5 rounded-xl bg-cyan-950/40 border border-cyan-800/40 text-cyan-400 group-hover:scale-110 transition-transform">
-                  <Cpu size={20} />
+          <Link href="/engine-a" className="group block text-left relative">
+            <div className="h-full rounded-2xl glass-panel-dark p-6 sm:p-8 relative overflow-hidden transition-all duration-300 border border-slate-900 hover:border-cyan-500/20 hover:shadow-glow flex flex-col justify-between min-h-[325px]">
+              
+              {/* Scanline grid pattern overlay (Lesse Studio style) */}
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none opacity-50 z-0" />
+              
+              <div className="relative z-10 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-cyan-950/40 border border-cyan-800/40 text-cyan-400 group-hover:scale-110 transition-transform">
+                    <Cpu size={20} />
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-cyan-400 block">
+                      Engine A
+                    </span>
+                    <h3 className="font-display font-black text-xl sm:text-2xl text-white tracking-wide">
+                      AI & Automation
+                    </h3>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-cyan-400 block">
-                    Engine A
-                  </span>
-                  <h3 className="font-display font-black text-xl sm:text-2xl text-white tracking-wide">
-                    AI & Automation
-                  </h3>
+
+                <p className="text-xs uppercase font-medium tracking-wider text-slate-400 mb-1 group-hover:text-cyan-300/80 transition-colors">
+                  {"\"Adapting AI Into Your Business\""}
+                </p>
+
+                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-light transition-all duration-300 group-hover:opacity-10 group-hover:blur-[1px]">
+                  Deploy custom software dashboards, automated n8n workflows, smart AI voice agents,
+                  CRM integrations, and complete lead capturing systems.
+                </p>
+              </div>
+
+              {/* Lesse style Slide-up Tags Overlay */}
+              <div className="absolute inset-0 z-20 bg-slate-950/95 flex flex-col justify-center p-6 sm:p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                <div className="text-[9px] uppercase tracking-widest text-cyan-400 font-bold mb-3 translate-y-2 group-hover:translate-y-0 transition-transform duration-500 delay-75">
+                  Engine A Capabilities
+                </div>
+                <div className="flex flex-wrap gap-2 mb-6 translate-y-3 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                  {["Custom Software", "n8n Workflows", "AI Voice Agents", "CRM Systems", "Lead Capture"].map((tag) => (
+                    <span key={tag} className="text-[10px] bg-slate-900/80 text-slate-300 px-2.5 py-1 rounded border border-slate-800/80 font-sans font-light">
+                      {tag}
+                    </span>
+                  ))}
                 </div>
               </div>
 
-              <p className="text-xs uppercase font-medium tracking-wider text-slate-400 mb-3 group-hover:text-cyan-300/80 transition-colors">
-                {"\"Adapting AI Into Your Business\""}
-              </p>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-6 font-light">
-                Deploy custom software dashboards, automated n8n workflows, smart AI voice agents,
-                CRM integrations, and complete lead capturing systems.
-              </p>
-
-              <div className="flex items-center gap-2 text-xs font-semibold text-cyan-400 group-hover:translate-x-1.5 transition-transform">
-                Enter Engine A <ArrowRight size={14} />
+              {/* Footer with enter action & shifting dot-grid icon */}
+              <div className="relative z-10 flex items-center justify-between w-full mt-6 pt-4 border-t border-slate-900/60">
+                <div className="flex items-center gap-2 text-xs font-semibold text-cyan-400 group-hover:translate-x-1.5 transition-transform duration-300">
+                  Enter Engine A <ArrowRight size={14} />
+                </div>
+                <div className="absolute right-0 bottom-0 pointer-events-none">
+                  <DotGridArrow colorClass="fill-cyan-400" />
+                </div>
               </div>
+
             </div>
           </Link>
 
           {/* ENGINE B CARD */}
-          <Link href="/engine-b" className="group block text-left">
-            <div className="h-full rounded-2xl glass-panel-dark p-6 sm:p-8 relative overflow-hidden transition-all duration-300 border border-slate-900 hover:border-violet-500/20 hover:shadow-glow-violet">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-violet-500/5 rounded-bl-full group-hover:bg-violet-500/10 transition-all duration-500" />
-              <div className="absolute -bottom-16 -right-16 w-32 h-32 bg-violet-500/5 rounded-full blur-2xl group-hover:bg-violet-500/10" />
+          <Link href="/engine-b" className="group block text-left relative">
+            <div className="h-full rounded-2xl glass-panel-dark p-6 sm:p-8 relative overflow-hidden transition-all duration-300 border border-slate-900 hover:border-violet-500/20 hover:shadow-glow-violet flex flex-col justify-between min-h-[325px]">
+              
+              {/* Scanline grid pattern overlay (Lesse Studio style) */}
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none opacity-50 z-0" />
 
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-800/40 text-violet-400 group-hover:scale-110 transition-transform">
-                  <Film size={20} />
+              <div className="relative z-10 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-800/40 text-violet-400 group-hover:scale-110 transition-transform">
+                    <Film size={20} />
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-violet-400 block">
+                      Engine B
+                    </span>
+                    <h3 className="font-display font-black text-xl sm:text-2xl text-white tracking-wide">
+                      Creative Muscle
+                    </h3>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-violet-400 block">
-                    Engine B
-                  </span>
-                  <h3 className="font-display font-black text-xl sm:text-2xl text-white tracking-wide">
-                    Creative Muscle
-                  </h3>
+
+                <p className="text-xs uppercase font-medium tracking-wider text-slate-400 mb-1 group-hover:text-violet-300/80 transition-colors">
+                  {"\"Creative Growth & Assets\""}
+                </p>
+
+                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-light transition-all duration-300 group-hover:opacity-10 group-hover:blur-[1px]">
+                  Elevate your visual positioning. Premium brand videography, editorial
+                  photography, social media growth, production workflows, and creative assets.
+                </p>
+              </div>
+
+              {/* Lesse style Slide-up Tags Overlay */}
+              <div className="absolute inset-0 z-20 bg-slate-950/95 flex flex-col justify-center p-6 sm:p-8 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                <div className="text-[9px] uppercase tracking-widest text-violet-400 font-bold mb-3 translate-y-2 group-hover:translate-y-0 transition-transform duration-500 delay-75">
+                  Engine B Capabilities
+                </div>
+                <div className="flex flex-wrap gap-2 mb-6 translate-y-3 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                  {["Cinematic Reels", "Brand Scopes", "Editorial Media", "Logo Guidelines", "Social Content"].map((tag) => (
+                    <span key={tag} className="text-[10px] bg-slate-900/80 text-slate-300 px-2.5 py-1 rounded border border-slate-800/80 font-sans font-light">
+                      {tag}
+                    </span>
+                  ))}
                 </div>
               </div>
 
-              <p className="text-xs uppercase font-medium tracking-wider text-slate-400 mb-3 group-hover:text-violet-300/80 transition-colors">
-                {"\"Creative Growth & Assets\""}
-              </p>
-
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-6 font-light">
-                Elevate your visual positioning. Premium brand videography, editorial
-                photography, social media growth, production workflows, and creative assets.
-              </p>
-
-              <div className="flex items-center gap-2 text-xs font-semibold text-violet-400 group-hover:translate-x-1.5 transition-transform">
-                Enter Engine B <ArrowRight size={14} />
+              {/* Footer with enter action & shifting dot-grid icon */}
+              <div className="relative z-10 flex items-center justify-between w-full mt-6 pt-4 border-t border-slate-900/60">
+                <div className="flex items-center gap-2 text-xs font-semibold text-violet-400 group-hover:translate-x-1.5 transition-transform duration-300">
+                  Enter Engine B <ArrowRight size={14} />
+                </div>
+                <div className="absolute right-0 bottom-0 pointer-events-none">
+                  <DotGridArrow colorClass="fill-violet-400" />
+                </div>
               </div>
+
             </div>
           </Link>
         </div>
@@ -214,6 +263,19 @@ export default function HomePage() {
           })}
         </div>
       </section>
+
+      {/* Floating Bottom Navigation Pill (Lesse Studio Visual Style) */}
+      <div className="fixed bottom-6 inset-x-0 z-30 flex items-center justify-center pointer-events-none">
+        <button
+          onClick={() => {
+            window.dispatchEvent(new CustomEvent("open-chatbot"));
+          }}
+          className="pointer-events-auto group flex items-center gap-2.5 bg-[#020914]/80 border border-slate-800/80 backdrop-blur-xl rounded-full px-5 py-2 sm:py-2.5 text-[10px] tracking-widest font-bold text-white uppercase hover:border-cyan-500/30 hover:scale-102 hover:shadow-glow transition-all duration-300 select-none shadow-lg"
+        >
+          <span>Start a project</span>
+          <DotGridArrow colorClass="fill-white" />
+        </button>
+      </div>
     </div>
   );
 }
