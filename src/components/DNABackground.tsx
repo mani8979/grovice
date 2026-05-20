@@ -11,6 +11,20 @@ function DNAMesh({ rotationY }: { rotationY: number }) {
   const gltf = useGLTF("/dna.glb");
   const groupRef = useRef<THREE.Group>(null);
 
+  // Apply premium metallic brown/bronze material to all meshes
+  React.useMemo(() => {
+    gltf.scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        mesh.material = new THREE.MeshStandardMaterial({
+          color: new THREE.Color("#7B4F27"), // rich, warm chocolate brown
+          roughness: 0.2,
+          metalness: 0.8,
+        });
+      }
+    });
+  }, [gltf]);
+
   // Center the model
   const box = new THREE.Box3().setFromObject(gltf.scene);
   const center = new THREE.Vector3();
@@ -21,7 +35,7 @@ function DNAMesh({ rotationY }: { rotationY: number }) {
 
   // Scale to fill screen nicely
   const maxDim = Math.max(size.x, size.y, size.z);
-  const scale = maxDim > 0 ? 5 / maxDim : 1;
+  const scale = maxDim > 0 ? 5.5 / maxDim : 1;
 
   useFrame(() => {
     if (groupRef.current) {
@@ -52,21 +66,22 @@ export default function DNABackground({ rotation }: DNABackgroundProps) {
   }, [rotation]);
 
   return (
-    <div style={{ position: "absolute", inset: 0, opacity: 0.35 }}>
+    <div style={{ position: "absolute", inset: 0, opacity: 0.45 }}>
       <Canvas
         camera={{ position: [0, 0, 8], fov: 60 }}
         gl={{ antialias: true, alpha: true }}
         style={{ background: "transparent" }}
       >
-        <ambientLight intensity={0.2} color="#ffffff" />
-        <directionalLight position={[5, 5, 5]} intensity={0.6} color="#00D2FF" />
-        <directionalLight position={[-5, -5, -5]} intensity={0.3} color="#7A5CFF" />
+        <ambientLight intensity={0.4} color="#ffffff" />
+        {/* Warm amber/bronze directional lights */}
+        <directionalLight position={[6, 6, 6]} intensity={1.2} color="#D2B48C" />
+        <directionalLight position={[-6, -6, -6]} intensity={0.6} color="#8B5A2B" />
 
         <Environment preset="city" />
 
         <ContactShadows
           position={[0, -3, 0]}
-          opacity={0.2}
+          opacity={0.3}
           scale={12}
           blur={3}
           far={5}

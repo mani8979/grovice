@@ -8,15 +8,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Phone, Mail, MapPin } from "lucide-react";
 
 /* ── Dynamic 3D imports (no SSR — WebGL needs browser) ── */
-const ModelViewer = dynamic(() => import("@/components/ModelViewer"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center">
-      <span className="w-6 h-6 rounded-full border-2 border-[#00D2FF] border-t-transparent animate-spin" />
-    </div>
-  ),
-});
-
 const DNABackground = dynamic(() => import("@/components/DNABackground"), {
   ssr: false,
 });
@@ -75,8 +66,6 @@ export default function LandingPage() {
 
   /* ── Scene 1: Arrival (0–25%) ── */
   const bgY = useTransform(scrollYProgress, [0, 0.25], ["0px", "-20px"]);
-  const logoScale = useTransform(scrollYProgress, [0, 0.25], [0.92, 1.0]);
-  const logoRotateY = useTransform(scrollYProgress, [0, 0.25], [-10, 0]);
   const logoOpacity = useTransform(scrollYProgress, [0, 0.20, 0.25], [1, 1, 0]);
   const welcomeOpacity = useTransform(scrollYProgress, [0, 0.04, 0.18, 0.24], [0, 1, 1, 0]);
   const welcomeY = useTransform(scrollYProgress, [0, 0.06, 0.18, 0.24], ["15px", "0px", "0px", "-15px"]);
@@ -139,36 +128,18 @@ export default function LandingPage() {
           className="absolute inset-0 z-[10] flex flex-col items-center justify-center text-center px-6"
           style={{ opacity: logoOpacity, pointerEvents: "none" }}
         >
-          {/* Glow rings behind model */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] rounded-full bg-[#00D2FF]/6 blur-[120px] pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] rounded-full bg-[#7A5CFF]/7 blur-[100px] pointer-events-none" />
-
-          {/* 3D name model */}
-          <motion.div
-            style={{ scale: logoScale, rotateY: logoRotateY }}
-            className="relative w-full max-w-2xl select-none"
-          >
-            <ModelViewer
-              style={{
-                width: "100%",
-                height: "clamp(240px, 40vw, 440px)",
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#00D2FF]/8 to-transparent mix-blend-color-dodge pointer-events-none" />
-          </motion.div>
-
-          {/* Brand label fades in below model */}
+          {/* Brand label centered */}
           <motion.div
             style={{ opacity: welcomeOpacity, y: welcomeY }}
-            className="-mt-6 flex flex-col items-center gap-2"
+            className="flex flex-col items-center gap-3"
           >
-            <h1 className="text-5xl md:text-7xl tracking-tighter font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#F6F7FB] via-[#F6F7FB] to-[#00D2FF] drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)] select-none leading-none">
+            <h1 className="text-6xl md:text-8xl tracking-tighter font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#F6F7FB] via-[#F6F7FB] to-[#00D2FF] drop-shadow-[0_15px_30px_rgba(0,0,0,0.7)] select-none leading-none">
               GROVICE 2.0
             </h1>
-            <p className="text-[11px] md:text-xs uppercase tracking-[0.28em] text-[#00D2FF] font-mono font-bold mt-1">
+            <p className="text-[12px] md:text-sm uppercase tracking-[0.3em] text-[#00D2FF] font-mono font-bold mt-2">
               Visakhapatnam&apos;s First Business Operating System
             </p>
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00D2FF] animate-pulse mt-1" />
+            <span className="w-2 h-2 rounded-full bg-[#00D2FF] animate-pulse mt-2" />
           </motion.div>
         </motion.div>
 
