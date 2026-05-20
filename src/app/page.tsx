@@ -1,10 +1,21 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Phone, Mail, MapPin } from "lucide-react";
+
+/* Dynamically import 3D viewer — no SSR (WebGL requires browser) */
+const ModelViewer = dynamic(() => import("@/components/ModelViewer"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center">
+      <span className="w-6 h-6 rounded-full border-2 border-[#00D2FF] border-t-transparent animate-spin" />
+    </div>
+  ),
+});
 
 /* ═════════════════════════════════════════════
     SPOTLIGHT CARD COMPONENT
@@ -111,7 +122,6 @@ export default function LandingPage() {
           {/* Subtle slow drifting dust glow particles */}
           <div className="absolute top-1/4 left-1/3 w-64 h-64 bg-cyan-500/10 rounded-full blur-[100px] animate-pulse" />
           <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-purple-600/10 rounded-full blur-[120px]" />
-          
           {/* Horizon sea line glow accent */}
           <div className="absolute bottom-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#00D2FF]/20 to-transparent" />
         </motion.div>
@@ -120,35 +130,42 @@ export default function LandingPage() {
             SCENE 01: ARRIVAL (0% -> 25%)
             ═════════════════════════════════════════════ */}
         <motion.div 
-          className="absolute flex flex-col items-center justify-center text-center z-10 px-6 max-w-4xl"
+          className="absolute flex flex-col items-center justify-center text-center z-10 px-6 w-full max-w-5xl"
           style={{ opacity: logoOpacity }}
         >
-          {/* Light sweep background glow behind logo */}
-          <div className="absolute -top-12 w-96 h-40 bg-gradient-to-r from-transparent via-[#00D2FF]/25 to-transparent blur-[70px] pointer-events-none transform -skew-x-12 animate-pulse" />
+          {/* Ambient glow ring behind the 3D model */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-[#00D2FF]/8 blur-[120px] pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[350px] h-[350px] rounded-full bg-[#7A5CFF]/8 blur-[100px] pointer-events-none" />
 
-          {/* Logo container */}
+          {/* 3D MODEL CENTREPIECE */}
           <motion.div
             style={{ scale: logoScale, rotateY: logoRotateY }}
-            className="relative font-bold tracking-[-0.04em] text-white select-none cursor-default"
+            className="relative w-full select-none"
           >
-            {/* Apple Event badge-style logo */}
-            <h1 className="text-7xl md:text-9xl tracking-tighter font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#F6F7FB] via-[#F6F7FB] to-[#00D2FF] drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)]">
+            <ModelViewer
+              style={{
+                width: "100%",
+                height: "clamp(280px, 45vw, 500px)",
+              }}
+            />
+            {/* Reflection shimmer pass */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#00D2FF]/10 to-transparent mix-blend-color-dodge pointer-events-none" />
+          </motion.div>
+
+          {/* Brand name below the 3D model */}
+          <motion.div
+            style={{ opacity: welcomeOpacity, y: welcomeY }}
+            className="-mt-4 flex flex-col items-center gap-2"
+          >
+            <h1 className="text-5xl md:text-7xl tracking-tighter font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#F6F7FB] via-[#F6F7FB] to-[#00D2FF] drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] select-none">
               GROVICE 2.0
             </h1>
-            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-[#00D2FF]/40 to-transparent mix-blend-color-dodge pointer-events-none" />
-          </motion.div>
-
-          <motion.div 
-            style={{ opacity: welcomeOpacity, y: welcomeY }}
-            className="mt-6 flex flex-col items-center gap-1.5"
-          >
-            <p className="text-sm md:text-md uppercase tracking-[0.25em] text-[#00D2FF] font-mono font-bold">
-              Visakhapatnam’s First Business Operating System
+            <p className="text-xs md:text-sm uppercase tracking-[0.25em] text-[#00D2FF] font-mono font-bold">
+              Visakhapatnam&apos;s First Business Operating System
             </p>
-            <span className="w-2 h-2 rounded-full bg-[#00D2FF] animate-pulse mt-2" />
+            <span className="w-2 h-2 rounded-full bg-[#00D2FF] animate-pulse mt-1" />
           </motion.div>
         </motion.div>
-
 
         {/* ═════════════════════════════════════════════
             SCENE 02: IDENTITY LOCK (25% -> 50%)
