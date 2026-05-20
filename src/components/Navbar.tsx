@@ -36,11 +36,11 @@ export default function Navbar() {
           justifyContent: "space-between",
           padding: scrolled ? "1rem 6%" : "1.6rem 6%",
           transition: "all 0.7s cubic-bezier(0.16,1,0.3,1)",
-          background: scrolled ? "rgba(255,255,255,0.93)" : "transparent",
+          background: scrolled ? "rgba(3, 8, 20, 0.75)" : "transparent",
           backdropFilter: scrolled ? "blur(24px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(11,43,92,0.08)" : "none",
-          boxShadow: scrolled ? "0 2px 40px rgba(11,43,92,0.06)" : "none",
+          borderBottom: scrolled ? "1px solid rgba(255, 255, 255, 0.08)" : "none",
+          boxShadow: scrolled ? "0 4px 30px rgba(0, 0, 0, 0.2)" : "none",
         }}
       >
         {/* Logo */}
@@ -50,7 +50,7 @@ export default function Navbar() {
             fontFamily: "var(--font-outfit), sans-serif",
             fontWeight: 900,
             fontSize: "1.2rem",
-            color: "var(--ocean)",
+            color: "var(--white)",
             textDecoration: "none",
             letterSpacing: "-0.02em",
             display: "flex",
@@ -84,7 +84,7 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 style={{
-                  color: "var(--ocean)",
+                  color: "var(--white)",
                   textDecoration: "none",
                   fontSize: "0.8rem",
                   fontWeight: 400,
@@ -104,8 +104,8 @@ export default function Navbar() {
           <a
             href="tel:+917396621004"
             style={{
-              background: "var(--ocean)",
-              color: "var(--white)",
+              background: "var(--white)",
+              color: "var(--ocean)",
               padding: "0.6rem 1.5rem",
               borderRadius: "3px",
               fontSize: "0.78rem",
@@ -116,11 +116,11 @@ export default function Navbar() {
               transition: "all 0.3s",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "var(--ocean-mid)";
+              (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.85)";
               (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "var(--ocean)";
+              (e.currentTarget as HTMLElement).style.background = "var(--white)";
               (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
             }}
           >
@@ -136,7 +136,7 @@ export default function Navbar() {
             background: "none",
             border: "none",
             cursor: "pointer",
-            color: "var(--ocean)",
+            color: "var(--white)",
             padding: "0.4rem",
           }}
           aria-label="Toggle menu"
@@ -156,7 +156,7 @@ export default function Navbar() {
             right: 0,
             bottom: 0,
             zIndex: 999,
-            background: "rgba(255,255,255,0.97)",
+            background: "rgba(3, 8, 20, 0.98)",
             backdropFilter: "blur(24px)",
             display: "flex",
             flexDirection: "column",
@@ -174,7 +174,7 @@ export default function Navbar() {
               background: "none",
               border: "none",
               cursor: "pointer",
-              color: "var(--ocean)",
+              color: "var(--white)",
             }}
           >
             <X size={26} />
@@ -186,7 +186,7 @@ export default function Navbar() {
               href={link.href}
               onClick={() => setIsOpen(false)}
               style={{
-                color: "var(--ocean)",
+                color: "var(--white)",
                 textDecoration: "none",
                 fontSize: "1.6rem",
                 fontFamily: "var(--font-playfair), serif",
@@ -204,8 +204,8 @@ export default function Navbar() {
             onClick={() => setIsOpen(false)}
             style={{
               marginTop: "1rem",
-              background: "var(--ocean)",
-              color: "var(--white)",
+              background: "var(--white)",
+              color: "var(--ocean)",
               padding: "0.9rem 2.5rem",
               borderRadius: "3px",
               fontSize: "0.85rem",

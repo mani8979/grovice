@@ -4,20 +4,20 @@
 
 /* ── CSS CUSTOM PROPERTIES ── */
 :root {
-  --ocean: #071C3D;
-  --ocean-mid: #0D2B5C;
+  --ocean: #030814;
+  --ocean-mid: #07152b;
   --ocean-bright: #2F6BFF;
-  --sky: #DCEBFF;
-  --sky-light: #F9FBFF;
+  --sky: #cbd5e1;
+  --sky-light: #f1f5f9;
   --white: #FFFFFF;
-  --cream: #F7F9FC;
-  --text: #071C3D;
-  --muted: #5A7AA8;
-  --border: rgba(7,28,61,0.08);
-  --metallic-highlight: #BFD4FF;
+  --cream: #050e1e;
+  --text: #cbd5e1;
+  --muted: #94a3b8;
+  --border: rgba(47, 107, 255, 0.15);
+  --metallic-highlight: #93c5fd;
 
   /* Dark mode legacy */
-  --background: #020914;
+  --background: #030814;
   --foreground: #f8fafc;
   --glow-color: rgba(47, 107, 255, 0.4);
   --glow-color-violet: rgba(139, 92, 246, 0.4);
@@ -28,7 +28,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--white);
+  background: #030814;
   color: var(--text);
   font-family: 'DM Sans', 'Outfit', system-ui, sans-serif;
   font-weight: 300;

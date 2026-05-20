@@ -167,22 +167,23 @@ function FadeBlurSection({
 }: FadeBlurSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Track scroll progress of this section container to trigger exit scale/fade/blur
+  // Track scroll progress of this section container from entering to leaving
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"],
+    offset: ["start end", "end start"],
   });
 
-  // When scrolling past this pinned sticky section, it fades, blurs, and scales down in place
-  const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
-  const blur = useTransform(scrollYProgress, [0, 0.85], ["blur(0px)", "blur(20px)"]);
-  const scale = useTransform(scrollYProgress, [0, 0.85], [1, 0.92]);
+  // Smooth entry and exit transitions
+  const opacity = useTransform(scrollYProgress, [0.1, 0.25, 0.75, 0.9], [0, 1, 1, 0]);
+  const blur = useTransform(scrollYProgress, [0.1, 0.25, 0.75, 0.9], ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"]);
+  const scale = useTransform(scrollYProgress, [0.1, 0.25, 0.75, 0.9], [0.95, 1, 1, 0.95]);
+  const y = useTransform(scrollYProgress, [0.1, 0.25, 0.75, 0.9], [50, 0, 0, -50]);
 
   return (
     <div
       ref={containerRef}
       id={id}
-      className="relative h-screen w-full"
+      className="relative h-[160vh] w-full"
       style={{ zIndex }}
     >
       <motion.div
@@ -190,6 +191,7 @@ function FadeBlurSection({
           opacity,
           filter: blur,
           scale,
+          y,
           position: "sticky",
           top: 0,
           height: "100vh",
@@ -236,12 +238,12 @@ export default function HomePage() {
     scrollYProgress,
     [0, 0.2, 0.4, 0.6, 0.8, 1],
     [
-      "radial-gradient(circle at 50% 50%, rgba(225, 238, 255, 0.98) 0%, rgba(250, 252, 255, 1) 100%)",
-      "radial-gradient(circle at 50% 50%, rgba(18, 44, 82, 0.95) 0%, rgba(7, 28, 61, 1) 100%)",
-      "radial-gradient(circle at 50% 50%, rgba(5, 18, 38, 1) 0%, rgba(2, 9, 20, 1) 100%)",
-      "radial-gradient(circle at 50% 50%, rgba(7, 28, 61, 0.95) 0%, rgba(2, 9, 20, 1) 100%)",
-      "radial-gradient(circle at 50% 50%, rgba(9, 15, 28, 1) 0%, rgba(2, 9, 20, 1) 100%)",
-      "radial-gradient(circle at 50% 50%, rgba(4, 8, 16, 1) 0%, rgba(1, 4, 10, 1) 100%)",
+      "radial-gradient(circle at 50% 50%, rgba(7, 18, 36, 1) 0%, rgba(3, 8, 18, 1) 100%)",
+      "radial-gradient(circle at 50% 50%, rgba(6, 14, 28, 1) 0%, rgba(2, 6, 14, 1) 100%)",
+      "radial-gradient(circle at 50% 50%, rgba(4, 10, 22, 1) 0%, rgba(1, 4, 10, 1) 100%)",
+      "radial-gradient(circle at 50% 50%, rgba(5, 12, 26, 1) 0%, rgba(1, 3, 8, 1) 100%)",
+      "radial-gradient(circle at 50% 50%, rgba(3, 8, 18, 1) 0%, rgba(0, 2, 6, 1) 100%)",
+      "radial-gradient(circle at 50% 50%, rgba(2, 5, 12, 1) 0%, rgba(0, 1, 4, 1) 100%)",
     ]
   );
 
@@ -251,10 +253,11 @@ export default function HomePage() {
     offset: ["start start", "end start"],
   });
 
-  // Hero animations (scales down and blurs away cleanly)
-  const heroOpacity = useTransform(heroScrollY, [0, 0.85], [1, 0]);
-  const heroBlur = useTransform(heroScrollY, [0, 0.85], ["blur(0px)", "blur(20px)"]);
-  const heroScale = useTransform(heroScrollY, [0, 0.85], [1, 0.92]);
+  // Hero animations (stays pinned, then scales down and blurs away cleanly)
+  const heroOpacity = useTransform(heroScrollY, [0, 0.5, 0.85], [1, 1, 0]);
+  const heroBlur = useTransform(heroScrollY, [0, 0.5, 0.85], ["blur(0px)", "blur(0px)", "blur(15px)"]);
+  const heroScale = useTransform(heroScrollY, [0, 0.5, 0.85], [1, 1, 0.95]);
+  const heroY = useTransform(heroScrollY, [0, 0.5, 0.85], [0, 0, -40]);
 
   // Mouse tilt logic for 3D coordinates
   const mouseX = useMotionValue(0);
@@ -324,12 +327,13 @@ export default function HomePage() {
       {/* ═════════════════════════════════════════════
           SECTION 1: HERO SECTION
           ═════════════════════════════════════════════ */}
-      <div ref={heroScrollProgress} className="relative h-screen w-full" style={{ zIndex: 10 }}>
+      <div ref={heroScrollProgress} className="relative h-[140vh] w-full" style={{ zIndex: 10 }}>
         <motion.div
           style={{
             opacity: heroOpacity,
             filter: heroBlur,
             scale: heroScale,
+            y: heroY,
             position: "sticky",
             top: 0,
             height: "100vh",
@@ -357,13 +361,13 @@ export default function HomePage() {
                   rotateY: springX,
                   transformStyle: "preserve-3d",
                 }}
-                className="text-[#071C3D] drop-shadow-sm"
+                className="text-white drop-shadow-[0_10px_30px_rgba(47,107,255,0.25)]"
               >
                 GROVICE 2.0
               </motion.h1>
 
               <div className="space-y-2">
-                <h2 className="font-display font-black text-xl md:text-2xl text-[#071C3D] tracking-tight">
+                <h2 className="font-display font-black text-xl md:text-2xl text-slate-100 tracking-tight">
                   One Stop Business Solution
                 </h2>
                 <p className="font-cormorant font-normal text-lg md:text-xl text-[#2F6BFF] italic">
@@ -379,14 +383,14 @@ export default function HomePage() {
                   }}
                   className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider text-white shadow-lg transition-all duration-300"
                   style={{
-                    background: "#071C3D",
-                    border: "1px solid rgba(47, 107, 255, 0.15)",
+                    background: "#2F6BFF",
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "#2F6BFF";
+                    (e.currentTarget as HTMLElement).style.background = "#1d4ed8";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "#071C3D";
+                    (e.currentTarget as HTMLElement).style.background = "#2F6BFF";
                   }}
                 >
                   Explore Platform
@@ -394,15 +398,16 @@ export default function HomePage() {
 
                 <button
                   onClick={() => window.dispatchEvent(new CustomEvent("open-chatbot"))}
-                  className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider border text-[#071C3D] bg-white/20 backdrop-blur-md transition-all duration-300"
+                  className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider border text-white backdrop-blur-md transition-all duration-300"
                   style={{
-                    borderColor: "rgba(7, 28, 61, 0.15)",
+                    borderColor: "rgba(255, 255, 255, 0.15)",
+                    background: "rgba(255, 255, 255, 0.05)",
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(7, 28, 61, 0.05)";
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.12)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "white/20";
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.05)";
                   }}
                 >
                   Consulting OS
