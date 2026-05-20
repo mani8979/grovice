@@ -17,7 +17,7 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: "About", href: "/#vision" },
+    { name: "Features", href: "/#features-section" },
     { name: "Engine A", href: "/engine-a" },
     { name: "Engine B", href: "/engine-b" },
   ];
@@ -35,36 +35,36 @@ export default function Navbar() {
           alignItems: "center",
           justifyContent: "space-between",
           padding: scrolled ? "1rem 6%" : "1.6rem 6%",
-          transition: "all 0.7s cubic-bezier(0.16,1,0.3,1)",
-          background: scrolled ? "rgba(9, 9, 11, 0.8)" : "transparent",
-          backdropFilter: scrolled ? "blur(24px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
+          transition: "all 0.5s cubic-bezier(0.16,1,0.3,1)",
+          background: scrolled ? "rgba(0, 0, 0, 0.85)" : "transparent",
+          backdropFilter: scrolled ? "blur(20px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
           borderBottom: scrolled ? "1px solid rgba(255, 255, 255, 0.08)" : "none",
-          boxShadow: scrolled ? "0 4px 30px rgba(0, 0, 0, 0.2)" : "none",
+          boxShadow: scrolled ? "0 8px 32px rgba(0, 0, 0, 0.5)" : "none",
         }}
       >
         {/* Logo */}
         <Link
           href="/"
           style={{
-            fontFamily: "var(--font-outfit), sans-serif",
+            fontFamily: "monospace",
             fontWeight: 900,
-            fontSize: "1.2rem",
+            fontSize: "1.1rem",
             color: "var(--white)",
             textDecoration: "none",
-            letterSpacing: "-0.02em",
+            letterSpacing: "0.1em",
             display: "flex",
             alignItems: "center",
-            gap: "0.3rem",
+            gap: "0.4rem",
           }}
         >
           GROVICE
-          <span style={{ color: "#c5a880" }}>2.0</span>
+          <span style={{ color: "#06b6d4", fontWeight: "bold" }}>2.0</span>
           <span
             style={{
-              width: 8,
-              height: 8,
-              background: "#c5a880",
+              width: 6,
+              height: 6,
+              background: "#06b6d4",
               borderRadius: "50%",
               display: "inline-block",
               animation: "pulse-dot 2.5s ease-in-out infinite",
@@ -78,7 +78,7 @@ export default function Navbar() {
           className="hidden md:flex"
         >
           {navLinks.map((link) => {
-            const isActive = pathname === link.href || (link.href === "/#vision" && pathname === "/");
+            const isActive = pathname === link.href || (link.href.startsWith("/#") && pathname === "/");
             return (
               <Link
                 key={link.name}
@@ -91,12 +91,18 @@ export default function Navbar() {
                   fontWeight: 400,
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
-                  opacity: isActive ? 1 : 0.65,
-                  transition: "opacity 0.3s",
+                  opacity: isActive ? 1 : 0.6,
+                  transition: "opacity 0.3s, color 0.3s",
                   position: "relative",
                 }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = isActive ? "1" : "0.65"; }}
+                onMouseEnter={(e) => { 
+                  (e.currentTarget as HTMLElement).style.opacity = "1";
+                  (e.currentTarget as HTMLElement).style.color = "#06b6d4";
+                }}
+                onMouseLeave={(e) => { 
+                  (e.currentTarget as HTMLElement).style.opacity = isActive ? "1" : "0.6";
+                  (e.currentTarget as HTMLElement).style.color = "var(--white)";
+                }}
               >
                 {link.name}
               </Link>
@@ -105,28 +111,29 @@ export default function Navbar() {
           <a
             href="tel:+917396621004"
             style={{
-              background: "#c5a880",
+              background: "linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)",
               color: "#000000",
-              padding: "0.6rem 1.5rem",
+              padding: "0.6rem 1.4rem",
               borderRadius: "0px",
               fontFamily: "monospace",
-              fontSize: "0.72rem",
-              fontWeight: 700,
+              fontSize: "0.7rem",
+              fontWeight: 800,
               letterSpacing: "0.15em",
               textTransform: "uppercase",
               textDecoration: "none",
               transition: "all 0.3s",
+              boxShadow: "0 0 15px rgba(6, 182, 212, 0.25)",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "#b5976f";
+              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 25px rgba(6, 182, 212, 0.5)";
               (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "#c5a880";
+              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 15px rgba(6, 182, 212, 0.25)";
               (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
             }}
           >
-            Book a Call
+            Launch OS
           </a>
         </nav>
 
@@ -158,13 +165,13 @@ export default function Navbar() {
             right: 0,
             bottom: 0,
             zIndex: 999,
-            background: "rgba(9, 9, 11, 0.98)",
+            background: "rgba(0, 0, 0, 0.98)",
             backdropFilter: "blur(24px)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: "2rem",
+            gap: "2.5rem",
           }}
         >
           <button
@@ -190,11 +197,11 @@ export default function Navbar() {
               style={{
                 color: "var(--white)",
                 textDecoration: "none",
-                fontSize: "1.6rem",
-                fontFamily: "var(--font-playfair), serif",
-                fontWeight: 900,
-                fontStyle: "italic",
-                letterSpacing: "-0.02em",
+                fontSize: "1.2rem",
+                fontFamily: "monospace",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
               }}
             >
               {link.name}
@@ -206,19 +213,20 @@ export default function Navbar() {
             onClick={() => setIsOpen(false)}
             style={{
               marginTop: "1rem",
-              background: "#c5a880",
+              background: "linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)",
               color: "#000000",
-              padding: "0.9rem 2.5rem",
+              padding: "0.8rem 2.2rem",
               borderRadius: "0px",
               fontFamily: "monospace",
-              fontSize: "0.8rem",
-              fontWeight: 700,
+              fontSize: "0.75rem",
+              fontWeight: 800,
               letterSpacing: "0.15em",
               textTransform: "uppercase",
               textDecoration: "none",
+              boxShadow: "0 0 15px rgba(6, 182, 212, 0.25)",
             }}
           >
-            Book a Call
+            Launch OS
           </a>
         </div>
       )}
