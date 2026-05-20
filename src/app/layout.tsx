@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Space_Grotesk } from "next/font/google";
+import { Outfit, DM_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
@@ -12,16 +12,27 @@ const outfit = Outfit({
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-dm-sans",
   display: "swap",
+  weight: ["300", "400", "500"],
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+  style: ["normal", "italic"],
+  weight: ["700", "900"],
 });
 
 export const metadata: Metadata = {
-  title: "GROVICE 2.0 | Futuristic Business Operating System",
-  description: "Bridging AI Automation systems & elite Creative Muscle. Custom enterprise software, AI voice agents, premium branding, and cinema production in Visakhapatnam.",
-  keywords: "GROVICE 2.0, business operating system, AI automation, voice agents, custom software, photography, videography, branding, Vizag, Siripuram, Gajuwaka",
+  title: "GROVICE 2.0 | Visakhapatnam's First Business Operating System",
+  description:
+    "Bridging AI Automation systems & elite Creative Muscle. Custom enterprise software, AI voice agents, premium branding, and cinema production in Visakhapatnam.",
+  keywords:
+    "GROVICE 2.0, business operating system, AI automation, voice agents, custom software, photography, videography, branding, Vizag, Siripuram, Gajuwaka",
   metadataBase: new URL("http://www.grovice.com"),
 };
 
@@ -31,14 +42,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${spaceGrotesk.variable} scroll-smooth`}>
-      <body className="font-sans antialiased text-slate-100 bg-[#020914] selection:bg-cyan-500 selection:text-slate-950">
+    <html
+      lang="en"
+      className={`${outfit.variable} ${dmSans.variable} ${playfair.variable} scroll-smooth`}
+    >
+      <body
+        className="antialiased"
+        style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+      >
         <SmoothScroll>
           <div className="flex flex-col min-h-screen relative overflow-hidden">
             <Navbar />
-            <main className="flex-1 w-full pt-[60px] md:pt-[76px]">
-              {children}
-            </main>
+            <main className="flex-1 w-full">{children}</main>
             <Footer />
             <Chatbot />
           </div>
@@ -47,4 +62,3 @@ export default function RootLayout({
     </html>
   );
 }
-
