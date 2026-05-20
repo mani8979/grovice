@@ -1,736 +1,538 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  Check,
+  Plus,
+  Minus,
   Film,
   Camera,
   Layers,
   Sparkles,
-  CheckCircle2,
   Play,
-  Clock,
-  Aperture,
-  Monitor,
+  Tv,
+  Image as ImageIcon
 } from "lucide-react";
+import Footer from "@/components/Footer";
 
-/* ── TYPES ── */
-type FilterType = "all" | "cinema" | "photography" | "branding";
+/* ═════════════════════════════════════════════
+    SPOTLIGHT CARD HELPER
+   ═════════════════════════════════════════════ */
+function SpotlightCard({
+  children,
+  className = "",
+  hoverBorder = true
+}: {
+  children: React.ReactNode;
+  className?: string;
+  hoverBorder?: boolean;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
 
-/* ── DATA ── */
-const portfolioItems = [
-  {
-    id: 1,
-    title: "Commercial Film Set",
-    category: "cinema" as FilterType,
-    client: "Luxury Auto Brand",
-    duration: "2:34",
-    tags: ["4K", "Color Grade", "VFX"],
-    icon: "🎬",
-    bg: "from-red-950/80 via-slate-950 to-slate-950",
-    accent: "#ef4444",
-    wide: true,
-  },
-  {
-    id: 2,
-    title: "Coastal Perfume Editorial",
-    category: "photography" as FilterType,
-    client: "Oceana Parfum",
-    duration: "48 shots",
-    tags: ["Editorial", "Retouch", "Coastal"],
-    icon: "📸",
-    bg: "from-amber-950/60 via-slate-950 to-slate-950",
-    accent: "#f59e0b",
-    wide: false,
-  },
-  {
-    id: 3,
-    title: "Identity Guide Mockup",
-    category: "branding" as FilterType,
-    client: "Grovice Labs",
-    duration: "Full Suite",
-    tags: ["Logo", "Typography", "Guidelines"],
-    icon: "✏️",
-    bg: "from-violet-950/60 via-slate-950 to-slate-950",
-    accent: "#8b5cf6",
-    wide: false,
-  },
-  {
-    id: 4,
-    title: "Brand Campaign Reel",
-    category: "cinema" as FilterType,
-    client: "Coastal Resorts Vizag",
-    duration: "1:15",
-    tags: ["Drone", "Cinematic", "Social"],
-    icon: "🎥",
-    bg: "from-orange-950/60 via-slate-950 to-slate-950",
-    accent: "#f97316",
-    wide: false,
-  },
-  {
-    id: 5,
-    title: "Product Photography Pack",
-    category: "photography" as FilterType,
-    client: "Luxury F&B Brand",
-    duration: "32 shots",
-    tags: ["Studio", "Lifestyle", "E-com"],
-    icon: "🍾",
-    bg: "from-cyan-950/50 via-slate-950 to-slate-950",
-    accent: "#06b6d4",
-    wide: false,
-  },
-  {
-    id: 6,
-    title: "Brand Identity Refresh",
-    category: "branding" as FilterType,
-    client: "Siripuram Startup",
-    duration: "Full Rebrand",
-    tags: ["Color", "Motion", "Deck"],
-    icon: "🎨",
-    bg: "from-pink-950/50 via-slate-950 to-slate-950",
-    accent: "#ec4899",
-    wide: false,
-  },
-];
-
-const services = [
-  {
-    icon: Film,
-    label: "01",
-    title: "Cinematic Videography",
-    accent: "#ef4444",
-    tags: ["4K Shoots", "Color Grade", "Motion VFX", "Drone"],
-    desc: "Stunning advertising reels, commercial campaigns, and social media assets. We handle the full pipeline: scriptwriting, coastal location scouting, lighting, directing, and high-end color-graded editing.",
-  },
-  {
-    icon: Camera,
-    label: "02",
-    title: "Premium Brand Photography",
-    accent: "#f59e0b",
-    tags: ["Editorial", "Product", "Corporate", "Retouch"],
-    desc: "Editorial products, high-fashion branding shoots, and premium corporate portraits. Every image is carefully retouched to reflect a luxury tier placement, matching Vizag's finest coastal lighting.",
-  },
-  {
-    icon: Layers,
-    label: "03",
-    title: "Visual Branding & Identity",
-    accent: "#8b5cf6",
-    tags: ["Logo Suite", "Typography", "Color System", "Brand Deck"],
-    desc: "We shape your business's soul. Complete logo suites, typography grids, cohesive color charts, presentation templates, and digital guidelines that make your audience instantly trust your name.",
-  },
-  {
-    icon: Sparkles,
-    label: "04",
-    title: "Social Growth Management",
-    accent: "#06b6d4",
-    tags: ["Reels", "Strategy", "Scheduling", "Analytics"],
-    desc: "Content schedules, premium reel templates, Instagram aesthetic layouts, and algorithmic growth tactics. We make sure your creative output matches the high caliber of your operations.",
-  },
-];
-
-const filters: { key: FilterType; label: string }[] = [
-  { key: "all", label: "All Work" },
-  { key: "cinema", label: "Cinema" },
-  { key: "photography", label: "Photography" },
-  { key: "branding", label: "Branding" },
-];
-
-/* ── COMPONENT ── */
-export default function EngineBPage() {
-  const [activeFilter, setActiveFilter] = useState<FilterType>("all");
-  const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", budget: "₹50k - ₹1.5L", desc: "" });
-
-  const filtered =
-    activeFilter === "all"
-      ? portfolioItems
-      : portfolioItems.filter((p) => p.category === activeFilter);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name || !form.email) return;
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setForm({ name: "", email: "", budget: "₹50k - ₹1.5L", desc: "" });
-    }, 5000);
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    cardRef.current.style.setProperty("--mouse-x", `${x}px`);
+    cardRef.current.style.setProperty("--mouse-y", `${y}px`);
   };
 
   return (
     <div
-      style={{
-        minHeight: "100vh",
-        background: "#080C12",
-        color: "#E2E8F0",
-        fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
-        overflowX: "hidden",
-      }}
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      className={`spotlight-card ${hoverBorder ? "spotlight-border" : ""} ${className}`}
     >
-      {/* ── FILM GRAIN TEXTURE OVERLAY ── */}
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          pointerEvents: "none",
-          zIndex: 0,
-          opacity: 0.03,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "128px 128px",
-        }}
-      />
+      {children}
+    </div>
+  );
+}
 
-      {/* ── AMBIENT GLOWS ── */}
-      <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}>
-        <div style={{ position: "absolute", top: "-10%", right: "-5%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(239,68,68,0.06) 0%, transparent 70%)" }} />
-        <div style={{ position: "absolute", bottom: "20%", left: "-10%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%)" }} />
-      </div>
+export default function EngineBPage() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", scope: "", category: "video" });
 
-      <div style={{ position: "relative", zIndex: 1, maxWidth: 1280, margin: "0 auto", padding: "0 5%", paddingTop: 100, paddingBottom: 80 }}>
+  const portfolioRef = useRef<HTMLDivElement>(null);
+  const consultRef = useRef<HTMLDivElement>(null);
 
-        {/* ══ HERO HEADER ══ */}
-        <div style={{ marginBottom: "5rem" }}>
-          {/* Eyebrow */}
-          <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "2rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 4, padding: "0.35rem 0.8rem" }}>
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#ef4444", animation: "pulse-dot 2s ease-in-out infinite" }} />
-              <span style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.25em", textTransform: "uppercase", color: "#ef4444" }}>Engine B · Creative Production</span>
+  const scrollToPortfolio = () => {
+    portfolioRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToConsult = () => {
+    consultRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleBriefSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email) return;
+    setFormSubmitted(true);
+    setTimeout(() => {
+      setFormSubmitted(false);
+      setFormData({ name: "", email: "", scope: "", category: "video" });
+    }, 6000);
+  };
+
+  const capabilities = [
+    { icon: Camera, title: "Photography", desc: "Premium editorial captures featuring coastal light and clean styling.", color: "text-[#FF4FD8]" },
+    { icon: Film, title: "Videography", desc: "Commercial-grade cinema clips matching international brand benchmarks.", color: "text-purple-400" },
+    { icon: Layers, title: "Branding", desc: "Complete visual identities built to look authoritative and premium.", color: "text-blue-400" },
+    { icon: Sparkles, title: "Social Media", desc: "Algorithmic reels and aesthetic layouts tailored for high luxury.", color: "text-pink-400" },
+    { icon: Tv, title: "Creative Production", desc: "Full-scale scriptwriting, location hunting, and casting workflows.", color: "text-[#FF4FD8]" },
+    { icon: ImageIcon, title: "Marketing Visuals", desc: "Premium ad vectors and brochures built to look human-designed.", color: "text-[#00D2FF]" }
+  ];
+
+  const casePortfolios = [
+    {
+      title: "Coastal Luxury Perfume Editorial",
+      tag: "PHOTOGRAPHY // RETOUCH",
+      goal: "Reposition Vizag local fragrance line for premium national scale.",
+      concept: "Minimalist bottles shot on natural RK Beach wet sands using early morning blue hour rays.",
+      outputs: "32 high-resolution retouched assets + 3 campaign posters.",
+      result: "42% increase in online boutique conversions.",
+      accent: "border-[#FF4FD8]/25 text-[#FF4FD8]"
+    },
+    {
+      title: "Siripuram Commercial Launch Film",
+      tag: "CINEMATOGRAPHY // 4K",
+      goal: "Launch high-end co-working hub with Apple-style event visual assets.",
+      concept: "Cinematic frames following developers scrolling n8n node systems in glass cabins.",
+      outputs: "60-sec master campaign cut + 3 optimized reels.",
+      result: "100% workstation booking capacity reached in 14 days.",
+      accent: "border-purple-500/25 text-purple-400"
+    }
+  ];
+
+  return (
+    <div className="bg-[#05060A] text-[#F6F7FB] min-h-screen relative font-sans pt-24 overflow-hidden">
+      
+      {/* Editorial glowing accents */}
+      <div className="absolute top-[12%] right-[-10%] w-[50%] h-[50%] rounded-full bg-pink-500/5 blur-[125px] pointer-events-none" />
+      <div className="absolute top-[45%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#7A5CFF]/5 blur-[125px] pointer-events-none" />
+
+      {/* ═════════════════════════════════════════════
+          B1 — HERO SECTION (EDITORIAL CINEMA)
+          ═════════════════════════════════════════════ */}
+      <section className="relative py-20 md:py-28 px-6 max-w-7xl mx-auto z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+          <div className="lg:col-span-7 space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-pink-500/20 bg-pink-950/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF4FD8] animate-pulse" />
+              <span className="text-[10px] font-mono text-[#FF4FD8] uppercase tracking-widest font-bold">
+                ENGINE B // VISUAL LABS
+              </span>
             </div>
-            <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, rgba(239,68,68,0.3), transparent)" }} />
-          </div>
 
-          {/* Headline */}
-          <h1
-            style={{
-              fontFamily: "var(--font-playfair), serif",
-              fontWeight: 900,
-              fontSize: "clamp(44px, 7vw, 100px)",
-              lineHeight: 0.95,
-              letterSpacing: "-0.03em",
-              marginBottom: "1.5rem",
-            }}
-          >
-            <span style={{ display: "block", color: "#FFFFFF" }}>Creative Muscle</span>
-            <span style={{ display: "block", fontStyle: "italic", WebkitTextStroke: "1px rgba(239,68,68,0.6)", color: "transparent" }}>& Brand Production</span>
-          </h1>
-
-          {/* Sub + meta strip */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "3rem", alignItems: "end" }} className="hero-sub-grid">
-            <p style={{ fontSize: "clamp(14px, 1.4vw, 18px)", fontWeight: 300, color: "rgba(226,232,240,0.55)", lineHeight: 1.75, maxWidth: 540 }}>
-              Elevating companies through high-fidelity photography, cinematic video campaigns, and luxury brand positioning.
+            <h1 className="text-4xl md:text-7xl font-extrabold tracking-tight leading-none text-white font-sans">
+              Engine B: Cinematic Creative Muscle
+            </h1>
+            
+            <p className="text-sm md:text-base text-zinc-400 leading-relaxed max-w-xl font-light">
+              Photography, video, branding, and social visuals—built to look premium and convert. We bring Figma-quality details and high-end editorial aesthetics to your business.
             </p>
-            <div style={{ display: "flex", gap: "2rem" }} className="hidden md:flex">
-              {[
-                { icon: Monitor, label: "4K Production" },
-                { icon: Aperture, label: "Studio Grade" },
-                { icon: Clock, label: "Fast Delivery" },
-              ].map(({ icon: Icon, label }) => (
-                <div key={label} style={{ textAlign: "center" }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 8, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.4rem", color: "rgba(239,68,68,0.8)" }}>
-                    <Icon size={16} />
-                  </div>
-                  <span style={{ fontSize: "0.65rem", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(226,232,240,0.4)" }}>{label}</span>
-                </div>
-              ))}
+
+            <div className="flex flex-wrap gap-4 pt-2">
+              <button
+                onClick={scrollToConsult}
+                className="px-8 py-4 rounded-none text-xs font-mono font-bold uppercase tracking-widest text-black bg-gradient-to-r from-[#FF4FD8] to-[#7A5CFF] hover:opacity-90 transition-all duration-300"
+              >
+                Book a Creative Consult
+              </button>
+              <button
+                onClick={scrollToPortfolio}
+                className="px-8 py-4 rounded-none text-xs font-mono font-bold uppercase tracking-widest border border-white/10 bg-white/5 text-white hover:bg-white/10 transition-all"
+              >
+                View Portfolio
+              </button>
             </div>
           </div>
 
-          {/* Film strip separator */}
-          <div style={{ marginTop: "3rem", display: "flex", gap: 3 }}>
-            {Array.from({ length: 32 }).map((_, i) => (
-              <div
-                key={i}
-                style={{
-                  height: 28,
-                  flex: 1,
-                  borderRadius: 2,
-                  background: i % 4 === 0
-                    ? "rgba(239,68,68,0.15)"
-                    : i % 7 === 0
-                    ? "rgba(139,92,246,0.12)"
-                    : "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(255,255,255,0.04)",
-                }}
-              />
-            ))}
+          {/* Cinematic Editorial Mock Frames */}
+          <div className="lg:col-span-5 grid grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="aspect-[3/4] bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 relative overflow-hidden flex items-center justify-center">
+                <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">[ VIZAG_COAST_01 ]</span>
+                <div className="absolute inset-0 bg-[#FF4FD8]/5 mix-blend-color-dodge" />
+              </div>
+              <div className="aspect-square bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 relative overflow-hidden flex items-center justify-center">
+                <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">[ SHOT_02 ]</span>
+              </div>
+            </div>
+            <div className="space-y-4 pt-8">
+              <div className="aspect-square bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 relative overflow-hidden flex items-center justify-center">
+                <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">[ EDITORIAL_03 ]</span>
+              </div>
+              <div className="aspect-[3/4] bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 relative overflow-hidden flex items-center justify-center">
+                <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">[ SHOT_04 ]</span>
+                <div className="absolute inset-0 bg-cyan-500/5 mix-blend-color-dodge" />
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* ══ PORTFOLIO SECTION ══ */}
-        <div style={{ marginBottom: "6rem" }}>
-          {/* Section label */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
-            <div>
-              <span style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(239,68,68,0.7)" }}>Selected Work</span>
-              <h2 style={{ fontFamily: "var(--font-playfair), serif", fontWeight: 900, fontSize: "clamp(22px, 3vw, 36px)", color: "#fff", marginTop: "0.3rem", letterSpacing: "-0.02em" }}>
-                Production Reel
-              </h2>
-            </div>
-
-            {/* Filter Tabs */}
-            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-              {filters.map((f) => (
-                <button
-                  key={f.key}
-                  onClick={() => setActiveFilter(f.key)}
-                  style={{
-                    padding: "0.45rem 1.1rem",
-                    borderRadius: 3,
-                    border: activeFilter === f.key ? "1px solid rgba(239,68,68,0.5)" : "1px solid rgba(255,255,255,0.07)",
-                    background: activeFilter === f.key ? "rgba(239,68,68,0.1)" : "transparent",
-                    color: activeFilter === f.key ? "#ef4444" : "rgba(226,232,240,0.45)",
-                    fontSize: "0.7rem",
-                    fontWeight: 500,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    cursor: "pointer",
-                    transition: "all 0.25s",
-                  }}
-                >
-                  {f.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Portfolio Grid — Masonry-style */}
-          <motion.div
-            layout
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(12, 1fr)",
-              gap: 10,
-            }}
-          >
-            <AnimatePresence mode="popLayout">
-              {filtered.map((item, idx) => {
-                const isWide = item.wide || idx === 0;
-                return (
-                  <motion.div
-                    key={item.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.35, delay: idx * 0.05 }}
-                    style={{
-                      gridColumn: isWide ? "span 7" : "span 5",
-                      minHeight: isWide ? 380 : 230,
-                      borderRadius: 8,
-                      overflow: "hidden",
-                      position: "relative",
-                      cursor: "pointer",
-                      background: `linear-gradient(135deg, ${item.accent}15 0%, #0a0e16 100%)`,
-                      border: "1px solid rgba(255,255,255,0.06)",
-                      transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
-                    }}
-                    className="portfolio-card"
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.border = `1px solid ${item.accent}40`;
-                      (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.border = "1px solid rgba(255,255,255,0.06)";
-                      (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                    }}
-                  >
-                    {/* Letterbox bars — cinema feel */}
-                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 18, background: "rgba(0,0,0,0.6)", zIndex: 2, display: "flex", alignItems: "center", paddingLeft: 12, gap: 6 }}>
-                      <div style={{ width: 5, height: 5, borderRadius: "50%", background: item.accent, opacity: 0.8 }} />
-                      <span style={{ fontSize: "0.55rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)" }}>
-                        {item.category}
-                      </span>
-                    </div>
-                    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 18, background: "rgba(0,0,0,0.6)", zIndex: 2 }} />
-
-                    {/* Main content area */}
-                    <div style={{ position: "absolute", inset: 18, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "1.5rem 1.5rem 1rem" }}>
-                      {/* Icon */}
-                      <div style={{ fontSize: isWide ? "4rem" : "2.5rem", opacity: 0.3 }}>{item.icon}</div>
-
-                      {/* Info bottom */}
-                      <div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: "0.8rem" }}>
-                          {item.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              style={{
-                                fontSize: "0.6rem",
-                                fontWeight: 500,
-                                letterSpacing: "0.1em",
-                                textTransform: "uppercase",
-                                padding: "0.25rem 0.6rem",
-                                borderRadius: 2,
-                                background: `${item.accent}18`,
-                                border: `1px solid ${item.accent}30`,
-                                color: item.accent,
-                              }}
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        <h3
-                          style={{
-                            fontFamily: "var(--font-playfair), serif",
-                            fontWeight: 900,
-                            fontSize: isWide ? "1.6rem" : "1.1rem",
-                            color: "#fff",
-                            letterSpacing: "-0.02em",
-                            marginBottom: "0.25rem",
-                          }}
-                        >
-                          {item.title}
-                        </h3>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                          <span style={{ fontSize: "0.7rem", color: "rgba(226,232,240,0.35)", fontWeight: 300 }}>
-                            Client: {item.client}
-                          </span>
-                          <span style={{ fontSize: "0.65rem", color: item.accent, fontWeight: 500, display: "flex", alignItems: "center", gap: 4 }}>
-                            {item.category === "cinema" ? <Play size={10} fill={item.accent} /> : null}
-                            {item.duration}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Corner accent line */}
-                    <div style={{ position: "absolute", top: 18, right: 0, width: 3, height: "40%", background: `linear-gradient(to bottom, ${item.accent}, transparent)`, opacity: 0.5 }} />
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
-          </motion.div>
-        </div>
-
-        {/* ══ SERVICES SECTION ══ */}
-        <div style={{ marginBottom: "6rem" }}>
-          {/* Section header */}
-          <div style={{ borderLeft: "3px solid #ef4444", paddingLeft: "1.2rem", marginBottom: "3rem" }}>
-            <span style={{ fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.25em", textTransform: "uppercase", color: "rgba(239,68,68,0.7)", display: "block", marginBottom: "0.4rem" }}>
-              What We Deliver
+      {/* ═════════════════════════════════════════════
+          B2 — CAPABILITIES (EDITORIAL GRID)
+          ═════════════════════════════════════════════ */}
+      <section className="relative py-20 bg-[#0A0B10] border-t border-b border-white/5 z-10">
+        <div className="max-w-7xl mx-auto px-6 space-y-16">
+          <div className="space-y-3 text-center max-w-xl mx-auto">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF4FD8]">
+              STUDIO CAPABILITIES
             </span>
-            <h2 style={{ fontFamily: "var(--font-playfair), serif", fontWeight: 900, fontSize: "clamp(24px, 3vw, 40px)", color: "#fff", letterSpacing: "-0.02em" }}>
-              Production Deliverables
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white font-sans">
+              Capabilities Grid
             </h2>
-            <p style={{ fontSize: "0.9rem", fontWeight: 300, color: "rgba(226,232,240,0.45)", marginTop: "0.4rem" }}>
-              Crafting cohesive brand storytelling assets that command premium trust.
-            </p>
           </div>
 
-          {/* Service items */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem" }} className="svc-grid">
-            {services.map((svc, i) => {
-              const Icon = svc.icon;
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {capabilities.map((cap, i) => {
+              const Icon = cap.icon;
               return (
-                <div
-                  key={i}
-                  style={{
-                    background: "rgba(255,255,255,0.025)",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    borderRadius: 8,
-                    padding: "2rem",
-                    position: "relative",
-                    overflow: "hidden",
-                    transition: "all 0.35s",
-                    cursor: "default",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.border = `1px solid ${svc.accent}35`;
-                    (e.currentTarget as HTMLElement).style.background = `${svc.accent}08`;
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.border = "1px solid rgba(255,255,255,0.06)";
-                    (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.025)";
-                  }}
-                >
-                  {/* Ghost number */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "1rem",
-                      right: "1.5rem",
-                      fontFamily: "var(--font-playfair), serif",
-                      fontWeight: 900,
-                      fontSize: "5rem",
-                      color: "transparent",
-                      WebkitTextStroke: `1px ${svc.accent}15`,
-                      lineHeight: 1,
-                      userSelect: "none",
-                    }}
-                  >
-                    {svc.label}
+                <SpotlightCard key={i} className="p-6 bg-black/40 border-white/5 flex flex-col justify-between min-h-[180px] hover:border-pink-500/20">
+                  <div className={`p-3 rounded-xl bg-[#05060A] border border-white/5 ${cap.color} w-fit`}>
+                    <Icon size={20} />
                   </div>
-
-                  {/* Icon + title */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.8rem", marginBottom: "1rem" }}>
-                    <div style={{ width: 40, height: 40, borderRadius: 6, background: `${svc.accent}15`, border: `1px solid ${svc.accent}25`, display: "flex", alignItems: "center", justifyContent: "center", color: svc.accent }}>
-                      <Icon size={18} />
-                    </div>
-                    <h3 style={{ fontFamily: "var(--font-playfair), serif", fontWeight: 700, fontSize: "1.1rem", color: "#fff", letterSpacing: "-0.01em" }}>
-                      {svc.title}
-                    </h3>
+                  <div className="mt-6 space-y-2">
+                    <h3 className="text-md font-bold text-white uppercase tracking-wide">{cap.title}</h3>
+                    <p className="text-xs text-zinc-400 leading-relaxed font-light">{cap.desc}</p>
                   </div>
-
-                  {/* Tags */}
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: "1rem" }}>
-                    {svc.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        style={{
-                          fontSize: "0.6rem",
-                          fontWeight: 500,
-                          letterSpacing: "0.08em",
-                          textTransform: "uppercase",
-                          padding: "0.2rem 0.55rem",
-                          borderRadius: 2,
-                          background: `${svc.accent}12`,
-                          color: svc.accent,
-                          border: `1px solid ${svc.accent}25`,
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Description */}
-                  <p style={{ fontSize: "0.82rem", fontWeight: 300, color: "rgba(226,232,240,0.5)", lineHeight: 1.75 }}>
-                    {svc.desc}
-                  </p>
-                </div>
+                </SpotlightCard>
               );
             })}
           </div>
         </div>
+      </section>
 
-        {/* ══ CREATIVE BRIEF FORM ══ */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1.4fr",
-            gap: "4rem",
-            alignItems: "start",
-            padding: "4rem",
-            background: "rgba(255,255,255,0.02)",
-            border: "1px solid rgba(255,255,255,0.07)",
-            borderRadius: 12,
-            position: "relative",
-            overflow: "hidden",
-          }}
-          className="brief-grid"
-        >
-          {/* Red left accent */}
-          <div style={{ position: "absolute", top: 0, left: 0, width: 3, height: "100%", background: "linear-gradient(to bottom, #ef4444, transparent)" }} />
+      {/* ═════════════════════════════════════════════
+          B3 — PORTFOLIO (FEATURED + GALLERY)
+          ═════════════════════════════════════════════ */}
+      <section ref={portfolioRef} className="relative py-20 px-6 max-w-7xl mx-auto z-10">
+        <div className="space-y-16">
+          <div className="space-y-3 text-center max-w-xl mx-auto">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-purple-400">
+              PRODUCTION EXHIBITION
+            </span>
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white font-sans">
+              Featured Campaigns
+            </h2>
+          </div>
 
-          {/* Left: Info */}
-          <div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 3, padding: "0.3rem 0.8rem", marginBottom: "1.5rem" }}>
-              <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#ef4444" }} />
-              <span style={{ fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: "#ef4444" }}>Work With Us</span>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {casePortfolios.map((item, idx) => (
+              <SpotlightCard key={idx} className="p-8 bg-[#0A0B10] border-white/5 rounded-2xl flex flex-col justify-between aspect-[4/3]">
+                <div className="flex justify-between items-center pb-4 border-b border-white/5">
+                  <span className={`text-[9px] font-mono font-bold border px-2 py-0.5 rounded-none ${item.accent}`}>
+                    {item.tag}
+                  </span>
+                  <Play size={14} className="text-zinc-600 hover:text-white transition-colors cursor-pointer" />
+                </div>
 
-            <h3
-              style={{
-                fontFamily: "var(--font-playfair), serif",
-                fontWeight: 900,
-                fontSize: "clamp(24px, 3vw, 38px)",
-                color: "#fff",
-                letterSpacing: "-0.025em",
-                lineHeight: 1.1,
-                marginBottom: "1rem",
-              }}
-            >
-              Initiate<br />
-              <em style={{ fontStyle: "italic", color: "rgba(239,68,68,0.8)" }}>Creative Brief</em>
-            </h3>
+                <div className="my-6 space-y-4">
+                  <h3 className="text-xl font-bold text-white leading-tight">{item.title}</h3>
+                  <div className="grid grid-cols-1 gap-2 text-xs text-zinc-400 font-light">
+                    <p><strong className="text-white font-medium">Goal:</strong> {item.goal}</p>
+                    <p><strong className="text-white font-medium">Concept:</strong> {item.concept}</p>
+                    <p><strong className="text-white font-medium">Outputs:</strong> {item.outputs}</p>
+                  </div>
+                </div>
 
-            <p style={{ fontSize: "0.85rem", fontWeight: 300, color: "rgba(226,232,240,0.45)", lineHeight: 1.8, marginBottom: "2rem" }}>
-              Tell us your creative requirements, and our production coordinator will schedule a detailed brief scoping call with you.
+                <div className="border-t border-white/5 pt-4 text-xs font-mono text-[#00D2FF] font-bold">
+                  RESULT: {item.result}
+                </div>
+              </SpotlightCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════
+          B4 — PROCESS
+          ═════════════════════════════════════════════ */}
+      <section className="relative py-20 bg-[#0A0B10] border-t border-b border-white/5 z-10">
+        <div className="max-w-7xl mx-auto px-6 space-y-16">
+          <div className="space-y-3 text-center max-w-xl mx-auto">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF4FD8]">
+              TIMELINE STEPS
+            </span>
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white font-sans">
+              Our Creative Process
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {[
+              { step: "01", name: "Concept", desc: "We design detailed moodboards and script frames based on your strategy goals." },
+              { step: "02", name: "Shoot", desc: "Production crews deploy premium cameras using Vizag coastal sunrise." },
+              { step: "03", name: "Edit", desc: "Elite color grading, sound scoring, and pacing adjustments." },
+              { step: "04", name: "Launch", desc: "Asset formats packaged for direct conversion launch campaigns." },
+            ].map((p, idx) => (
+              <div key={idx} className="space-y-4 text-center">
+                <div className="w-14 h-14 rounded-full bg-black border border-white/10 flex items-center justify-center font-mono font-bold text-md text-[#FF4FD8] mx-auto shadow-md">
+                  {p.step}
+                </div>
+                <div className="space-y-1">
+                  <h4 className="text-sm font-bold text-white uppercase">{p.name}</h4>
+                  <p className="text-[11px] text-zinc-400 leading-relaxed font-light">{p.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════
+          B5 — PACKAGES (PREMIUM CARDS)
+          ═════════════════════════════════════════════ */}
+      <section className="relative py-20 px-6 max-w-7xl mx-auto z-10">
+        <div className="space-y-16">
+          <div className="space-y-3 text-center max-w-xl mx-auto">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-purple-400">
+              PRICING SYSTEMS
+            </span>
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white font-sans">
+              Premium Packages
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Package Essentials */}
+            <SpotlightCard className="p-8 bg-[#0A0B10] border-white/5 rounded-2xl flex flex-col justify-between min-h-[400px]">
+              <div>
+                <span className="text-[9px] font-mono text-zinc-500 block uppercase">TIER 01</span>
+                <h3 className="text-xl font-bold text-white mt-1">Essentials</h3>
+                <p className="text-2xl font-extrabold text-white mt-3 font-mono">₹25,000<span className="text-xs text-zinc-500 font-normal"> / project</span></p>
+                
+                <ul className="mt-6 space-y-3 text-xs text-zinc-400 font-light">
+                  <li className="flex items-center gap-2">✔ 12 Campaign Images</li>
+                  <li className="flex items-center gap-2">✔ 3 Social Media Reels</li>
+                  <li className="flex items-center gap-2">✔ Editorial Retouching</li>
+                  <li className="flex items-center gap-2">✔ Location Scoping</li>
+                </ul>
+              </div>
+              <button onClick={scrollToConsult} className="mt-8 py-3 w-full border border-white/10 text-xs font-mono font-bold uppercase text-white hover:bg-white/5 transition">
+                Select Essentials
+              </button>
+            </SpotlightCard>
+
+            {/* Package Studio */}
+            <SpotlightCard className="p-8 bg-[#0A0B10] border-purple-500/30 rounded-2xl flex flex-col justify-between min-h-[400px] relative">
+              <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-purple-500 text-black text-[9px] font-mono font-bold uppercase tracking-wider px-3 py-1">
+                RECOMMENDED
+              </div>
+              <div>
+                <span className="text-[9px] font-mono text-purple-400 block uppercase">TIER 02</span>
+                <h3 className="text-xl font-bold text-white mt-1">Studio</h3>
+                <p className="text-2xl font-extrabold text-white mt-3 font-mono">₹60,000<span className="text-xs text-zinc-500 font-normal"> / project</span></p>
+
+                <ul className="mt-6 space-y-3 text-xs text-zinc-400 font-light">
+                  <li className="flex items-center gap-2">✔ 30 Campaign Images</li>
+                  <li className="flex items-center gap-2">✔ 6 Social Media Reels</li>
+                  <li className="flex items-center gap-2">✔ Full Brand Moodboard Concept</li>
+                  <li className="flex items-center gap-2">✔ High-end sound editing</li>
+                </ul>
+              </div>
+              <button onClick={scrollToConsult} className="mt-8 py-3 w-full bg-purple-600 text-xs font-mono font-bold uppercase text-white hover:bg-purple-700 transition">
+                Select Studio
+              </button>
+            </SpotlightCard>
+
+            {/* Package Campaign */}
+            <SpotlightCard className="p-8 bg-[#0A0B10] border-white/5 rounded-2xl flex flex-col justify-between min-h-[400px]">
+              <div>
+                <span className="text-[9px] font-mono text-[#FF4FD8] block uppercase">TIER 03</span>
+                <h3 className="text-xl font-bold text-white mt-1">Campaign</h3>
+                <p className="text-2xl font-extrabold text-white mt-3 font-mono">₹1,50,000<span className="text-xs text-zinc-500 font-normal"> / project</span></p>
+
+                <ul className="mt-6 space-y-3 text-xs text-zinc-400 font-light">
+                  <li className="flex items-center gap-2">✔ Full Brand Photoshoot Suite</li>
+                  <li className="flex items-center gap-2">✔ 4K Master Cinema Campaign Cut</li>
+                  <li className="flex items-center gap-2">✔ 12 Social Media Reels</li>
+                  <li className="flex items-center gap-2">✔ Continuous Retainer options</li>
+                </ul>
+              </div>
+              <button onClick={scrollToConsult} className="mt-8 py-3 w-full border border-[#FF4FD8]/30 text-xs font-mono font-bold uppercase text-[#FF4FD8] hover:bg-[#FF4FD8]/5 transition">
+                Select Campaign
+              </button>
+            </SpotlightCard>
+          </div>
+        </div>
+      </section>
+
+      {/* ═════════════════════════════════════════════
+          B6 — ENGINE B FAQ & BRIEF SUBMIT
+          ═════════════════════════════════════════════ */}
+      <section ref={consultRef} className="relative py-20 bg-[#050507] border-t border-white/5 z-10">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16">
+          
+          {/* Brief Form */}
+          <div className="lg:col-span-6 space-y-6">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF4FD8]">
+              WORK WITH US
+            </span>
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-none">
+              Initiate Creative Brief
+            </h2>
+            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-light">
+              Send your parameters and our studio coordinators will outline visual concepts for your campaign.
             </p>
 
-            {/* Checklist */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.8rem" }}>
+            <SpotlightCard className="p-6 bg-[#0A0B10] border-white/5 rounded-2xl">
+              <AnimatePresence mode="wait">
+                {!formSubmitted ? (
+                  <motion.form
+                    key="creative-form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onSubmit={handleBriefSubmit}
+                    className="space-y-4"
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-[10px] text-zinc-500 font-mono block mb-1 uppercase font-bold">Name *</label>
+                        <input
+                          type="text"
+                          required
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          placeholder="Sarah Connor"
+                          className="w-full bg-[#05060A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF4FD8]"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-zinc-500 font-mono block mb-1 uppercase font-bold">Email *</label>
+                        <input
+                          type="email"
+                          required
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          placeholder="sarah@skynet.com"
+                          className="w-full bg-[#05060A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF4FD8]"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] text-zinc-500 font-mono block mb-1 uppercase font-bold">Campaign Type</label>
+                      <select
+                        value={formData.category}
+                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                        className="w-full bg-[#05060A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF4FD8]"
+                      >
+                        <option value="video">Cinematic Video</option>
+                        <option value="photo">Brand Photography</option>
+                        <option value="brand">Logo & Visual Branding</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] text-zinc-500 font-mono block mb-1 uppercase font-bold">Scope Parameters</label>
+                      <textarea
+                        rows={3}
+                        value={formData.scope}
+                        onChange={(e) => setFormData({ ...formData, scope: e.target.value })}
+                        placeholder="Explain your product campaign or brand refresh scope..."
+                        className="w-full bg-[#05060A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF4FD8]"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full py-4 text-xs font-mono font-bold uppercase tracking-widest text-black bg-gradient-to-r from-[#FF4FD8] to-purple-500 hover:opacity-90 transition-opacity"
+                    >
+                      Submit Brief
+                    </button>
+                  </motion.form>
+                ) : (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex flex-col items-center justify-center text-center py-12 space-y-4"
+                  >
+                    <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                      <Check size={28} />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white text-lg">Brief Sync Complete!</h4>
+                      <p className="text-xs text-zinc-400 max-w-sm mt-1">
+                        We will draft style proposals and contact you at {formData.email} within 2 hours.
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </SpotlightCard>
+          </div>
+
+          {/* FAQs */}
+          <div className="lg:col-span-6 space-y-6">
+            <h3 className="text-2xl font-extrabold text-white">Engine B FAQ</h3>
+            
+            <div className="border-t border-white/10 divide-y divide-white/10">
               {[
-                "Coastal Location Scouting Blueprint",
-                "Moodboard Design Concept",
-                "Custom Campaign Timeline Outline",
-              ].map((item) => (
-                <div key={item} style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
-                  <div style={{ width: 20, height: 20, borderRadius: 4, background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <CheckCircle2 size={11} color="#ef4444" />
-                  </div>
-                  <span style={{ fontSize: "0.78rem", fontWeight: 300, color: "rgba(226,232,240,0.6)" }}>{item}</span>
+                {
+                  q: "Who owns visual copyrights?",
+                  a: "Once final milestone payouts resolve, complete commercial copyrights assign to your brand."
+                },
+                {
+                  q: "What is your standard turnaround?",
+                  a: "Commercial photo briefs require 7-10 days. Edited campaign films require 2-3 weeks post-shoot."
+                },
+                {
+                  q: "How do revisions work?",
+                  a: "Every project tier includes 2 complete cycles of editing revisions to ensure exact brand alignment."
+                },
+                {
+                  q: "Do you offer monthly retainers?",
+                  a: "Yes. Retainers cover regular weekly photoshoot cycles at Siripuram studios to keep social calendars updated."
+                },
+                {
+                  q: "Where do shoot productions take place?",
+                  a: "We shoot primarily in Visakhapatnam, featuring coastal spots (Siripuram & Gajuwaka studios, beach landscapes)."
+                }
+              ].map((faq, idx) => (
+                <div key={idx} className="py-4">
+                  <button
+                    onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                    className="w-full flex items-center justify-between text-left focus:outline-none group"
+                  >
+                    <span className="text-sm font-bold text-white group-hover:text-[#FF4FD8] transition-colors">
+                      {faq.q}
+                    </span>
+                    <span className="text-zinc-500">
+                      {openFaq === idx ? <Minus size={12} /> : <Plus size={12} />}
+                    </span>
+                  </button>
+
+                  <AnimatePresence>
+                    {openFaq === idx && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <p className="text-xs text-zinc-400 leading-relaxed font-light mt-2.5">
+                          {faq.a}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Right: Form */}
-          <div>
-            <AnimatePresence mode="wait">
-              {!submitted ? (
-                <motion.form
-                  key="form"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  onSubmit={handleSubmit}
-                  style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-                >
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-                    {[
-                      { key: "name", label: "Your Name *", placeholder: "e.g. Rahul Sharma", type: "text" },
-                      { key: "email", label: "Your Email *", placeholder: "e.g. rahul@brand.com", type: "email" },
-                    ].map((field) => (
-                      <div key={field.key}>
-                        <label style={{ fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(226,232,240,0.4)", display: "block", marginBottom: "0.4rem" }}>
-                          {field.label}
-                        </label>
-                        <input
-                          type={field.type}
-                          required={field.key !== "budget"}
-                          placeholder={field.placeholder}
-                          value={form[field.key as keyof typeof form]}
-                          onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
-                          style={{
-                            width: "100%",
-                            background: "rgba(255,255,255,0.03)",
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            borderRadius: 4,
-                            padding: "0.65rem 0.9rem",
-                            fontSize: "0.82rem",
-                            color: "#E2E8F0",
-                            outline: "none",
-                            transition: "border-color 0.2s",
-                            fontFamily: "inherit",
-                          }}
-                          onFocus={(e) => { (e.target as HTMLInputElement).style.borderColor = "rgba(239,68,68,0.5)"; }}
-                          onBlur={(e) => { (e.target as HTMLInputElement).style.borderColor = "rgba(255,255,255,0.08)"; }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-
-                  <div>
-                    <label style={{ fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(226,232,240,0.4)", display: "block", marginBottom: "0.4rem" }}>
-                      Project Budget
-                    </label>
-                    <select
-                      value={form.budget}
-                      onChange={(e) => setForm({ ...form, budget: e.target.value })}
-                      style={{
-                        width: "100%",
-                        background: "rgba(255,255,255,0.03)",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        borderRadius: 4,
-                        padding: "0.65rem 0.9rem",
-                        fontSize: "0.82rem",
-                        color: "#E2E8F0",
-                        outline: "none",
-                        fontFamily: "inherit",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <option value="₹20k - ₹50k">₹20,000 – ₹50,000</option>
-                      <option value="₹50k - ₹1.5L">₹50,000 – ₹1,50,000 (Recommended)</option>
-                      <option value="₹1.5L+">₹1,50,000+ Premium Campaign</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label style={{ fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(226,232,240,0.4)", display: "block", marginBottom: "0.4rem" }}>
-                      Tell us about your brand & scope
-                    </label>
-                    <textarea
-                      rows={4}
-                      value={form.desc}
-                      onChange={(e) => setForm({ ...form, desc: e.target.value })}
-                      placeholder="e.g. We need a commercial cinematic video for our resort launch in Vizag, along with 20 product photos for social campaigns..."
-                      style={{
-                        width: "100%",
-                        background: "rgba(255,255,255,0.03)",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        borderRadius: 4,
-                        padding: "0.65rem 0.9rem",
-                        fontSize: "0.82rem",
-                        color: "#E2E8F0",
-                        outline: "none",
-                        resize: "none",
-                        fontFamily: "inherit",
-                        lineHeight: 1.7,
-                        transition: "border-color 0.2s",
-                      }}
-                      onFocus={(e) => { (e.target as HTMLTextAreaElement).style.borderColor = "rgba(239,68,68,0.5)"; }}
-                      onBlur={(e) => { (e.target as HTMLTextAreaElement).style.borderColor = "rgba(255,255,255,0.08)"; }}
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    style={{
-                      width: "100%",
-                      padding: "0.9rem",
-                      borderRadius: 4,
-                      background: "#ef4444",
-                      color: "#fff",
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      letterSpacing: "0.15em",
-                      textTransform: "uppercase",
-                      border: "none",
-                      cursor: "pointer",
-                      transition: "all 0.3s",
-                      fontFamily: "inherit",
-                    }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#dc2626"; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#ef4444"; }}
-                  >
-                    Request Campaign Scoping Call →
-                  </button>
-                </motion.form>
-              ) : (
-                <motion.div
-                  key="success"
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "4rem 2rem",
-                    textAlign: "center",
-                    gap: "1.2rem",
-                  }}
-                >
-                  <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <CheckCircle2 size={28} color="#ef4444" />
-                  </div>
-                  <h4 style={{ fontFamily: "var(--font-playfair), serif", fontWeight: 900, fontSize: "1.4rem", color: "#fff" }}>
-                    Creative Brief Received!
-                  </h4>
-                  <p style={{ fontSize: "0.82rem", fontWeight: 300, color: "rgba(226,232,240,0.5)", maxWidth: 320 }}>
-                    Our production coordinator will review your brief and connect within 12 hours with moodboard options.
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Responsive overrides */}
-      <style>{`
-        @media (max-width: 900px) {
-          .hero-sub-grid { grid-template-columns: 1fr !important; }
-          .svc-grid { grid-template-columns: 1fr !important; }
-          .brief-grid { grid-template-columns: 1fr !important; padding: 2rem !important; }
-        }
-        @media (max-width: 600px) {
-          .portfolio-card { grid-column: span 12 !important; }
-        }
-      `}</style>
+      {/* Render the unified footer at the bottom of the page */}
+      <Footer />
     </div>
   );
 }

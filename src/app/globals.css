@@ -2,16 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── CSS CUSTOM PROPERTIES ── */
+/* ── GLOBAL DESIGN SYSTEM TOKENS ── */
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
-  --neon-blue: #2f6bff;
-  --neon-purple: #9333ea;
-  --neon-cyan: #06b6d4;
-  --text-secondary: #a1a1aa;
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --background: #05060A;
+  --background-charcoal: #0A0B10;
+  --text-primary: #F6F7FB;
+  --text-secondary: rgba(246, 247, 251, 0.68);
+  
+  /* Glass card recipe */
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-border-hover: rgba(255, 255, 255, 0.18);
+  
+  /* Accents */
+  --accent-gradient: linear-gradient(135deg, #00D2FF 0%, #7A5CFF 45%, #FF4FD8 100%);
+  --glow-cyan: rgba(51, 230, 255, 0.18);
+  --glow-purple: rgba(139, 92, 246, 0.14);
 }
 
 * { 
@@ -22,31 +28,59 @@
 
 html { 
   scroll-behavior: smooth; 
-  background-color: #000000;
+  background-color: var(--background);
 }
 
 body {
-  background: #000000;
-  color: var(--foreground);
-  font-family: 'DM Sans', 'Outfit', system-ui, sans-serif;
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: 'Inter', 'Outfit', system-ui, sans-serif;
   font-weight: 300;
   overflow-x: hidden;
   line-height: 1.6;
 }
 
+/* ── VECTOR FILM GRAIN OVERLAY ── */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.045; /* 4.5% opacity for premium editorial texture */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
 /* ── CUSTOM SCROLLBAR ── */
 ::-webkit-scrollbar { 
-  width: 6px; 
+  width: 8px; 
 }
 ::-webkit-scrollbar-track { 
-  background: #000000; 
+  background: var(--background); 
 }
 ::-webkit-scrollbar-thumb { 
-  background: rgba(255, 255, 255, 0.1); 
-  border-radius: 3px; 
+  background: rgba(255, 255, 255, 0.08); 
+  border-radius: 4px; 
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--neon-blue);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ── GLASS CARD RECIPE ── */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.10);
+  transition: all 320ms cubic-bezier(.2,.8,.2,1);
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--glass-border-hover);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
 /* ── INFINITE MARQUEE ANIMATION ── */
@@ -58,91 +92,82 @@ body {
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 25s linear infinite;
+  animation: marquee 30s linear infinite;
 }
 
 .animate-marquee:hover {
   animation-play-state: paused;
 }
 
-/* ── GLASSMORPHISM PANELS ── */
-.glass-card {
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(20px) saturate(120%);
-  -webkit-backdrop-filter: blur(20px) saturate(120%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  transition: border-color 0.4s, box-shadow 0.4s, background-color 0.4s;
-}
-
-.glass-card:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(47, 107, 255, 0.3);
-  box-shadow: 0 12px 40px 0 rgba(47, 107, 255, 0.1);
-}
-
 /* ── NEON GRADIENT TEXT ── */
 .text-gradient-neon {
-  background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 40%, #06b6d4 70%, #2f6bff 100%);
+  background: var(--accent-gradient);
   -webkit-background-clip: text; 
   -webkit-text-fill-color: transparent; 
   background-clip: text;
 }
 
-.text-gradient-cyan {
-  background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-  -webkit-background-clip: text; 
-  -webkit-text-fill-color: transparent; 
-  background-clip: text;
+/* ── STROKE FLOW FOR SVG NODES ── */
+@keyframes stroke-flow {
+  0% { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0; }
 }
 
-.text-gradient-purple {
-  background: linear-gradient(135deg, #c084fc 0%, #6366f1 100%);
-  -webkit-background-clip: text; 
-  -webkit-text-fill-color: transparent; 
-  background-clip: text;
+.animate-stroke-flow {
+  stroke-dasharray: 8 4;
+  animation: stroke-flow 1s linear infinite;
 }
 
-/* ── GRADIENT BORDERS ── */
-.border-gradient-blue {
-  border: 1px solid transparent;
-  background: linear-gradient(#09090b, #09090b) padding-box,
-              linear-gradient(135deg, var(--neon-blue), var(--neon-cyan)) border-box;
+/* ── SPOTLIGHT EFFECT CARD ── */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
 }
 
-.border-gradient-purple {
-  border: 1px solid transparent;
-  background: linear-gradient(#09090b, #09090b) padding-box,
-              linear-gradient(135deg, var(--neon-purple), var(--neon-blue)) border-box;
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    400px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(255, 255, 255, 0.04),
+    transparent 80%
+  );
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
 }
 
-/* ── KEYFRAME MICRO INTERACTIONS ── */
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(1deg); }
+.spotlight-card:hover::before {
+  opacity: 1;
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
+/* Glowing border highlighting spotlight */
+.spotlight-border {
+  position: relative;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.15; transform: scale(1); }
-  50% { opacity: 0.25; transform: scale(1.1); }
+.spotlight-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: radial-gradient(
+    250px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(255, 255, 255, 0.15),
+    transparent 80%
+  );
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+  border-radius: inherit;
+  padding: 1px;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
 
-.bg-glow-radial {
-  filter: blur(100px);
-  animation: pulse-glow 10s ease-in-out infinite;
-}
-
-/* ── NEON SHADOWS ── */
-.neon-shadow-blue {
-  box-shadow: 0 0 25px rgba(47, 107, 255, 0.25);
-}
-.neon-shadow-purple {
-  box-shadow: 0 0 25px rgba(147, 51, 234, 0.25);
-}
-.neon-shadow-cyan {
-  box-shadow: 0 0 25px rgba(6, 182, 212, 0.25);
+.spotlight-border:hover::before {
+  opacity: 1;
 }

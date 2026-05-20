@@ -3,7 +3,6 @@ import { Outfit, DM_Sans, Playfair_Display, Archivo, Cormorant_Garamond } from "
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Chatbot from "@/components/Chatbot";
 
 const outfit = Outfit({
@@ -65,11 +64,11 @@ export default function RootLayout({
         className="antialiased"
         style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
       >
+        <div className="grain-overlay" />
         <SmoothScroll>
           <div className="flex flex-col min-h-screen relative">
             <Navbar />
             <main className="flex-1 w-full">{children}</main>
-            <Footer />
             <Chatbot />
           </div>
         </SmoothScroll>

@@ -17,9 +17,9 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: "Features", href: "/#features-section" },
     { name: "Engine A", href: "/engine-a" },
     { name: "Engine B", href: "/engine-b" },
+    { name: "Book Call", href: "/book" },
   ];
 
   return (
@@ -36,7 +36,7 @@ export default function Navbar() {
           justifyContent: "space-between",
           padding: scrolled ? "1rem 6%" : "1.6rem 6%",
           transition: "all 0.5s cubic-bezier(0.16,1,0.3,1)",
-          background: scrolled ? "rgba(0, 0, 0, 0.85)" : "transparent",
+          background: scrolled ? "rgba(5, 6, 10, 0.95)" : "transparent",
           backdropFilter: scrolled ? "blur(20px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
           borderBottom: scrolled ? "1px solid rgba(255, 255, 255, 0.08)" : "none",
@@ -50,7 +50,7 @@ export default function Navbar() {
             fontFamily: "monospace",
             fontWeight: 900,
             fontSize: "1.1rem",
-            color: "var(--white)",
+            color: "#F6F7FB",
             textDecoration: "none",
             letterSpacing: "0.1em",
             display: "flex",
@@ -59,16 +59,9 @@ export default function Navbar() {
           }}
         >
           GROVICE
-          <span style={{ color: "#06b6d4", fontWeight: "bold" }}>2.0</span>
+          <span style={{ color: "#00D2FF", fontWeight: "bold" }}>2.0</span>
           <span
-            style={{
-              width: 6,
-              height: 6,
-              background: "#06b6d4",
-              borderRadius: "50%",
-              display: "inline-block",
-              animation: "pulse-dot 2.5s ease-in-out infinite",
-            }}
+            className="w-1.5 h-1.5 rounded-full bg-[#00D2FF] animate-pulse"
           />
         </Link>
 
@@ -78,13 +71,13 @@ export default function Navbar() {
           className="hidden md:flex"
         >
           {navLinks.map((link) => {
-            const isActive = pathname === link.href || (link.href.startsWith("/#") && pathname === "/");
+            const isActive = pathname === link.href;
             return (
               <Link
                 key={link.name}
                 href={link.href}
                 style={{
-                  color: "var(--white)",
+                  color: "#F6F7FB",
                   textDecoration: "none",
                   fontSize: "0.75rem",
                   fontFamily: "monospace",
@@ -93,25 +86,24 @@ export default function Navbar() {
                   textTransform: "uppercase",
                   opacity: isActive ? 1 : 0.6,
                   transition: "opacity 0.3s, color 0.3s",
-                  position: "relative",
                 }}
                 onMouseEnter={(e) => { 
                   (e.currentTarget as HTMLElement).style.opacity = "1";
-                  (e.currentTarget as HTMLElement).style.color = "#06b6d4";
+                  (e.currentTarget as HTMLElement).style.color = "#00D2FF";
                 }}
                 onMouseLeave={(e) => { 
                   (e.currentTarget as HTMLElement).style.opacity = isActive ? "1" : "0.6";
-                  (e.currentTarget as HTMLElement).style.color = "var(--white)";
+                  (e.currentTarget as HTMLElement).style.color = "#F6F7FB";
                 }}
               >
                 {link.name}
               </Link>
             );
           })}
-          <a
-            href="tel:+917396621004"
+          <Link
+            href="/book"
             style={{
-              background: "linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)",
+              background: "linear-gradient(135deg, #00D2FF 0%, #7A5CFF 50%, #FF4FD8 100%)",
               color: "#000000",
               padding: "0.6rem 1.4rem",
               borderRadius: "0px",
@@ -122,30 +114,29 @@ export default function Navbar() {
               textTransform: "uppercase",
               textDecoration: "none",
               transition: "all 0.3s",
-              boxShadow: "0 0 15px rgba(6, 182, 212, 0.25)",
+              boxShadow: "0 0 15px rgba(0, 210, 255, 0.25)",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 25px rgba(6, 182, 212, 0.5)";
+              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 25px rgba(0, 210, 255, 0.5)";
               (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 15px rgba(6, 182, 212, 0.25)";
+              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 15px rgba(0, 210, 255, 0.25)";
               (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
             }}
           >
             Launch OS
-          </a>
+          </Link>
         </nav>
 
         {/* Mobile Hamburger */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden"
+          className="md:hidden text-[#F6F7FB] focus:outline-none"
           style={{
             background: "none",
             border: "none",
             cursor: "pointer",
-            color: "var(--white)",
             padding: "0.4rem",
           }}
           aria-label="Toggle menu"
@@ -165,7 +156,7 @@ export default function Navbar() {
             right: 0,
             bottom: 0,
             zIndex: 999,
-            background: "rgba(0, 0, 0, 0.98)",
+            background: "rgba(5, 6, 10, 0.98)",
             backdropFilter: "blur(24px)",
             display: "flex",
             flexDirection: "column",
@@ -183,7 +174,7 @@ export default function Navbar() {
               background: "none",
               border: "none",
               cursor: "pointer",
-              color: "var(--white)",
+              color: "#F6F7FB",
             }}
           >
             <X size={26} />
@@ -195,7 +186,7 @@ export default function Navbar() {
               href={link.href}
               onClick={() => setIsOpen(false)}
               style={{
-                color: "var(--white)",
+                color: "#F6F7FB",
                 textDecoration: "none",
                 fontSize: "1.2rem",
                 fontFamily: "monospace",
@@ -208,12 +199,12 @@ export default function Navbar() {
             </Link>
           ))}
 
-          <a
-            href="tel:+917396621004"
+          <Link
+            href="/book"
             onClick={() => setIsOpen(false)}
             style={{
               marginTop: "1rem",
-              background: "linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)",
+              background: "linear-gradient(135deg, #00D2FF 0%, #7A5CFF 50%, #FF4FD8 100%)",
               color: "#000000",
               padding: "0.8rem 2.2rem",
               borderRadius: "0px",
@@ -223,11 +214,11 @@ export default function Navbar() {
               letterSpacing: "0.15em",
               textTransform: "uppercase",
               textDecoration: "none",
-              boxShadow: "0 0 15px rgba(6, 182, 212, 0.25)",
+              boxShadow: "0 0 15px rgba(0, 210, 255, 0.25)",
             }}
           >
             Launch OS
-          </a>
+          </Link>
         </div>
       )}
     </>
