@@ -4,17 +4,7 @@ import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import {
-  Sparkles,
   ArrowRight,
-  Workflow,
-  Camera,
-  Layers,
-  Database,
-  Cpu,
-  Tv,
-  LineChart,
-  Star,
-  Quote,
   ArrowUpRight,
 } from "lucide-react";
 
@@ -24,41 +14,38 @@ import {
 function EngineACard() {
   return (
     <div
-      className="p-5 rounded-xl border transition-all duration-500 shadow-lg relative overflow-hidden"
+      className="p-5 rounded-sm border transition-all duration-500 relative overflow-hidden"
       style={{
-        background: "rgba(7, 28, 61, 0.85)",
-        backdropFilter: "blur(16px)",
-        borderColor: "rgba(47, 107, 255, 0.25)",
-        boxShadow: "0 10px 30px rgba(47, 107, 255, 0.15)",
+        background: "rgba(18, 18, 20, 0.9)",
+        backdropFilter: "blur(20px)",
+        borderColor: "rgba(197, 168, 128, 0.2)",
+        boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
         width: "100%",
         maxWidth: 280,
       }}
     >
-      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/10 to-transparent blur-md pointer-events-none" />
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-[9px] uppercase tracking-widest text-[#2F6BFF] font-bold">Engine A · AI OS</span>
-        <div className="flex items-center gap-1.5 bg-[#2F6BFF]/10 px-2 py-0.5 rounded border border-[#2F6BFF]/20">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#2F6BFF] animate-pulse" />
-          <span className="text-[8px] text-[#2F6BFF] font-mono font-bold uppercase">Active</span>
-        </div>
+      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#c5a880]/10 to-transparent blur-md pointer-events-none" />
+      <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
+        <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#c5a880] font-bold">NODE 01 // SALES FLOW</span>
+        <span className="text-[7px] font-mono text-emerald-400 border border-emerald-400/30 px-1 py-0.5 uppercase bg-emerald-950/20">LIVE</span>
       </div>
-      <div className="space-y-3 font-mono text-[10px] text-slate-300">
+      <div className="space-y-2.5 font-mono text-[9px] text-zinc-300">
         <div className="flex justify-between items-center border-b border-white/5 pb-1">
-          <span>AI Agents</span>
-          <span className="text-[#BFD4FF]">98.4% Efficiency</span>
+          <span>AI AGENTS</span>
+          <span className="text-[#c5a880] font-bold">12 ACTIVE</span>
         </div>
         <div className="flex justify-between items-center border-b border-white/5 pb-1">
-          <span>CRM Router</span>
-          <span className="text-[#BFD4FF]">n8n Live</span>
+          <span>n8n PIPELINE</span>
+          <span className="text-zinc-400">99.8% READY</span>
         </div>
         <div className="flex justify-between items-center">
-          <span>Voice Dialers</span>
-          <span className="text-emerald-400">12 Parallel</span>
+          <span>LATENCY</span>
+          <span className="text-zinc-400">45ms</span>
         </div>
       </div>
-      <div className="mt-4 pt-3 border-t border-white/5 flex items-center gap-2">
-        <Cpu size={12} className="text-[#2F6BFF]" />
-        <span className="text-[9px] text-[#BFD4FF] font-sans font-medium uppercase tracking-wider">Automating Sales Pipeline</span>
+      <div className="mt-4 pt-2 border-t border-white/5 flex items-center gap-1.5">
+        <span className="w-1 h-1 rounded-full bg-[#c5a880]" />
+        <span className="text-[8px] text-zinc-500 font-mono uppercase tracking-wider">Automating Inbound Pipeline</span>
       </div>
     </div>
   );
@@ -70,37 +57,36 @@ function EngineACard() {
 function EngineBCard() {
   return (
     <div
-      className="p-5 rounded-xl border transition-all duration-500 shadow-lg relative overflow-hidden"
+      className="p-5 rounded-sm border transition-all duration-500 relative overflow-hidden"
       style={{
-        background: "rgba(255, 255, 255, 0.04)",
-        backdropFilter: "blur(16px)",
+        background: "rgba(18, 18, 20, 0.9)",
+        backdropFilter: "blur(20px)",
         borderColor: "rgba(255, 255, 255, 0.08)",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+        boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
         width: "100%",
         maxWidth: 280,
       }}
     >
-      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-500/10 to-transparent blur-md pointer-events-none" />
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-[9px] uppercase tracking-widest text-[#BFD4FF]/60 font-bold">Engine B · Creative</span>
-        <span className="text-[8px] bg-red-950/40 border border-red-500/30 text-red-400 px-2 py-0.5 rounded uppercase font-bold tracking-wider">Production</span>
+      <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
+        <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#c5a880] font-bold">NODE 02 // CINEMATIC</span>
+        <span className="text-[7px] font-mono text-zinc-400">4K DCI</span>
       </div>
-      <div className="grid grid-cols-3 gap-2">
-        {["🌅", "🎥", "📸"].map((emoji, i) => (
-          <div
-            key={i}
-            className="aspect-[4/5] rounded bg-white/5 border border-white/5 flex items-center justify-center text-sm relative group overflow-hidden"
-          >
-            {emoji}
-            <div className="absolute inset-0 bg-[#071C3D]/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <span className="text-[6px] text-white uppercase font-bold tracking-widest">View</span>
-            </div>
-          </div>
-        ))}
+      
+      {/* Custom Minimalist Camera Frame Blocks */}
+      <div className="grid grid-cols-2 gap-2 my-2">
+        <div className="border border-white/10 p-2 text-center bg-white/5">
+          <p className="text-[8px] font-mono text-[#c5a880] font-bold">2.39 : 1</p>
+          <span className="text-[6px] font-mono text-zinc-500 uppercase tracking-widest block mt-0.5">ANAMORPHIC</span>
+        </div>
+        <div className="border border-white/10 p-2 text-center bg-white/5">
+          <p className="text-[8px] font-mono text-zinc-300 font-bold">4 : 5</p>
+          <span className="text-[6px] font-mono text-zinc-500 uppercase tracking-widest block mt-0.5">EDITORIAL</span>
+        </div>
       </div>
-      <div className="mt-4 flex items-center justify-between text-[9px] text-[#BFD4FF]/60 font-sans">
-        <span>Vizag Coastal Shoots</span>
-        <span className="text-white font-medium">1080p | 4K</span>
+      
+      <div className="mt-4 flex items-center justify-between text-[8px] text-zinc-500 font-mono uppercase border-t border-white/5 pt-2">
+        <span>Production Set</span>
+        <span className="text-zinc-300">Vizag Coastal</span>
       </div>
     </div>
   );
@@ -112,34 +98,34 @@ function EngineBCard() {
 function SoftwareCard() {
   return (
     <div
-      className="p-5 rounded-xl border transition-all duration-500 shadow-lg relative overflow-hidden"
+      className="p-5 rounded-sm border transition-all duration-500 relative overflow-hidden"
       style={{
-        background: "rgba(7, 28, 61, 0.85)",
-        backdropFilter: "blur(16px)",
+        background: "rgba(18, 18, 20, 0.9)",
+        backdropFilter: "blur(20px)",
         borderColor: "rgba(255, 255, 255, 0.08)",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+        boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
         width: "100%",
         maxWidth: 280,
       }}
     >
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
         <div className="flex items-center gap-1.5">
-          <Database size={12} className="text-[#2F6BFF]" />
-          <span className="text-[9px] uppercase tracking-widest text-[#BFD4FF] font-bold">Software Infra</span>
+          <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-[#c5a880] font-bold">NODE 03 // DB SYNC</span>
         </div>
-        <span className="text-[8px] text-[#BFD4FF]/40 font-mono">v2.0.4</span>
+        <span className="text-[7px] font-mono text-zinc-500">v2.1.0</span>
       </div>
       
       {/* Code mockup */}
-      <div className="p-3 rounded bg-[#020914]/80 border border-white/5 font-mono text-[8px] text-sky-300/80 space-y-1">
-        <div><span className="text-pink-400">const</span> app = <span className="text-yellow-300">GroviceOS</span>();</div>
-        <div>app.<span className="text-green-300">integrate</span>(<span className="text-orange-300">&apos;EngineA&apos;</span>);</div>
-        <div>app.<span className="text-green-300">powerUp</span>(<span className="text-orange-300">&apos;EngineB&apos;</span>);</div>
+      <div className="p-3 rounded-none bg-[#09090b] border border-white/5 font-mono text-[7px] text-zinc-400 space-y-1">
+        <div><span className="text-[#c5a880] font-bold">init</span> system.os() {"{"}</div>
+        <div className="pl-3">{'modules: ["A", "B"],'}</div>
+        <div className="pl-3">{'ping: "8ms_resolved"'}</div>
+        <div>{"}"}</div>
       </div>
 
-      <div className="mt-3 flex items-center justify-between text-[9px] text-[#BFD4FF]/50 font-sans">
-        <span>Custom Portals & Apps</span>
-        <span className="text-emerald-400">Secure ✅</span>
+      <div className="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[8px] text-zinc-500 font-mono uppercase">
+        <span>DATABASE GATE</span>
+        <span className="text-emerald-400">SECURE ✓</span>
       </div>
     </div>
   );
@@ -354,10 +340,10 @@ export default function HomePage() {
         >
           <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* LEFT HERO METADATA */}
-            <div className="lg:col-span-7 space-y-6 text-left relative z-10">
+            <div className="lg:col-span-7 space-y-8 text-left relative z-10">
               <div className="inline-flex items-center gap-3">
-                <span className="w-8 h-[1px] bg-[#2F6BFF] block" />
-                <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#2F6BFF]">
+                <span className="w-8 h-[1px] bg-[#c5a880] block" />
+                <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#c5a880]">
                   Visakhapatnam’s First Business Operating System
                 </span>
               </div>
@@ -367,42 +353,44 @@ export default function HomePage() {
                   fontFamily: "var(--font-playfair), serif",
                   fontWeight: 900,
                   fontSize: "clamp(54px, 7vw, 105px)",
-                  lineHeight: 0.95,
-                  letterSpacing: "-0.03em",
+                  lineHeight: 0.9,
+                  letterSpacing: "-0.04em",
                   rotateX: springY,
                   rotateY: springX,
                   transformStyle: "preserve-3d",
                 }}
-                className="text-white drop-shadow-[0_10px_30px_rgba(47,107,255,0.25)]"
+                className="text-white"
               >
                 GROVICE 2.0
               </motion.h1>
 
-              <div className="space-y-2">
-                <h2 className="font-display font-black text-xl md:text-2xl text-slate-100 tracking-tight">
-                  One Stop Business Solution
+              <div className="space-y-4 max-w-xl">
+                <h2 className="font-sans font-light text-lg md:text-xl text-zinc-300 tracking-wider uppercase">
+                  UNIFIED BUSINESS PLATFORM
                 </h2>
-                <p className="font-cormorant font-normal text-lg md:text-xl text-[#2F6BFF] italic">
-                  “Where AI Infrastructure Meets Creative Power.”
+                <p className="font-cormorant font-normal text-2xl md:text-4xl text-[#c5a880] italic leading-tight">
+                  “Where automated AI workflows meet luxury-tier art direction.”
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-4 pt-4">
+              <div className="flex flex-wrap items-center gap-4 pt-6">
                 <button
                   onClick={() => {
                     const targetEl = document.getElementById("vision-section");
                     targetEl?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider text-white shadow-lg transition-all duration-300"
+                  className="px-8 py-4 rounded-none text-[10px] font-mono uppercase tracking-widest text-black font-bold transition-all duration-300"
                   style={{
-                    background: "#2F6BFF",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    background: "#c5a880",
+                    border: "1px solid #c5a880",
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "#1d4ed8";
+                    (e.currentTarget as HTMLElement).style.background = "#b5976f";
+                    (e.currentTarget as HTMLElement).style.borderColor = "#b5976f";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "#2F6BFF";
+                    (e.currentTarget as HTMLElement).style.background = "#c5a880";
+                    (e.currentTarget as HTMLElement).style.borderColor = "#c5a880";
                   }}
                 >
                   Explore Platform
@@ -410,16 +398,16 @@ export default function HomePage() {
 
                 <button
                   onClick={() => window.dispatchEvent(new CustomEvent("open-chatbot"))}
-                  className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider border text-white backdrop-blur-md transition-all duration-300"
+                  className="px-8 py-4 rounded-none text-[10px] font-mono uppercase tracking-widest border text-white backdrop-blur-md transition-all duration-300"
                   style={{
                     borderColor: "rgba(255, 255, 255, 0.15)",
-                    background: "rgba(255, 255, 255, 0.05)",
+                    background: "rgba(255, 255, 255, 0.02)",
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.12)";
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.06)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.05)";
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.02)";
                   }}
                 >
                   Consulting OS
@@ -476,40 +464,40 @@ export default function HomePage() {
         id="vision-section"
         sideHeadingNum="01 // OVERVIEW"
         sideHeadingText="System Vision"
-        className="bg-slate-900/95 backdrop-blur-md border-t border-white/5"
+        className="bg-[#0e0e10]/98 backdrop-blur-md border-t border-white/5"
         zIndex={20}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          <div className="lg:col-span-6 space-y-6">
             {[
-              { num: "1", label: "Unified OS", desc: "AI engines + creative content teams integrated seamlessly" },
-              { num: "2", label: "Core Engines", desc: "Software engineering pipelines & high-end cinematography" },
-              { num: "∞", label: "Scale Architecture", desc: "Cloud integrations that adapt and automate booking workflows" },
+              { num: "01", label: "Unified OS", desc: "AI automation engines + elite creative cinematography integrated under one unified strategy." },
+              { num: "02", label: "Core Engines", desc: "Autonomous software development pipelines combined with high-fidelity camera direction." },
+              { num: "03", label: "Scale Architecture", desc: "Secured n8n database integrations that automate customer conversations and workflows." },
             ].map((stat, i) => (
-              <div key={i} className="flex gap-6 items-center border-b border-white/10 pb-4">
-                <span className="font-serif font-black text-6xl text-[#2F6BFF]">{stat.num}</span>
-                <div>
-                  <h4 className="font-display font-black text-xs uppercase tracking-wider text-white">{stat.label}</h4>
-                  <p className="text-[10px] text-[#BFD4FF]/60 uppercase tracking-widest mt-0.5">{stat.desc}</p>
+              <div key={i} className="flex gap-6 items-start border-b border-white/5 pb-6">
+                <span className="font-cormorant font-light text-5xl text-[#c5a880] italic leading-none">{stat.num}</span>
+                <div className="space-y-1">
+                  <h4 className="font-mono text-[9px] uppercase tracking-[0.2em] text-white font-bold">{stat.label}</h4>
+                  <p className="text-[10px] text-zinc-400 uppercase tracking-widest leading-relaxed">{stat.desc}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="space-y-4">
-            <span className="inline-block text-[9px] uppercase tracking-[0.2em] font-bold text-[#2F6BFF] bg-[#2F6BFF]/10 px-3 py-1 rounded">
+          <div className="lg:col-span-6 space-y-6 lg:pl-8">
+            <span className="inline-block text-[8px] font-mono uppercase tracking-[0.3em] text-[#c5a880]">
               Visakhapatnam Brand Ecosystem
             </span>
-            <h2 className="font-serif font-black text-3xl md:text-5xl text-white tracking-tight leading-tight">
+            <h2 className="font-serif font-light text-3xl md:text-5xl text-white tracking-tight leading-tight">
               Redefining growth with{" "}
-              <em className="text-[#BFD4FF] italic">coastal-tech caliber</em>
+              <em className="text-[#c5a880] italic font-cormorant font-normal">coastal-tech caliber</em>
             </h2>
-            <p className="text-xs sm:text-sm text-[#BFD4FF]/80 leading-relaxed font-light">
+            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-light">
               Grovice 2.0 bridges technical AI systems with cinematic brand photography. We own the software infrastructure that scales your lead conversion, and the creative media assets that command consumer trust.
             </p>
             <div className="flex flex-wrap gap-2 pt-2">
               {["AI Integrations", "Software Dev", "Luxury Brand Design", "Automated Booking"].map((pill) => (
-                <span key={pill} className="text-[9px] uppercase tracking-wider font-bold bg-white/5 border border-white/10 px-3 py-1.5 rounded text-[#BFD4FF]">
+                <span key={pill} className="text-[8px] font-mono uppercase tracking-wider bg-white/2 border border-white/5 px-3 py-1.5 rounded-none text-zinc-400">
                   {pill}
                 </span>
               ))}
@@ -525,22 +513,26 @@ export default function HomePage() {
         id="projects-section"
         sideHeadingNum="02 // PORTFOLIO"
         sideHeadingText="Architectural Deployments"
-        className="bg-slate-950/95 backdrop-blur-md border-t border-white/5"
+        className="bg-[#09090b]/98 backdrop-blur-md border-t border-white/5"
         zIndex={30}
       >
-        <div className="space-y-8">
-          <div className="max-w-xl space-y-2">
-            <h2 className="font-serif font-black text-3xl md:text-4xl text-white leading-tight">
-              Select Case Studies
+        <div className="space-y-12">
+          <div className="max-w-xl space-y-4">
+            <span className="inline-block text-[8px] font-mono uppercase tracking-[0.3em] text-[#c5a880]">
+              CASE STUDIES & ARCHIVE
+            </span>
+            <h2 className="font-serif font-light text-3xl md:text-5xl text-white leading-tight">
+              Select Architectural Deployments
             </h2>
-            <p className="text-xs text-[#BFD4FF]/60 font-light">
-              A brief preview of systems deployed for luxury automotive, premium beauty brands, and logistics.
+            <p className="text-xs text-zinc-400 leading-relaxed font-light">
+              A brief preview of systems deployed for luxury automotive, premium beauty brands, and logistics pipelines.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="border-t border-white/10">
             {[
               {
+                num: "01",
                 title: "Oceana Perfume Campaign",
                 type: "Brand Film / Creative (Engine B)",
                 desc: "High-fidelity editorial content and video campaigns filmed on Visakhapatnam beaches, delivering luxury positioning.",
@@ -548,6 +540,7 @@ export default function HomePage() {
                 tag: "Creative Calibration",
               },
               {
+                num: "02",
                 title: "Apex Logistics Platform",
                 type: "Custom ERP & Automation (Engine A)",
                 desc: "Autonomous workflow system syncing customer inquiries, voice dialers, and automated schedules into a single panel.",
@@ -555,13 +548,15 @@ export default function HomePage() {
                 tag: "AI Architecture",
               },
               {
+                num: "03",
                 title: "V-Motors Launch Shoot",
                 type: "Automotive Campaigns (Engine B)",
                 desc: "Commercial cinematography sets, color-graded reels, and professional brand portraits showcasing auto catalogs.",
-                metric: "98% Customer Retainment",
+                metric: "98% Retainment",
                 tag: "High Fidelity",
               },
               {
+                num: "04",
                 title: "Vizag Homes Portal",
                 type: "SaaS Portal / n8n System (Engine A)",
                 desc: "An intelligent database routing WhatsApp, Instagram, and web leads straight into CRM modules without human latency.",
@@ -571,30 +566,42 @@ export default function HomePage() {
             ].map((proj, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-xl border border-white/5 bg-slate-900/30 backdrop-blur-md flex flex-col justify-between hover:border-[#2F6BFF]/40 transition duration-300 group"
+                className="border-b border-white/10 py-6 md:py-8 transition-all duration-300 hover:bg-white/[0.02] px-4 group"
               >
-                <div className="space-y-3">
-                  <div className="flex justify-between items-start">
-                    <span className="text-[9px] uppercase tracking-widest text-[#2F6BFF] font-bold">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                  {/* Column 1: Num */}
+                  <div className="md:col-span-1">
+                    <span className="font-mono text-xs text-[#c5a880] tracking-widest">{proj.num}</span>
+                  </div>
+
+                  {/* Column 2: Title & Type */}
+                  <div className="md:col-span-4 space-y-1">
+                    <h3 className="font-serif text-lg text-white group-hover:text-[#c5a880] transition-colors duration-300">
+                      {proj.title}
+                    </h3>
+                    <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest block">
                       {proj.type}
                     </span>
-                    <ArrowUpRight size={14} className="text-slate-500 group-hover:text-white transition" />
                   </div>
-                  <h3 className="font-serif font-bold text-lg text-white group-hover:text-[#BFD4FF] transition">
-                    {proj.title}
-                  </h3>
-                  <p className="text-xs text-slate-400 font-light leading-relaxed">
-                    {proj.desc}
-                  </p>
-                </div>
 
-                <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400">
-                    {proj.metric}
-                  </span>
-                  <span className="text-[9px] font-mono text-slate-500 uppercase">
-                    {proj.tag}
-                  </span>
+                  {/* Column 3: Description */}
+                  <div className="md:col-span-4">
+                    <p className="text-xs text-zinc-400 leading-relaxed font-light">
+                      {proj.desc}
+                    </p>
+                  </div>
+
+                  {/* Column 4: Metric */}
+                  <div className="md:col-span-2">
+                    <span className="text-[10px] font-mono text-emerald-400 tracking-wider uppercase">
+                      {proj.metric}
+                    </span>
+                  </div>
+
+                  {/* Column 5: Arrow */}
+                  <div className="md:col-span-1 flex justify-end">
+                    <ArrowUpRight size={14} className="text-zinc-500 group-hover:text-white transition-colors duration-300" />
+                  </div>
                 </div>
               </div>
             ))}
@@ -609,48 +616,46 @@ export default function HomePage() {
         id="engine-a-section"
         sideHeadingNum="03 // ENGINE A"
         sideHeadingText="Software & Automations"
-        className="bg-slate-900/95 backdrop-blur-md border-t border-white/5"
+        className="bg-[#0e0e10]/98 backdrop-blur-md border-t border-white/5"
         zIndex={40}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-5 space-y-4">
-            <span className="inline-block text-[9px] uppercase tracking-[0.2em] font-bold text-[#2F6BFF] bg-[#2F6BFF]/10 px-3 py-1 rounded">
-              Engine A · Software & AI
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-5 space-y-6">
+            <span className="inline-block text-[8px] font-mono uppercase tracking-[0.3em] text-[#c5a880]">
+              ENGINE A · SOFTWARE & AI
             </span>
-            <h2 className="font-serif font-black text-3xl md:text-5xl text-white tracking-tight leading-none">
+            <h2 className="font-serif font-light text-3xl md:text-5xl text-white tracking-tight leading-none">
               Your Infrastructure<br />
-              <em className="text-[#BFD4FF] italic">Always Active</em>
+              <em className="text-[#c5a880] italic font-cormorant font-normal">Always Active</em>
             </h2>
-            <p className="text-xs sm:text-sm text-[#BFD4FF]/70 leading-relaxed font-light">
+            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-light">
               Custom AI voice agents, n8n databases, and smart lead routers. Instantly scale customer communication and book meetings automatically.
             </p>
             <Link
               href="/engine-a"
-              className="inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-wider text-white bg-[#2F6BFF] hover:bg-blue-600 px-4 py-2.5 rounded transition"
+              className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-widest text-black bg-[#c5a880] hover:bg-[#b5976f] px-6 py-3.5 transition"
             >
               Configure Engine A <ArrowRight size={12} />
             </Link>
           </div>
 
-          <div className="lg:col-span-7 bg-[#071C3D]/50 border border-white/5 p-6 rounded-xl relative overflow-hidden space-y-6">
-            <span className="text-[8px] font-bold uppercase tracking-widest text-[#BFD4FF]/50 block">Live Pipeline Blueprint</span>
+          <div className="lg:col-span-7 bg-[#121214]/65 border border-white/5 p-6 md:p-8 rounded-none relative overflow-hidden space-y-6">
+            <div className="flex items-center justify-between border-b border-white/5 pb-3">
+              <span className="text-[8px] font-mono uppercase tracking-widest text-[#c5a880] block">Live Pipeline Blueprint</span>
+              <span className="text-[7px] font-mono text-emerald-400 bg-emerald-950/20 px-2 py-0.5 border border-emerald-400/25">SYS STATUS: OPTIMAL</span>
+            </div>
             
             <div className="space-y-4">
               {[
-                { icon: Sparkles, color: "#2F6BFF", step: "01", title: "Omnichannel Lead Ingestion", desc: "Websites, social networks, calls captured automatically" },
-                { icon: Workflow, color: "#BFD4FF", step: "02", title: "n8n Qualification Router", desc: "Automated verification and smart routing pipelines" },
-                { icon: LineChart, color: "#34d399", step: "03", title: "CRM Logging & Automated Booking", desc: "Syncs directly with your team calendar" },
+                { step: "NODE 01", title: "Omnichannel Lead Ingestion", desc: "Websites, social networks, calls captured automatically" },
+                { step: "NODE 02", title: "n8n Qualification Router", desc: "Automated verification and smart routing pipelines" },
+                { step: "NODE 03", title: "CRM Logging & Automated Booking", desc: "Syncs directly with your team calendar" },
               ].map((flow, i) => (
-                <div key={i} className="flex gap-4 p-3 rounded bg-white/5 border border-white/5 items-start">
-                  <div className="p-2 rounded" style={{ background: `${flow.color}15`, border: `1px solid ${flow.color}30` }}>
-                    <flow.icon size={16} style={{ color: flow.color }} />
-                  </div>
+                <div key={i} className="flex gap-4 p-4 rounded-none bg-white/[0.01] border border-white/5 items-start transition duration-300 hover:bg-white/2">
+                  <span className="text-[8px] font-mono text-[#c5a880] border border-[#c5a880]/30 px-1.5 py-0.5 bg-[#c5a880]/5">{flow.step}</span>
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[9px] font-mono text-[#BFD4FF]/40">{flow.step}</span>
-                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">{flow.title}</h4>
-                    </div>
-                    <p className="text-[10px] text-[#BFD4FF]/60 mt-0.5">{flow.desc}</p>
+                    <h4 className="text-xs font-bold text-white uppercase tracking-wider">{flow.title}</h4>
+                    <p className="text-[10px] text-zinc-400 mt-1 leading-relaxed">{flow.desc}</p>
                   </div>
                 </div>
               ))}
@@ -666,24 +671,24 @@ export default function HomePage() {
         id="engine-b-section"
         sideHeadingNum="04 // ENGINE B"
         sideHeadingText="Creative Calibration"
-        className="bg-slate-950/95 backdrop-blur-md border-t border-white/5"
+        className="bg-[#09090b]/98 backdrop-blur-md border-t border-white/5"
         zIndex={50}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-5 space-y-4">
-            <span className="inline-block text-[9px] uppercase tracking-[0.2em] font-bold text-red-400 bg-red-950/40 border border-red-500/25 px-3 py-1 rounded">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-5 space-y-6">
+            <span className="inline-block text-[8px] font-mono uppercase tracking-[0.3em] text-[#c5a880]">
               Engine B · Creative Muscle
             </span>
-            <h2 className="font-serif font-black text-3xl md:text-5xl text-white tracking-tight leading-none">
+            <h2 className="font-serif font-light text-3xl md:text-5xl text-white tracking-tight leading-none">
               High-Fidelity<br />
-              <em className="text-red-400 italic">Brand Production</em>
+              <em className="text-[#c5a880] italic font-cormorant font-normal">Brand Production</em>
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-light">
+            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-light">
               Premium brand photography, cinematic video campaigns, and complete visual guidelines designed to command luxury-tier trust.
             </p>
             <Link
               href="/engine-b"
-              className="inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-wider text-white bg-red-500 hover:bg-red-600 px-4 py-2.5 rounded transition"
+              className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-widest text-black bg-[#c5a880] hover:bg-[#b5976f] px-6 py-3.5 transition"
             >
               Configure Engine B <ArrowRight size={12} />
             </Link>
@@ -691,19 +696,22 @@ export default function HomePage() {
 
           <div className="lg:col-span-7 grid grid-cols-2 gap-4">
             {[
-              { label: "Commercial Films", bg: "from-red-950/40", client: "Luxury Auto", icon: Tv },
-              { label: "Coastal Editorials", bg: "from-amber-950/30", client: "Oceana Parfum", icon: Camera },
-              { label: "Corporate Guidelines", bg: "from-violet-950/30", client: "Grovice Labs", icon: Layers },
-              { label: "Social Campaign Reels", bg: "from-pink-950/30", client: "Coastal Resorts", icon: Sparkles },
+              { label: "Commercial Films", ratio: "2.39 : 1 AR", camera: "Arri Alexa LF", client: "Luxury Auto" },
+              { label: "Coastal Editorials", ratio: "4 : 5 Portrait", camera: "Hasselblad H6D", client: "Oceana Parfum" },
+              { label: "Brand Identity", ratio: "12-Col System", camera: "Typography Guides", client: "Grovice Labs" },
+              { label: "Social Campaign Reels", ratio: "9 : 16 Vertical", camera: "Sony FX3 / 60fps", client: "Coastal Resorts" },
             ].map((p, idx) => (
               <div
                 key={idx}
-                className={`p-5 rounded-lg border border-white/5 bg-gradient-to-br ${p.bg} to-[#020914] flex flex-col justify-between aspect-[16/10]`}
+                className="p-5 rounded-none border border-white/5 bg-[#121214]/60 flex flex-col justify-between aspect-[16/10] hover:border-[#c5a880]/30 transition-all duration-300 group"
               >
-                <p.icon size={16} className="text-slate-400" />
+                <div className="flex items-center justify-between">
+                  <span className="text-[7px] font-mono text-zinc-500 uppercase tracking-widest">{p.ratio}</span>
+                  <span className="text-[7px] font-mono text-[#c5a880] uppercase tracking-wider">{p.camera}</span>
+                </div>
                 <div>
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">{p.label}</h4>
-                  <span className="text-[9px] text-slate-500 uppercase tracking-widest font-mono">Client: {p.client}</span>
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider group-hover:text-[#c5a880] transition-colors duration-300">{p.label}</h4>
+                  <span className="text-[8px] text-zinc-500 uppercase tracking-widest font-mono mt-1 block">Client: {p.client}</span>
                 </div>
               </div>
             ))}
@@ -718,15 +726,18 @@ export default function HomePage() {
         id="reviews-section"
         sideHeadingNum="05 // TRUST OS"
         sideHeadingText="Client Testimonials"
-        className="bg-slate-900/95 backdrop-blur-md border-t border-white/5"
+        className="bg-[#0e0e10]/98 backdrop-blur-md border-t border-white/5"
         zIndex={60}
       >
-        <div className="space-y-8">
-          <div className="max-w-xl space-y-2">
-            <h2 className="font-serif font-black text-3xl md:text-4xl text-white leading-tight">
+        <div className="space-y-12">
+          <div className="max-w-xl space-y-4">
+            <span className="inline-block text-[8px] font-mono uppercase tracking-[0.3em] text-[#c5a880]">
+              Ecosystem Feedback
+            </span>
+            <h2 className="font-serif font-light text-3xl md:text-5xl text-white leading-tight">
               Ecosystem Feedback
             </h2>
-            <p className="text-xs text-[#BFD4FF]/60 font-light">
+            <p className="text-xs text-zinc-400 leading-relaxed font-light">
               Honest validation from founders who integrated our Software and Creative Engines.
             </p>
           </div>
@@ -737,48 +748,34 @@ export default function HomePage() {
                 quote: "Grovice completely integrated our client acquisition setup. We automated booking workflows via WhatsApp, resulting in an 80% decrease in manual call answering time.",
                 author: "Siripuram Properties",
                 role: "Director of Operations",
-                rating: 5,
               },
               {
                 quote: "The visual photography and cinematic automobile set production delivered for our auto launch captured the premium feel we wanted. They are the best creative agency in Vizag.",
                 author: "V-Motors Auto Group",
-                role: "Marketing lead",
-                rating: 5,
+                role: "Marketing Lead",
               },
               {
                 quote: "Our backend API and custom databases developed by Grovice have run with zero latency for six months. Outstanding software engineering support.",
                 author: "Vizag Maritime Logistics",
                 role: "Systems Specialist",
-                rating: 5,
               },
             ].map((rev, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-xl border border-white/5 bg-slate-950/40 backdrop-blur-md flex flex-col justify-between space-y-6 relative"
+                className="p-6 rounded-none border border-white/5 bg-[#121214]/40 flex flex-col justify-between space-y-6 relative"
               >
-                <div className="absolute top-4 right-4 text-[#2F6BFF]/10">
-                  <Quote size={48} />
-                </div>
-                
                 <div className="space-y-4 relative z-10">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: rev.rating }).map((_, i) => (
-                      <Star key={i} size={10} className="fill-amber-400 text-amber-400" />
-                    ))}
+                  <div className="text-[7px] font-mono text-[#c5a880] tracking-widest uppercase">
+                    [ SYSTEM VERIFIED // 5/5 ]
                   </div>
-                  <p className="text-xs text-slate-300 leading-relaxed font-light italic">
+                  <p className="font-cormorant text-base md:text-lg text-zinc-300 leading-relaxed italic">
                     &ldquo;{rev.quote}&rdquo;
                   </p>
                 </div>
 
-                <div className="flex items-center gap-3 pt-4 border-t border-white/5">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#2F6BFF] to-[#BFD4FF] flex items-center justify-center font-bold text-xs text-slate-950">
-                    {rev.author[0]}
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-white uppercase tracking-wider">{rev.author}</h4>
-                    <span className="text-[9px] text-[#BFD4FF]/60 uppercase tracking-widest font-mono">{rev.role}</span>
-                  </div>
+                <div className="pt-4 border-t border-white/5">
+                  <h4 className="text-[9px] font-mono font-bold text-white uppercase tracking-widest">{rev.author}</h4>
+                  <span className="text-[8px] text-zinc-500 uppercase tracking-widest font-mono block mt-0.5">{rev.role}</span>
                 </div>
               </div>
             ))}
@@ -793,30 +790,30 @@ export default function HomePage() {
         id="cta-section"
         sideHeadingNum="06 // ONBOARDING"
         sideHeadingText="Deploy Ecosystem"
-        className="bg-slate-950/95 backdrop-blur-md border-t border-white/5 pb-32"
+        className="bg-[#09090b]/98 backdrop-blur-md border-t border-white/5 pb-32"
         zIndex={70}
       >
         <div className="max-w-xl space-y-6">
-          <span className="text-[9px] uppercase tracking-[0.25em] font-bold text-[#2F6BFF] block">
+          <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#c5a880] block">
             Configure Your Ecosystem
           </span>
-          <h2 className="font-serif font-black text-4xl sm:text-6xl text-white tracking-tight leading-none">
+          <h2 className="font-serif font-light text-4xl sm:text-6xl text-white tracking-tight leading-none">
             Scale Your<br />
-            <em className="text-[#BFD4FF] italic">Business OS Today</em>
+            <em className="text-[#c5a880] italic font-cormorant font-normal">Business OS Today</em>
           </h2>
-          <p className="text-xs sm:text-sm text-[#BFD4FF]/60 max-w-md leading-relaxed font-light">
+          <p className="text-xs sm:text-sm text-zinc-400 max-w-md leading-relaxed font-light">
             One partner. One operating system. We coordinate your technical automation layers and your entire creative content output.
           </p>
 
-          <div className="flex flex-wrap gap-4 pt-2">
+          <div className="flex flex-wrap gap-4 pt-4">
             <a
               href="tel:+917396621004"
-              className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider text-slate-950 bg-white transition-all duration-300"
+              className="px-8 py-4 rounded-none text-[10px] font-mono font-bold uppercase tracking-widest text-black bg-[#c5a880] transition-all duration-300"
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "#DCEBFF";
+                (e.currentTarget as HTMLElement).style.background = "#b5976f";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "white";
+                (e.currentTarget as HTMLElement).style.background = "#c5a880";
               }}
             >
               Book Scoping Call
@@ -824,12 +821,12 @@ export default function HomePage() {
 
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-chatbot"))}
-              className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider border border-white/20 bg-white/5 text-white transition-all duration-300"
+              className="px-8 py-4 rounded-none text-[10px] font-mono font-bold uppercase tracking-widest border border-white/10 bg-white/2 text-white transition-all duration-300"
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)";
+                (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.06)";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
+                (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.02)";
               }}
             >
               Chat With OS
@@ -858,38 +855,48 @@ export default function HomePage() {
             display: "flex",
             alignItems: "center",
             gap: "0.6rem",
-            background: "rgba(7, 28, 61, 0.85)",
+            background: "rgba(18, 18, 20, 0.9)",
             color: "var(--white)",
-            border: "1px solid rgba(255,255,255,0.12)",
+            border: "1px solid rgba(197, 168, 128, 0.3)",
             backdropFilter: "blur(16px)",
             WebkitBackdropFilter: "blur(16px)",
-            borderRadius: 100,
-            padding: "0.6rem 1.5rem",
-            fontSize: "0.75rem",
-            fontWeight: 500,
-            letterSpacing: "0.12em",
+            borderRadius: 0,
+            padding: "0.75rem 1.75rem",
+            fontSize: "0.7rem",
+            fontFamily: "monospace",
+            fontWeight: 700,
+            letterSpacing: "0.15em",
             textTransform: "uppercase",
             cursor: "pointer",
             transition: "all 0.3s",
-            boxShadow: "0 8px 32px rgba(11,43,92,0.25)",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.background = "rgba(47, 107, 255, 0.85)";
+            (e.currentTarget as HTMLElement).style.background = "#c5a880";
+            (e.currentTarget as HTMLElement).style.color = "#000000";
+            (e.currentTarget as HTMLElement).style.borderColor = "#c5a880";
             (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+            const dot = (e.currentTarget as HTMLElement).querySelector("span");
+            if (dot) dot.style.background = "#000000";
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.background = "rgba(7, 28, 61, 0.85)";
+            (e.currentTarget as HTMLElement).style.background = "rgba(18, 18, 20, 0.9)";
+            (e.currentTarget as HTMLElement).style.color = "var(--white)";
+            (e.currentTarget as HTMLElement).style.borderColor = "rgba(197, 168, 128, 0.3)";
             (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+            const dot = (e.currentTarget as HTMLElement).querySelector("span");
+            if (dot) dot.style.background = "#c5a880";
           }}
         >
           <span
             style={{
-              width: 7,
-              height: 7,
+              width: 6,
+              height: 6,
               borderRadius: "50%",
-              background: "var(--sky)",
+              background: "#c5a880",
               animation: "pulse-dot 2.5s ease-in-out infinite",
               display: "inline-block",
+              transition: "background 0.3s",
             }}
           />
           Start a Project

@@ -4,23 +4,23 @@
 
 /* ── CSS CUSTOM PROPERTIES ── */
 :root {
-  --ocean: #030814;
-  --ocean-mid: #07152b;
-  --ocean-bright: #2F6BFF;
+  --ocean: #09090b;
+  --ocean-mid: #141416;
+  --ocean-bright: #c5a880; /* Elegant Warm Gold/Champagne */
   --sky: #cbd5e1;
   --sky-light: #f1f5f9;
   --white: #FFFFFF;
-  --cream: #050e1e;
-  --text: #cbd5e1;
-  --muted: #94a3b8;
-  --border: rgba(47, 107, 255, 0.15);
-  --metallic-highlight: #93c5fd;
+  --cream: #0e0e10;
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+  --border: rgba(197, 168, 128, 0.15);
+  --metallic-highlight: #e4e4e7;
 
   /* Dark mode legacy */
-  --background: #030814;
-  --foreground: #f8fafc;
-  --glow-color: rgba(47, 107, 255, 0.4);
-  --glow-color-violet: rgba(139, 92, 246, 0.4);
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  --glow-color: rgba(197, 168, 128, 0.15);
+  --glow-color-violet: rgba(197, 168, 128, 0.08);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,7 +28,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: #030814;
+  background: #09090b;
   color: var(--text);
   font-family: 'DM Sans', 'Outfit', system-ui, sans-serif;
   font-weight: 300;
@@ -69,19 +69,19 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ── TEXT UTILITIES ── */
 .metallic-text {
-  background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 50%, #3b82f6 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #d4d4d8 50%, #c5a880 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .metallic-blue-text {
-  background: linear-gradient(135deg, #e0f2fe 0%, #00e5ff 40%, #0284c7 100%);
+  background: linear-gradient(135deg, #f4f4f5 0%, #c5a880 50%, #8e7456 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .ocean-gradient-text {
-  background: linear-gradient(135deg, var(--ocean) 0%, var(--ocean-bright) 100%);
+  background: linear-gradient(135deg, #ffffff 0%, var(--ocean-bright) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-.glow-text { text-shadow: 0 0 10px var(--glow-color); }
-.glow-text-violet { text-shadow: 0 0 10px var(--glow-color-violet); }
+.glow-text { text-shadow: 0 0 15px rgba(197, 168, 128, 0.3); }
+.glow-text-violet { text-shadow: 0 0 15px rgba(197, 168, 128, 0.15); }
 
 /* ── GRID BG HELPERS ── */
 .grid-bg-tech {
@@ -106,7 +106,7 @@ html.lenis, html.lenis body { height: auto; }
   content: '';
   position: absolute; top: 0; left: -60%;
   width: 60%; height: 100%;
-  background: linear-gradient(90deg, transparent, #2E6BC4, transparent);
+  background: linear-gradient(90deg, transparent, #c5a880, transparent);
   animation: flow-line 2s linear infinite;
 }
 

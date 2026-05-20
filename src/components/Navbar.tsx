@@ -36,7 +36,7 @@ export default function Navbar() {
           justifyContent: "space-between",
           padding: scrolled ? "1rem 6%" : "1.6rem 6%",
           transition: "all 0.7s cubic-bezier(0.16,1,0.3,1)",
-          background: scrolled ? "rgba(3, 8, 20, 0.75)" : "transparent",
+          background: scrolled ? "rgba(9, 9, 11, 0.8)" : "transparent",
           backdropFilter: scrolled ? "blur(24px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(24px)" : "none",
           borderBottom: scrolled ? "1px solid rgba(255, 255, 255, 0.08)" : "none",
@@ -59,12 +59,12 @@ export default function Navbar() {
           }}
         >
           GROVICE
-          <span style={{ color: "var(--ocean-bright)" }}>2.0</span>
+          <span style={{ color: "#c5a880" }}>2.0</span>
           <span
             style={{
               width: 8,
               height: 8,
-              background: "var(--ocean-bright)",
+              background: "#c5a880",
               borderRadius: "50%",
               display: "inline-block",
               animation: "pulse-dot 2.5s ease-in-out infinite",
@@ -86,9 +86,10 @@ export default function Navbar() {
                 style={{
                   color: "var(--white)",
                   textDecoration: "none",
-                  fontSize: "0.8rem",
+                  fontSize: "0.75rem",
+                  fontFamily: "monospace",
                   fontWeight: 400,
-                  letterSpacing: "0.12em",
+                  letterSpacing: "0.15em",
                   textTransform: "uppercase",
                   opacity: isActive ? 1 : 0.65,
                   transition: "opacity 0.3s",
@@ -104,23 +105,24 @@ export default function Navbar() {
           <a
             href="tel:+917396621004"
             style={{
-              background: "var(--white)",
-              color: "var(--ocean)",
+              background: "#c5a880",
+              color: "#000000",
               padding: "0.6rem 1.5rem",
-              borderRadius: "3px",
-              fontSize: "0.78rem",
-              fontWeight: 500,
-              letterSpacing: "0.1em",
+              borderRadius: "0px",
+              fontFamily: "monospace",
+              fontSize: "0.72rem",
+              fontWeight: 700,
+              letterSpacing: "0.15em",
               textTransform: "uppercase",
               textDecoration: "none",
               transition: "all 0.3s",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "rgba(255, 255, 255, 0.85)";
+              (e.currentTarget as HTMLElement).style.background = "#b5976f";
               (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background = "var(--white)";
+              (e.currentTarget as HTMLElement).style.background = "#c5a880";
               (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
             }}
           >
@@ -156,7 +158,7 @@ export default function Navbar() {
             right: 0,
             bottom: 0,
             zIndex: 999,
-            background: "rgba(3, 8, 20, 0.98)",
+            background: "rgba(9, 9, 11, 0.98)",
             backdropFilter: "blur(24px)",
             display: "flex",
             flexDirection: "column",
@@ -204,13 +206,14 @@ export default function Navbar() {
             onClick={() => setIsOpen(false)}
             style={{
               marginTop: "1rem",
-              background: "var(--white)",
-              color: "var(--ocean)",
+              background: "#c5a880",
+              color: "#000000",
               padding: "0.9rem 2.5rem",
-              borderRadius: "3px",
-              fontSize: "0.85rem",
-              fontWeight: 500,
-              letterSpacing: "0.12em",
+              borderRadius: "0px",
+              fontFamily: "monospace",
+              fontSize: "0.8rem",
+              fontWeight: 700,
+              letterSpacing: "0.15em",
               textTransform: "uppercase",
               textDecoration: "none",
             }}
