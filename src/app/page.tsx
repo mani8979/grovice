@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { ArrowRight, Phone, Mail, MapPin } from "lucide-react";
 
 /* ── Dynamic 3D imports (no SSR — WebGL needs browser) ── */
@@ -61,29 +61,39 @@ export default function LandingPage() {
     offset: ["start start", "end end"]
   });
 
+  // Smooth out scroll progress using spring dynamics for cinematic deceleration
+  const smoothScroll = useSpring(scrollYProgress, {
+    stiffness: 40,
+    damping: 18,
+    mass: 0.8,
+    restDelta: 0.001
+  });
+
   /* ── Scroll-driven DNA rotation ── */
-  const dnaRotation = useTransform(scrollYProgress, [0, 1], [0, 360]);
+  const dnaRotation = useTransform(smoothScroll, [0, 1], [0, 360]);
 
   /* ── Scene 1: Arrival (0–25%) ── */
-  const bgY = useTransform(scrollYProgress, [0, 0.25], ["0px", "-20px"]);
-  const logoOpacity = useTransform(scrollYProgress, [0, 0.20, 0.25], [1, 1, 0]);
-  const welcomeOpacity = useTransform(scrollYProgress, [0, 0.04, 0.18, 0.24], [0, 1, 1, 0]);
-  const welcomeY = useTransform(scrollYProgress, [0, 0.06, 0.18, 0.24], ["15px", "0px", "0px", "-15px"]);
+  const bgY = useTransform(smoothScroll, [0, 0.25], ["0px", "-20px"]);
+  const logoOpacity = useTransform(smoothScroll, [0, 0.20, 0.25], [1, 1, 0]);
+  const welcomeOpacity = useTransform(smoothScroll, [0, 0.04, 0.18, 0.24], [0, 1, 1, 0]);
+  const welcomeY = useTransform(smoothScroll, [0, 0.06, 0.18, 0.24], ["15px", "0px", "0px", "-15px"]);
 
   /* ── Scene 2: Identity Lock (25–50%) ── */
-  const s2Opacity = useTransform(scrollYProgress, [0.24, 0.29, 0.44, 0.49], [0, 1, 1, 0]);
-  const s2Y = useTransform(scrollYProgress, [0.24, 0.29, 0.44, 0.49], ["24px", "0px", "0px", "-24px"]);
-  const s2Blur = useTransform(scrollYProgress, [0.24, 0.30, 0.42, 0.49], ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"]);
+  const s2Opacity = useTransform(smoothScroll, [0.24, 0.29, 0.44, 0.49], [0, 1, 1, 0]);
+  const s2Y = useTransform(smoothScroll, [0.24, 0.29, 0.44, 0.49], ["24px", "0px", "0px", "-24px"]);
+  const s2Blur = useTransform(smoothScroll, [0.24, 0.30, 0.42, 0.49], ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"]);
 
   /* ── Scene 3: Engine Gateway (50–80%) ── */
-  const s3Opacity = useTransform(scrollYProgress, [0.49, 0.55, 0.76, 0.81], [0, 1, 1, 0]);
-  const s3Y = useTransform(scrollYProgress, [0.49, 0.55, 0.76, 0.81], ["24px", "0px", "0px", "-24px"]);
-  const s3Blur = useTransform(scrollYProgress, [0.49, 0.56, 0.74, 0.81], ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"]);
+  const s3Opacity = useTransform(smoothScroll, [0.49, 0.55, 0.76, 0.81], [0, 1, 1, 0]);
+  const s3Y = useTransform(smoothScroll, [0.49, 0.55, 0.76, 0.81], ["24px", "0px", "0px", "-24px"]);
+  const s3Blur = useTransform(smoothScroll, [0.49, 0.56, 0.74, 0.81], ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"]);
+  const s3PointerEvents = useTransform(smoothScroll, (v) => (v >= 0.49 && v <= 0.80) ? "auto" : "none");
 
   /* ── Scene 4: Conversion (80–100%) ── */
-  const s4Opacity = useTransform(scrollYProgress, [0.80, 0.86], [0, 1]);
-  const s4Y = useTransform(scrollYProgress, [0.80, 0.86], ["24px", "0px"]);
-  const s4GlowSize = useTransform(scrollYProgress, [0.80, 0.98], ["300px", "120px"]);
+  const s4Opacity = useTransform(smoothScroll, [0.80, 0.86], [0, 1]);
+  const s4Y = useTransform(smoothScroll, [0.80, 0.86], ["24px", "0px"]);
+  const s4GlowSize = useTransform(smoothScroll, [0.80, 0.98], ["300px", "120px"]);
+  const s4PointerEvents = useTransform(smoothScroll, (v) => (v >= 0.80) ? "auto" : "none");
 
   /* ── Engine B cycling preview frames ── */
   const [activeFrame, setActiveFrame] = useState(0);
@@ -141,6 +151,16 @@ export default function LandingPage() {
             </p>
             <span className="w-2 h-2 rounded-full bg-[#00D2FF] animate-pulse mt-2" />
           </motion.div>
+
+          {/* Looping premium scroll indicator */}
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 font-mono text-[9px] text-[#00D2FF] tracking-[0.25em] opacity-80 select-none">
+            <span>SCROLL TO EXPLORE</span>
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+              className="w-1.5 h-1.5 rounded-full bg-[#00D2FF]"
+            />
+          </div>
         </motion.div>
 
 
@@ -170,7 +190,7 @@ export default function LandingPage() {
             ══════════════════════════════════════════════ */}
         <motion.div
           className="absolute inset-0 z-[10] flex flex-col items-center justify-center px-6 py-20"
-          style={{ opacity: s3Opacity, y: s3Y, filter: s3Blur }}
+          style={{ opacity: s3Opacity, y: s3Y, filter: s3Blur, pointerEvents: s3PointerEvents }}
         >
           <div className="w-full max-w-5xl flex flex-col items-center gap-8">
             <div className="text-center space-y-2">
@@ -278,7 +298,7 @@ export default function LandingPage() {
             ══════════════════════════════════════════════ */}
         <motion.div
           className="absolute inset-0 z-[10] flex flex-col items-center justify-center text-center px-6"
-          style={{ opacity: s4Opacity, y: s4Y }}
+          style={{ opacity: s4Opacity, y: s4Y, pointerEvents: s4PointerEvents }}
         >
           <div className="max-w-2xl mx-auto space-y-8 relative flex flex-col items-center">
             {/* Shrinking glow target */}

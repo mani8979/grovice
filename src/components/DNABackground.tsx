@@ -33,9 +33,8 @@ function DNAMesh({ rotationY }: { rotationY: number }) {
   box.getSize(size);
   gltf.scene.position.sub(center);
 
-  // Scale to fill screen nicely
-  const maxDim = Math.max(size.x, size.y, size.z);
-  const scale = maxDim > 0 ? 5.5 / maxDim : 1;
+  // Scale to fit screen vertically from top to bottom, extending beyond the boundaries
+  const scale = size.y > 0 ? 13.5 / size.y : 1.5;
 
   useFrame(() => {
     if (groupRef.current) {
