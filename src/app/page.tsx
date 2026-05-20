@@ -75,8 +75,9 @@ export default function LandingPage() {
   /* ── Scene 1: Arrival (0–25%) ── */
   const bgY = useTransform(smoothScroll, [0, 0.25], ["0px", "-20px"]);
   const logoOpacity = useTransform(smoothScroll, [0, 0.20, 0.25], [1, 1, 0]);
-  const welcomeOpacity = useTransform(smoothScroll, [0, 0.04, 0.18, 0.24], [0, 1, 1, 0]);
-  const welcomeY = useTransform(smoothScroll, [0, 0.06, 0.18, 0.24], ["15px", "0px", "0px", "-15px"]);
+  // Start fully visible (opacity 1, no offset) — fade + rise out as user scrolls past 18%
+  const welcomeOpacity = useTransform(smoothScroll, [0, 0.18, 0.24], [1, 1, 0]);
+  const welcomeY = useTransform(smoothScroll, [0, 0.18, 0.24], ["0px", "0px", "-20px"]);
 
   /* ── Scene 2: Identity Lock (25–50%) ── */
   const s2Opacity = useTransform(smoothScroll, [0.24, 0.29, 0.44, 0.49], [0, 1, 1, 0]);
