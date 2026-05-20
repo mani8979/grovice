@@ -2,943 +2,660 @@
 
 import React, { useEffect, useRef } from "react";
 import Link from "next/link";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import {
+  Sparkles,
+  ArrowRight,
+  Workflow,
+  Camera,
+  Layers,
+  Database,
+  Cpu,
+  Tv,
+  LineChart,
+} from "lucide-react";
 
 /* ─────────────────────────────────────────────
-   HERO SECTION
+   COMPOSABLE ORBITING CARD 1: ENGINE A
 ───────────────────────────────────────────── */
-function HeroSection() {
-  const particlesRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const container = particlesRef.current;
-    if (!container) return;
-    for (let i = 0; i < 24; i++) {
-      const s = document.createElement("span");
-      const size = 2 + Math.random() * 3;
-      s.className = "hero-particle";
-      s.style.cssText = `
-        left:${Math.random() * 100}%;
-        top:${Math.random() * 100}%;
-        width:${size}px;
-        height:${size}px;
-        --dur:${6 + Math.random() * 10}s;
-        --delay:${Math.random() * 8}s;
-      `;
-      container.appendChild(s);
-    }
-  }, []);
-
-  const words = ["Visakhapatnam's", "First", "Business", "Operating", "System"];
-
+function EngineACard() {
   return (
-    <section
-      id="hero"
+    <div
+      className="p-5 rounded-xl border transition-all duration-500 shadow-lg relative overflow-hidden"
       style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: "0 6%",
-        position: "relative",
-        overflow: "hidden",
-        background: "var(--white)",
+        background: "rgba(7, 28, 61, 0.75)",
+        backdropFilter: "blur(16px)",
+        borderColor: "rgba(47, 107, 255, 0.25)",
+        boxShadow: "0 10px 30px rgba(47, 107, 255, 0.15)",
+        minWidth: 260,
       }}
     >
-      {/* Particles */}
+      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/10 to-transparent blur-md pointer-events-none" />
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-[9px] uppercase tracking-widest text-[#2F6BFF] font-bold">Engine A · AI OS</span>
+        <div className="flex items-center gap-1.5 bg-[#2F6BFF]/10 px-2 py-0.5 rounded border border-[#2F6BFF]/20">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#2F6BFF] animate-pulse" />
+          <span className="text-[8px] text-[#2F6BFF] font-mono font-bold uppercase">Active</span>
+        </div>
+      </div>
+      <div className="space-y-3 font-mono text-[10px] text-slate-300">
+        <div className="flex justify-between items-center border-b border-white/5 pb-1">
+          <span>AI Agents</span>
+          <span className="text-[#BFD4FF]">98.4% Efficiency</span>
+        </div>
+        <div className="flex justify-between items-center border-b border-white/5 pb-1">
+          <span>CRM Router</span>
+          <span className="text-[#BFD4FF]">n8n Live</span>
+        </div>
+        <div className="flex justify-between items-center">
+          <span>Voice Dialers</span>
+          <span className="text-emerald-400">12 Parallel</span>
+        </div>
+      </div>
+      <div className="mt-4 pt-3 border-t border-white/5 flex items-center gap-2">
+        <Cpu size={12} className="text-[#2F6BFF]" />
+        <span className="text-[9px] text-[#BFD4FF] font-sans font-medium uppercase tracking-wider">Automating Sales Pipeline</span>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   COMPOSABLE ORBITING CARD 2: ENGINE B
+───────────────────────────────────────────── */
+function EngineBCard() {
+  return (
+    <div
+      className="p-5 rounded-xl border transition-all duration-500 shadow-lg relative overflow-hidden"
+      style={{
+        background: "rgba(255, 255, 255, 0.03)",
+        backdropFilter: "blur(16px)",
+        borderColor: "rgba(255, 255, 255, 0.08)",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+        minWidth: 260,
+      }}
+    >
+      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-red-500/10 to-transparent blur-md pointer-events-none" />
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-[9px] uppercase tracking-widest text-[#BFD4FF]/60 font-bold">Engine B · Creative</span>
+        <span className="text-[8px] bg-red-950/40 border border-red-500/30 text-red-400 px-2 py-0.5 rounded uppercase font-bold tracking-wider">Production</span>
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        {["🌅", "🎥", "📸"].map((emoji, i) => (
+          <div
+            key={i}
+            className="aspect-[4/5] rounded bg-white/5 border border-white/5 flex items-center justify-center text-sm relative group overflow-hidden"
+          >
+            {emoji}
+            <div className="absolute inset-0 bg-[#071C3D]/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span className="text-[6px] text-white uppercase font-bold tracking-widest">View</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 flex items-center justify-between text-[9px] text-[#BFD4FF]/60 font-sans">
+        <span>Vizag Coastal Shoots</span>
+        <span className="text-white font-medium">1080p | 4K</span>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   COMPOSABLE ORBITING CARD 3: SOFTWARE PROJECTS
+───────────────────────────────────────────── */
+function SoftwareCard() {
+  return (
+    <div
+      className="p-5 rounded-xl border transition-all duration-500 shadow-lg relative overflow-hidden"
+      style={{
+        background: "rgba(7, 28, 61, 0.75)",
+        backdropFilter: "blur(16px)",
+        borderColor: "rgba(255, 255, 255, 0.08)",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+        minWidth: 260,
+      }}
+    >
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-1.5">
+          <Database size={12} className="text-[#2F6BFF]" />
+          <span className="text-[9px] uppercase tracking-widest text-[#BFD4FF] font-bold">Software Infra</span>
+        </div>
+        <span className="text-[8px] text-[#BFD4FF]/40 font-mono">v2.0.4</span>
+      </div>
+      
+      {/* Code mockup */}
+      <div className="p-3 rounded bg-[#020914]/80 border border-white/5 font-mono text-[8px] text-sky-300/80 space-y-1">
+        <div><span className="text-pink-400">const</span> app = <span className="text-yellow-300">GroviceOS</span>();</div>
+        <div>app.<span className="text-green-300">integrate</span>(<span className="text-orange-300">&apos;EngineA&apos;</span>);</div>
+        <div>app.<span className="text-green-300">powerUp</span>(<span className="text-orange-300">&apos;EngineB&apos;</span>);</div>
+      </div>
+
+      <div className="mt-3 flex items-center justify-between text-[9px] text-[#BFD4FF]/50 font-sans">
+        <span>Custom Portals & Apps</span>
+        <span className="text-emerald-400">Secure ✅</span>
+      </div>
+    </div>
+  );
+}
+
+export default function HomePage() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Scroll binding
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  // Background values
+  const bgGradient = useTransform(
+    scrollYProgress,
+    [0, 0.25, 0.5, 0.8, 1],
+    [
+      "radial-gradient(circle at 50% 50%, rgba(220, 235, 255, 0.95) 0%, rgba(249, 251, 255, 1) 100%)",
+      "radial-gradient(circle at 50% 50%, rgba(220, 235, 255, 0.6) 0%, rgba(7, 28, 61, 0.9) 100%)",
+      "radial-gradient(circle at 50% 50%, rgba(7, 28, 61, 1) 0%, rgba(2, 9, 20, 1) 100%)",
+      "radial-gradient(circle at 50% 50%, rgba(7, 28, 61, 1) 0%, rgba(2, 9, 20, 1) 100%)",
+      "radial-gradient(circle at 50% 50%, rgba(8, 12, 18, 1) 0%, rgba(2, 9, 20, 1) 100%)",
+    ]
+  );
+
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
+  const heroPointerEvents = useTransform(scrollYProgress, [0, 0.2], ["auto", "none"]);
+
+  // Section visibility controls
+  const visionOpacity = useTransform(scrollYProgress, [0.15, 0.28, 0.42], [0, 1, 0]);
+  const visionScale = useTransform(scrollYProgress, [0.15, 0.28], [0.95, 1]);
+  const visionPointerEvents = useTransform(scrollYProgress, [0.15, 0.28, 0.42], ["none", "auto", "none"]);
+
+  const engineAOpacity = useTransform(scrollYProgress, [0.38, 0.52, 0.72], [0, 1, 0]);
+  const engineAScale = useTransform(scrollYProgress, [0.38, 0.52], [0.95, 1]);
+  const engineAPointerEvents = useTransform(scrollYProgress, [0.38, 0.52, 0.72], ["none", "auto", "none"]);
+
+  const engineBOpacity = useTransform(scrollYProgress, [0.68, 0.82, 0.96], [0, 1, 0]);
+  const engineBScale = useTransform(scrollYProgress, [0.68, 0.82], [0.95, 1]);
+  const engineBPointerEvents = useTransform(scrollYProgress, [0.68, 0.82, 0.96], ["none", "auto", "none"]);
+
+  const ctaOpacity = useTransform(scrollYProgress, [0.88, 0.96], [0, 1]);
+  const ctaPointerEvents = useTransform(scrollYProgress, [0.88, 0.96], ["none", "auto"]);
+
+  // Mouse tilt logic for 3D title & floating UI cards
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  const springX = useSpring(mouseX, { stiffness: 100, damping: 20 });
+  const springY = useSpring(mouseY, { stiffness: 100, damping: 20 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
+      const x = (clientX / innerWidth - 0.5) * 30; // degrees max tilt
+      const y = (clientY / innerHeight - 0.5) * -30;
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  return (
+    <motion.div
+      ref={containerRef}
+      style={{
+        background: bgGradient,
+        minHeight: "450vh",
+        position: "relative",
+      }}
+      className="relative text-slate-900"
+    >
+      {/* ── NOISE & MIST TEXTURE LAYER ── */}
       <div
-        ref={particlesRef}
-        style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}
+        style={{
+          position: "fixed",
+          inset: 0,
+          pointerEvents: "none",
+          zIndex: 1,
+          opacity: 0.03,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "128px 128px",
+        }}
       />
 
-      {/* Ghost watermark */}
+      {/* ── GIANT BACKGROUND WATERMARK "GROVICE" ── */}
       <div
         aria-hidden
         style={{
-          position: "absolute",
-          fontFamily: "var(--font-playfair), serif",
+          position: "fixed",
+          fontFamily: "var(--font-archivo), system-ui, sans-serif",
           fontWeight: 900,
-          fontStyle: "italic",
-          fontSize: "clamp(120px, 22vw, 300px)",
-          color: "transparent",
-          WebkitTextStroke: "1px rgba(11,43,92,0.04)",
-          right: "-3%",
-          top: "50%",
+          fontSize: "clamp(120px, 20vw, 320px)",
+          color: "var(--ocean)",
+          opacity: 0.02,
+          left: "-5%",
+          top: "40%",
           transform: "translateY(-50%)",
           lineHeight: 1,
           userSelect: "none",
           pointerEvents: "none",
           whiteSpace: "nowrap",
-          animation: "ghost-drift 18s ease-in-out infinite",
+          zIndex: 0,
         }}
+        className="animate-float-slow"
       >
-        GROW
+        GROVICE
       </div>
 
-      {/* Grid bg */}
-      <div className="grid-bg-ocean" style={{ position: "absolute", inset: 0, pointerEvents: "none" }} />
-
-      {/* Content */}
-      <div style={{ position: "relative", zIndex: 1, maxWidth: 1000 }}>
-        {/* Eyebrow */}
-        <div
-          style={{
-            fontSize: "0.72rem",
-            fontWeight: 500,
-            letterSpacing: "0.25em",
-            textTransform: "uppercase",
-            color: "var(--ocean-bright)",
-            marginBottom: "1.8rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.8rem",
-          }}
-        >
-          <span style={{ width: 32, height: 1, background: "var(--ocean-bright)", display: "inline-block" }} />
-          Visakhapatnam · Est. 2024
-        </div>
-
-        {/* Headline */}
-        <h1
-          style={{
-            fontFamily: "var(--font-playfair), serif",
-            fontWeight: 900,
-            fontSize: "clamp(44px, 7.5vw, 108px)",
-            lineHeight: 0.95,
-            letterSpacing: "-0.02em",
-            color: "var(--ocean)",
-            marginBottom: "2rem",
-            maxWidth: 900,
-          }}
-        >
-          {words.map((w, i) => (
-            <span
-              key={i}
-              style={{
-                display: "inline-block",
-                marginRight: "0.22em",
-                ...(i === 4 ? { fontStyle: "italic", color: "var(--ocean-bright)" } : {}),
-              }}
-            >
-              {w}
-            </span>
-          ))}
-        </h1>
-
-        {/* Sub */}
-        <p
-          style={{
-            fontSize: "clamp(15px, 1.6vw, 19px)",
-            fontWeight: 300,
-            color: "var(--muted)",
-            maxWidth: 520,
-            marginBottom: "3rem",
-            lineHeight: 1.75,
-          }}
-        >
-          Where AI Automation meets Creative Excellence — the first Business Operating System built for Vizag.
-        </p>
-
-        {/* CTAs */}
-        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
-          <Link href="/engine-a" className="btn-ocean">
-            Explore Engine A <span>→</span>
-          </Link>
-          <Link href="/engine-b" className="btn-outline-ocean">
-            Explore Engine B
-          </Link>
-        </div>
-      </div>
-
-      {/* Wave transition to cream */}
-      <div style={{ position: "absolute", bottom: -2, left: 0, right: 0, lineHeight: 0 }}>
-        <svg viewBox="0 0 1440 90" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: 90 }} xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,60 C240,100 480,20 720,50 C960,80 1200,10 1440,45 L1440,90 L0,90 Z" fill="#F7F9FC" />
-        </svg>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   VISION SECTION
-───────────────────────────────────────────── */
-function VisionSection() {
-  const stats = [
-    { number: "1", suffix: "OS", label: "One complete system" },
-    { number: "2", suffix: "Engines", label: "AI Brain + Creative Muscle" },
-    { number: "∞", suffix: "Growth", label: "Unlimited potential" },
-  ];
-
-  const pills = ["AI Automation", "Photography", "Videography", "SEO & Maps", "Social Media", "Design"];
-
-  return (
-    <section
-      id="vision"
-      style={{
-        background: "var(--cream)",
-        padding: "9rem 6%",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      <div className="grid-bg-ocean" style={{ position: "absolute", inset: 0, pointerEvents: "none", opacity: 0.5 }} />
-      <div
+      {/* ═════════════════════════════════════════════
+          SECTION 1: IMMERSIVE HERO VIEWPORT (STICKY)
+          ═════════════════════════════════════════════ */}
+      <motion.div
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "5rem",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "100vh",
+          display: "flex",
           alignItems: "center",
-          maxWidth: 1200,
-          margin: "0 auto",
-          position: "relative",
-          zIndex: 1,
+          opacity: heroOpacity,
+          scale: heroScale,
+          pointerEvents: heroPointerEvents,
+          zIndex: 2,
         }}
-        className="vision-inner"
+        className="px-6 sm:px-12 md:px-20"
       >
-        {/* Stats */}
-        <div>
-          {stats.map((s, i) => (
-            <div
-              key={i}
-              style={{
-                padding: "2.5rem 0",
-                borderBottom: "1px solid var(--border)",
-                ...(i === 0 ? { borderTop: "1px solid var(--border)" } : {}),
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: "var(--font-playfair), serif",
-                  fontWeight: 900,
-                  fontSize: "clamp(52px, 6vw, 80px)",
-                  color: "var(--ocean)",
-                  lineHeight: 1,
-                  letterSpacing: "-0.03em",
-                }}
-              >
-                {s.number}{" "}
-                <span style={{ color: "var(--ocean-bright)" }}>{s.suffix}</span>
-              </div>
-              <div
-                style={{
-                  fontSize: "0.8rem",
-                  fontWeight: 500,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: "var(--muted)",
-                  marginTop: "0.4rem",
-                }}
-              >
-                {s.label}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Text */}
-        <div>
-          <span className="section-tag">Our Vision</span>
-          <h2
-            style={{
-              fontFamily: "var(--font-playfair), serif",
-              fontWeight: 900,
-              fontSize: "clamp(30px, 3.5vw, 48px)",
-              lineHeight: 1.1,
-              color: "var(--ocean)",
-              marginBottom: "1.5rem",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            Redefining digital growth{" "}
-            <em style={{ fontStyle: "italic", color: "var(--ocean-bright)" }}>in Vizag</em>
-          </h2>
-          <p style={{ fontSize: "1rem", fontWeight: 300, color: "#4A6080", lineHeight: 1.85, marginBottom: "1.2rem" }}>
-            Grovice 2.0 is a hybrid agency that merges AI-powered automation with a managed creative talent marketplace. We handle everything — from the technical backend running your leads to the creative frontend building your brand.
-          </p>
-          <p style={{ fontSize: "1rem", fontWeight: 300, color: "#4A6080", lineHeight: 1.85, marginBottom: "2rem" }}>
-            Born in Visakhapatnam. Built for Vizag businesses. With on-field presence in Siripuram and Gajuwaka, we deliver digital excellence with local trust.
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
-            {pills.map((p) => (
-              <span
-                key={p}
-                style={{
-                  background: "var(--sky)",
-                  color: "var(--ocean)",
-                  fontSize: "0.78rem",
-                  fontWeight: 500,
-                  padding: "0.45rem 1rem",
-                  borderRadius: 100,
-                  letterSpacing: "0.05em",
-                }}
-              >
-                {p}
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pointer-events-auto">
+          {/* LEFT COLUMN: HERO ESSENTIALS */}
+          <div className="lg:col-span-7 space-y-6 text-left relative z-10">
+            {/* Tiny Label */}
+            <div className="inline-flex items-center gap-3">
+              <span className="w-8 h-[1px] bg-[#2F6BFF] block" />
+              <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[#2F6BFF]">
+                Visakhapatnam’s First Business Operating System
               </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Wave to Engine A */}
-      <div style={{ position: "absolute", bottom: -2, left: 0, right: 0, lineHeight: 0 }}>
-        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: 80 }} xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,30 1440,40 L1440,80 L0,80 Z" fill="var(--ocean)" />
-        </svg>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   ENGINE A SECTION
-───────────────────────────────────────────── */
-function EngineASection() {
-  const steps = [
-    { num: "01", title: "Lead comes in", body: "Via phone, WhatsApp, Instagram, or your website — every channel captured automatically." },
-    { num: "02", title: "AI responds instantly", body: "Our AI Voice Agent answers, qualifies, and engages your lead within 3 seconds — 24 hours a day." },
-    { num: "03", title: "Lead gets booked", body: "The n8n workflow nurtures the lead, updates your CRM, and books them into your calendar automatically." },
-  ];
-
-  const eaStats = [
-    { num: "3", suf: "sec", label: "Average AI response time" },
-    { num: "40", suf: "%", label: "More leads captured monthly" },
-    { num: "120", suf: "hrs", label: "Saved per month on follow-ups" },
-  ];
-
-  const wfNodes = [
-    { icon: "📱", title: "Lead Arrives", sub: "WhatsApp / Web", color: "rgba(214,232,255,0.12)" },
-    { icon: "🤖", title: "AI Voice Agent", sub: "Responds in 3 sec", color: "rgba(46,107,196,0.25)" },
-    { icon: "⚡", title: "n8n Workflow", sub: "Qualifies & routes", color: "rgba(214,232,255,0.12)" },
-    { icon: "📊", title: "CRM Update", sub: "Auto-logged", color: "rgba(214,232,255,0.12)" },
-    { icon: "✅", title: "Lead Booked", sub: "You get notified", color: "rgba(26,155,100,0.2)" },
-  ];
-
-  return (
-    <section
-      id="engine-a"
-      style={{
-        background: "var(--ocean)",
-        padding: "9rem 6%",
-        position: "relative",
-        overflow: "hidden",
-        color: "var(--white)",
-      }}
-    >
-      {/* Ghost A */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          fontFamily: "var(--font-playfair), serif",
-          fontWeight: 900,
-          fontStyle: "italic",
-          fontSize: 480,
-          color: "transparent",
-          WebkitTextStroke: "1px rgba(255,255,255,0.03)",
-          right: -60,
-          top: "50%",
-          transform: "translateY(-50%)",
-          userSelect: "none",
-          pointerEvents: "none",
-          lineHeight: 1,
-        }}
-      >
-        A
-      </div>
-
-      <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
-        <span className="section-tag section-tag-dark">Engine A — AI Brain</span>
-
-        <h2
-          style={{
-            fontFamily: "var(--font-playfair), serif",
-            fontWeight: 900,
-            fontSize: "clamp(38px, 5.5vw, 74px)",
-            lineHeight: 1.0,
-            letterSpacing: "-0.025em",
-            color: "var(--white)",
-            maxWidth: 700,
-            marginBottom: "1.2rem",
-          }}
-        >
-          Your business runs
-          <br />
-          <em style={{ fontStyle: "italic", color: "var(--sky)" }}>while you sleep</em>
-        </h2>
-
-        <p style={{ fontSize: "1rem", fontWeight: 300, color: "rgba(214,232,255,0.7)", maxWidth: 480, marginBottom: "3.5rem", lineHeight: 1.8 }}>
-          AI Voice Agents that never miss a lead. n8n workflows connecting your entire business. Automated follow-ups that book clients 24/7.
-        </p>
-
-        {/* Workflow Diagram */}
-        <div
-          style={{
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: 16,
-            padding: "2.5rem",
-            marginBottom: "4rem",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "0.7rem",
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: "rgba(214,232,255,0.5)",
-              marginBottom: "1.5rem",
-              fontWeight: 500,
-            }}
-          >
-            Live automation flow
-          </div>
-          <div style={{ display: "flex", alignItems: "center", overflowX: "auto", paddingBottom: "0.5rem" }}>
-            {wfNodes.map((node, i) => (
-              <React.Fragment key={i}>
-                {/* Node */}
-                <div
-                  style={{
-                    background: "rgba(255,255,255,0.07)",
-                    border: "1px solid rgba(255,255,255,0.12)",
-                    borderRadius: 10,
-                    padding: "1rem 1.2rem",
-                    minWidth: 120,
-                    textAlign: "center",
-                    flexShrink: 0,
-                    cursor: "default",
-                    transition: "all 0.3s",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.13)";
-                    (e.currentTarget as HTMLElement).style.transform = "translateY(-3px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.07)";
-                    (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 8,
-                      background: node.color,
-                      margin: "0 auto 0.5rem",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: 18,
-                    }}
-                  >
-                    {node.icon}
-                  </div>
-                  <div style={{ fontSize: "0.75rem", fontWeight: 500, color: "var(--white)", lineHeight: 1.3 }}>{node.title}</div>
-                  <div style={{ fontSize: "0.65rem", color: "rgba(214,232,255,0.5)", marginTop: "0.2rem" }}>{node.sub}</div>
-                </div>
-
-                {/* Connector (not after last node) */}
-                {i < wfNodes.length - 1 && (
-                  <div style={{ flex: 1, minWidth: 40, maxWidth: 80, position: "relative", height: 2, flexShrink: 0, display: "flex", alignItems: "center" }}>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: 2,
-                        background: "rgba(255,255,255,0.08)",
-                        borderRadius: 1,
-                        position: "relative",
-                        overflow: "hidden",
-                      }}
-                      className="wf-connector-fill"
-                    />
-                    <div
-                      style={{
-                        position: "absolute",
-                        right: -1,
-                        width: 0,
-                        height: 0,
-                        borderLeft: "6px solid rgba(214,232,255,0.6)",
-                        borderTop: "4px solid transparent",
-                        borderBottom: "4px solid transparent",
-                      }}
-                    />
-                  </div>
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-
-        {/* Steps */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem", marginBottom: "3rem" }} className="ea-steps-grid">
-          {steps.map((s, i) => (
-            <div
-              key={i}
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: 12,
-                padding: "1.8rem 1.5rem",
-                position: "relative",
-                transition: "all 0.4s",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)";
-                (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
-                (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: "var(--font-playfair), serif",
-                  fontSize: "3rem",
-                  fontWeight: 900,
-                  color: "rgba(214,232,255,0.1)",
-                  lineHeight: 1,
-                  position: "absolute",
-                  top: "1rem",
-                  right: "1.2rem",
-                }}
-              >
-                {s.num}
-              </div>
-              <div style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--white)", marginBottom: "0.5rem" }}>{s.title}</div>
-              <div style={{ fontSize: "0.8rem", fontWeight: 300, color: "rgba(214,232,255,0.6)", lineHeight: 1.6 }}>{s.body}</div>
             </div>
-          ))}
-        </div>
 
-        {/* Stats */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem", marginBottom: "3rem" }} className="ea-stats-grid">
-          {eaStats.map((s, i) => (
-            <div key={i} style={{ borderTop: "1px solid rgba(255,255,255,0.12)", paddingTop: "1.2rem" }}>
-              <div
-                style={{
-                  fontFamily: "var(--font-playfair), serif",
-                  fontSize: "clamp(28px, 3.5vw, 44px)",
-                  fontWeight: 900,
-                  color: "var(--sky)",
-                  letterSpacing: "-0.02em",
-                  lineHeight: 1,
-                }}
-              >
-                {s.num}
-                <span style={{ fontSize: "0.55em", opacity: 0.6 }}>{s.suf}</span>
-              </div>
-              <div style={{ fontSize: "0.75rem", color: "rgba(214,232,255,0.55)", marginTop: "0.4rem", fontWeight: 400, lineHeight: 1.4 }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <a
-          href="/engine-a"
-          style={{
-            background: "var(--sky)",
-            color: "var(--ocean)",
-            padding: "1rem 2.2rem",
-            borderRadius: 4,
-            fontSize: "0.82rem",
-            fontWeight: 500,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            textDecoration: "none",
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-            (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 40px rgba(11,43,92,0.3)";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-            (e.currentTarget as HTMLElement).style.boxShadow = "none";
-          }}
-        >
-          Get Your Free AI Audit →
-        </a>
-      </div>
-
-      {/* Wave to Engine B */}
-      <div style={{ position: "absolute", bottom: -2, left: 0, right: 0, lineHeight: 0 }}>
-        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: 80 }} xmlns="http://www.w3.org/2000/svg">
-          <path d="M0,30 C360,70 720,10 1080,50 C1260,70 1380,25 1440,40 L1440,80 L0,80 Z" fill="var(--white)" />
-        </svg>
-      </div>
-    </section>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   ENGINE B SECTION
-───────────────────────────────────────────── */
-function EngineBSection() {
-  const portfolioItems = [
-    { cat: "Brand Photography", title: "Visual Storytelling", icon: "📸", color: "linear-gradient(135deg,#D6E8FF 0%,#B5D4F4 100%)", span: "col-span-7 row-span-2" },
-    { cat: "Brand Films", title: "Motion & Story", icon: "🎬", color: "linear-gradient(135deg,#EEF5FF 0%,#D6E8FF 100%)", span: "col-span-5" },
-    { cat: "Brand Identity", title: "Design Systems", icon: "✏️", color: "linear-gradient(135deg,#E8F0FF 0%,#C8DCFF 100%)", span: "col-span-5" },
-    { cat: "Social Strategy", title: "Growth Content", icon: "📱", color: "linear-gradient(135deg,#D6E8FF 0%,#B8CEFF 100%)", span: "col-span-4" },
-    { cat: "Short Form", title: "Reels & Promos", icon: "🎞️", color: "linear-gradient(135deg,#EEF5FF 0%,#D0E5FF 100%)", span: "col-span-4" },
-    { cat: "Event Coverage", title: "Live Moments", icon: "🎉", color: "linear-gradient(135deg,#E0EEFF 0%,#C0D8FF 100%)", span: "col-span-4" },
-  ];
-
-  const services = [
-    { icon: "📸", name: "Photography", desc: "Product shoots, brand portraits, event coverage — all quality-controlled." },
-    { icon: "🎬", name: "Videography", desc: "Brand films, reels, promos and testimonials that convert viewers into clients." },
-    { icon: "✏️", name: "Design", desc: "Logos, brand identity, social creatives and everything visual your brand needs." },
-    { icon: "📱", name: "Social Media", desc: "Content strategy, posting calendars, and growth management — done for you." },
-  ];
-
-  return (
-    <section
-      id="engine-b"
-      style={{
-        background: "var(--white)",
-        padding: "9rem 6%",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Ghost B */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          fontFamily: "var(--font-playfair), serif",
-          fontWeight: 900,
-          fontStyle: "italic",
-          fontSize: 480,
-          color: "transparent",
-          WebkitTextStroke: "1px rgba(11,43,92,0.03)",
-          left: -60,
-          top: "50%",
-          transform: "translateY(-50%)",
-          userSelect: "none",
-          pointerEvents: "none",
-          lineHeight: 1,
-        }}
-      >
-        B
-      </div>
-
-      <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
-        {/* Header */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "end", marginBottom: "4rem" }} className="eb-header-grid">
-          <div>
-            <span className="section-tag">Engine B — Creative Muscle</span>
-            <h2
+            {/* Title / Main Headline */}
+            <motion.h1
               style={{
                 fontFamily: "var(--font-playfair), serif",
                 fontWeight: 900,
-                fontSize: "clamp(36px, 5vw, 68px)",
-                lineHeight: 1.0,
-                letterSpacing: "-0.025em",
-                color: "var(--ocean)",
+                fontSize: "clamp(54px, 7vw, 105px)",
+                lineHeight: 0.95,
+                letterSpacing: "-0.03em",
+                rotateX: springY,
+                rotateY: springX,
+                transformStyle: "preserve-3d",
               }}
+              className="text-[#071C3D]"
             >
-              Every creative need.
-              <br />
-              <em style={{ fontStyle: "italic", color: "var(--ocean-bright)" }}>One team.</em>
-            </h2>
-          </div>
-          <div>
-            <p style={{ fontSize: "1rem", fontWeight: 300, color: "var(--muted)", lineHeight: 1.8, marginBottom: "2rem" }}>
-              Photography, videography, brand design, and social media — all managed under one roof, with quality-controlled output and a curated talent marketplace.
-            </p>
-            <a href="/engine-b" className="btn-ocean">See Our Work →</a>
-          </div>
-        </div>
+              GROVICE 2.0
+            </motion.h1>
 
-        {/* Portfolio Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(12, 1fr)",
-            gap: 12,
-            marginBottom: "4rem",
-          }}
-          className="portfolio-grid-main"
-        >
-          {portfolioItems.map((item, i) => (
-            <div
-              key={i}
-              className="port-item"
-              style={{
-                gridColumn: `span ${[7,5,5,4,4,4][i]}`,
-                gridRow: i === 0 ? "span 2" : "auto",
-                minHeight: [380, 184, 184, 200, 200, 200][i],
-                borderRadius: 10,
-                overflow: "hidden",
-                position: "relative",
-                cursor: "pointer",
-              }}
-            >
-              <div className="port-bg" style={{ background: item.color, width: "100%", height: "100%", position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 8 }}>
-                <span style={{ fontSize: "2.5rem" }}>{item.icon}</span>
-                <span style={{ fontSize: "0.75rem", fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)" }}>
-                  {item.cat}
-                </span>
-              </div>
-              <div className="port-overlay" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "flex-end", padding: "1.5rem" }}>
-                <div className="port-info">
-                  <div style={{ fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--sky)", fontWeight: 500, marginBottom: "0.3rem" }}>{item.cat}</div>
-                  <div style={{ fontFamily: "var(--font-playfair), serif", fontSize: "1.1rem", fontWeight: 700, color: "var(--white)" }}>{item.title}</div>
-                </div>
-              </div>
+            {/* Subline & Editorial tag */}
+            <div className="space-y-2">
+              <h2 className="font-display font-black text-xl md:text-2xl text-[#071C3D] tracking-tight">
+                One Stop Business Solution
+              </h2>
+              <p className="font-cormorant font-normal text-lg md:text-xl text-[#2F6BFF] italic">
+                “Where AI Infrastructure Meets Creative Power.”
+              </p>
             </div>
-          ))}
-        </div>
 
-        {/* Service Cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem" }} className="svc-cards-grid">
-          {services.map((svc, i) => (
-            <div
-              key={i}
-              className="svc-card"
-              style={{
-                border: "1px solid var(--border)",
-                borderRadius: 10,
-                padding: "2rem 1.5rem",
-                cursor: "pointer",
-                transition: "all 0.45s cubic-bezier(0.16,1,0.3,1)",
-                background: "var(--white)",
-                position: "relative",
-                overflow: "hidden",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = "translateY(-6px)";
-                (e.currentTarget as HTMLElement).style.borderColor = "var(--ocean)";
-                (e.currentTarget as HTMLElement).style.boxShadow = "0 20px 60px rgba(11,43,92,0.18)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-                (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-                (e.currentTarget as HTMLElement).style.boxShadow = "none";
-              }}
-            >
-              <div style={{ position: "relative", zIndex: 1 }}>
-                <div
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 10,
-                    background: "var(--sky)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 20,
-                    marginBottom: "1.2rem",
-                  }}
-                >
-                  {svc.icon}
-                </div>
-                <div style={{ fontSize: "0.95rem", fontWeight: 500, color: "var(--ocean)", marginBottom: "0.4rem" }}>{svc.name}</div>
-                <div style={{ fontSize: "0.8rem", fontWeight: 300, color: "var(--muted)", lineHeight: 1.6 }}>{svc.desc}</div>
-                <span style={{ display: "block", marginTop: "1.2rem", fontSize: "1.2rem", color: "var(--border)" }}>→</span>
-              </div>
+            {/* CTA buttons */}
+            <div className="flex flex-wrap items-center gap-4 pt-4">
+              <a
+                href="#engine-a-section"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.scrollTo({ top: window.innerHeight * 2.2, behavior: "smooth" });
+                }}
+                className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider text-white shadow-lg transition-all duration-300"
+                style={{
+                  background: "#071C3D",
+                  border: "1px solid rgba(47, 107, 255, 0.15)",
+                  boxShadow: "0 8px 30px rgba(7, 28, 61, 0.2)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "#2F6BFF";
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 35px rgba(47, 107, 255, 0.4)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "#071C3D";
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 30px rgba(7, 28, 61, 0.2)";
+                }}
+              >
+                Explore Engine A
+              </a>
+
+              <a
+                href="#engine-b-section"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.scrollTo({ top: window.innerHeight * 3.4, behavior: "smooth" });
+                }}
+                className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider border text-[#071C3D] bg-white/20 backdrop-blur-md transition-all duration-300"
+                style={{
+                  borderColor: "rgba(7, 28, 61, 0.15)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "rgba(7, 28, 61, 0.05)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "white/20";
+                }}
+              >
+                Explore Engine B
+              </a>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+          </div>
 
-/* ─────────────────────────────────────────────
-   CTA SECTION
-───────────────────────────────────────────── */
-function CtaSection() {
-  return (
-    <section
-      style={{
-        background: "var(--ocean)",
-        padding: "7rem 6%",
-        textAlign: "center",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      <div className="grid-bg-tech" style={{ position: "absolute", inset: 0, pointerEvents: "none" }} />
-      <div style={{ position: "relative", zIndex: 1, maxWidth: 700, margin: "0 auto" }}>
-        <div
-          style={{
-            fontSize: "0.7rem",
-            fontWeight: 500,
-            letterSpacing: "0.25em",
-            textTransform: "uppercase",
-            color: "rgba(214,232,255,0.7)",
-            marginBottom: "1.5rem",
-          }}
-        >
-          Ready to Scale?
-        </div>
-        <h2
-          style={{
-            fontFamily: "var(--font-playfair), serif",
-            fontWeight: 900,
-            fontSize: "clamp(36px, 5vw, 64px)",
-            lineHeight: 1.05,
-            letterSpacing: "-0.025em",
-            color: "var(--white)",
-            marginBottom: "1.5rem",
-          }}
-        >
-          Let&apos;s build your
-          <br />
-          <em style={{ fontStyle: "italic", color: "var(--sky)" }}>business operating system</em>
-        </h2>
-        <p style={{ fontSize: "1rem", fontWeight: 300, color: "rgba(214,232,255,0.65)", lineHeight: 1.75, marginBottom: "2.5rem" }}>
-          One call. One team. One platform that handles your AI backend and creative output.
-        </p>
-        <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-          <a
-            href="tel:+917396621004"
-            style={{
-              background: "var(--sky)",
-              color: "var(--ocean)",
-              padding: "1rem 2.2rem",
-              borderRadius: 4,
-              fontSize: "0.82rem",
-              fontWeight: 500,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              textDecoration: "none",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}
-          >
-            Book a Free Call →
-          </a>
-          <a
-            href="mailto:grovicedigital@gmail.com"
-            style={{
-              background: "transparent",
-              color: "rgba(214,232,255,0.85)",
-              padding: "1rem 2.2rem",
-              borderRadius: 4,
-              fontSize: "0.82rem",
-              fontWeight: 400,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              textDecoration: "none",
-              border: "1px solid rgba(214,232,255,0.2)",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              transition: "all 0.4s",
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(214,232,255,0.5)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(214,232,255,0.2)"; }}
-          >
-            Send a Message
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
+          {/* RIGHT COLUMN: FLOATING SYSTEM UI CARDS */}
+          <div className="lg:col-span-5 relative h-[360px] md:h-[420px] hidden md:block">
+            {/* Card 1: Engine A */}
+            <motion.div
+              style={{
+                position: "absolute",
+                top: "5%",
+                left: "10%",
+                x: springX,
+                y: springY,
+                zIndex: 10,
+              }}
+              whileHover={{ scale: 1.03, rotate: 1 }}
+            >
+              <EngineACard />
+            </motion.div>
 
-/* ─────────────────────────────────────────────
-   ROOT EXPORT
-───────────────────────────────────────────── */
-export default function HomePage() {
-  return (
-    <>
-      <style>{`
-        @media (max-width: 900px) {
-          .vision-inner { grid-template-columns: 1fr !important; gap: 3rem !important; }
-          .ea-steps-grid { grid-template-columns: 1fr !important; }
-          .ea-stats-grid { grid-template-columns: repeat(3,1fr) !important; }
-          .eb-header-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
-          .svc-cards-grid { grid-template-columns: repeat(2,1fr) !important; }
-          .portfolio-grid-main > div:nth-child(1) { grid-column: span 12 !important; min-height: 240px !important; }
-          .portfolio-grid-main > div:nth-child(2),
-          .portfolio-grid-main > div:nth-child(3) { grid-column: span 6 !important; }
-          .portfolio-grid-main > div:nth-child(4),
-          .portfolio-grid-main > div:nth-child(5),
-          .portfolio-grid-main > div:nth-child(6) { grid-column: span 12 !important; }
-        }
-        @media (max-width: 600px) {
-          .ea-stats-grid { grid-template-columns: 1fr 1fr !important; }
-          .svc-cards-grid { grid-template-columns: 1fr !important; }
-          .portfolio-grid-main > div:nth-child(2),
-          .portfolio-grid-main > div:nth-child(3) { grid-column: span 12 !important; }
-        }
-      `}</style>
+            {/* Card 2: Engine B */}
+            <motion.div
+              style={{
+                position: "absolute",
+                bottom: "5%",
+                right: "5%",
+                x: useTransform(springX, (val) => val * -0.8),
+                y: useTransform(springY, (val) => val * -0.8),
+                zIndex: 8,
+              }}
+              whileHover={{ scale: 1.03, rotate: -1 }}
+            >
+              <EngineBCard />
+            </motion.div>
 
-      {/* Floating bottom pill */}
-      <div
+            {/* Card 3: Software Projects */}
+            <motion.div
+              style={{
+                position: "absolute",
+                top: "45%",
+                right: "12%",
+                x: useTransform(springX, (val) => val * 1.2),
+                y: useTransform(springY, (val) => val * 1.2),
+                zIndex: 9,
+              }}
+              whileHover={{ scale: 1.03, rotate: 0.5 }}
+            >
+              <SoftwareCard />
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ═════════════════════════════════════════════
+          SECTION 2: VISION / MISSION (SCROLL TRIGGERED)
+          ═════════════════════════════════════════════ */}
+      <motion.div
         style={{
           position: "fixed",
-          bottom: 24,
+          top: 0,
           left: 0,
           right: 0,
-          zIndex: 30,
+          height: "100vh",
           display: "flex",
-          justifyContent: "center",
-          pointerEvents: "none",
+          alignItems: "center",
+          opacity: visionOpacity,
+          scale: visionScale,
+          zIndex: 3,
+          pointerEvents: visionPointerEvents,
         }}
+        className="px-6 sm:px-12 md:px-20 text-slate-100"
       >
-        <button
-          onClick={() => window.dispatchEvent(new CustomEvent("open-chatbot"))}
-          style={{
-            pointerEvents: "auto",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.6rem",
-            background: "var(--ocean)",
-            color: "var(--white)",
-            border: "1px solid rgba(255,255,255,0.12)",
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
-            borderRadius: 100,
-            padding: "0.6rem 1.5rem",
-            fontSize: "0.75rem",
-            fontWeight: 500,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            cursor: "pointer",
-            transition: "all 0.3s",
-            boxShadow: "0 8px 32px rgba(11,43,92,0.25)",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.background = "var(--ocean-mid)";
-            (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.background = "var(--ocean)";
-            (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-          }}
-        >
-          <span
-            style={{
-              width: 7,
-              height: 7,
-              borderRadius: "50%",
-              background: "var(--sky)",
-              animation: "pulse-dot 2.5s ease-in-out infinite",
-              display: "inline-block",
-            }}
-          />
-          Start a Project
-        </button>
-      </div>
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pointer-events-auto">
+          {/* Counters */}
+          <div className="space-y-6">
+            {[
+              { num: "1", label: "Unified OS", desc: "AI engine + creative powerhouse integrated" },
+              { num: "2", label: "Core Engines", desc: "Engine A (Software) & Engine B (Content)" },
+              { num: "∞", label: "Brand Scale", desc: "Unlimited automated infrastructure growth" },
+            ].map((stat, i) => (
+              <div key={i} className="flex gap-6 items-center border-b border-white/10 pb-4">
+                <span className="font-serif font-black text-6xl text-[#2F6BFF]">{stat.num}</span>
+                <div>
+                  <h4 className="font-display font-black text-xs uppercase tracking-wider text-white">{stat.label}</h4>
+                  <p className="text-[10px] text-[#BFD4FF]/60 uppercase tracking-widest mt-0.5">{stat.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
 
-      <HeroSection />
-      <VisionSection />
-      <EngineASection />
-      <EngineBSection />
-      <CtaSection />
-    </>
+          {/* Details */}
+          <div className="space-y-4">
+            <span className="inline-block text-[9px] uppercase tracking-[0.2em] font-bold text-[#2F6BFF] bg-[#2F6BFF]/10 px-3 py-1 rounded">
+              Visakhapatnam Brand Ecosystem
+            </span>
+            <h2 className="font-serif font-black text-3xl md:text-5xl text-white tracking-tight leading-tight">
+              Redefining local scale with{" "}
+              <em className="text-[#BFD4FF] italic">global caliber</em>
+            </h2>
+            <p className="text-xs sm:text-sm text-[#BFD4FF]/80 leading-relaxed font-light">
+              Grovice 2.0 bridges technical AI integrations with custom videography campaigns. We own the software infrastructure that collects and qualifies your leads, and the creative engine that converts them.
+            </p>
+            <div className="flex flex-wrap gap-2 pt-2">
+              {["AI Automation", "Software Development", "Cinematic Films", "Corporate Branding"].map((pill) => (
+                <span key={pill} className="text-[9px] uppercase tracking-wider font-bold bg-white/5 border border-white/10 px-3 py-1.5 rounded text-[#BFD4FF]">
+                  {pill}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ═════════════════════════════════════════════
+          SECTION 3: ENGINE A (SCROLL TRIGGERED)
+          ═════════════════════════════════════════════ */}
+      <motion.div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          opacity: engineAOpacity,
+          scale: engineAScale,
+          zIndex: 4,
+          pointerEvents: engineAPointerEvents,
+        }}
+        className="px-6 sm:px-12 md:px-20 text-slate-100"
+      >
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pointer-events-auto">
+          {/* Left Column info */}
+          <div className="lg:col-span-5 space-y-4">
+            <span className="inline-block text-[9px] uppercase tracking-[0.2em] font-bold text-[#2F6BFF] bg-[#2F6BFF]/10 px-3 py-1 rounded">
+              Engine A · Software & AI
+            </span>
+            <h2 className="font-serif font-black text-3xl md:text-5xl text-white tracking-tight leading-none">
+              Your Systems<br />
+              <em className="text-[#BFD4FF] italic">Always Active</em>
+            </h2>
+            <p className="text-xs sm:text-sm text-[#BFD4FF]/70 leading-relaxed font-light">
+              Autonomous AI voice agents, smart booking workflows, and database integrations. Capture leads instantly and schedule conversions 24/7.
+            </p>
+            <Link
+              href="/engine-a"
+              className="inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-wider text-white bg-[#2F6BFF] hover:bg-blue-600 px-4 py-2.5 rounded transition"
+            >
+              Configure Engine A <ArrowRight size={12} />
+            </Link>
+          </div>
+
+          {/* Right Column Diagram */}
+          <div className="lg:col-span-7 bg-[#071C3D]/50 border border-white/5 p-6 rounded-xl relative overflow-hidden space-y-6">
+            <span className="text-[8px] font-bold uppercase tracking-widest text-[#BFD4FF]/50 block">Live Pipeline Blueprint</span>
+            
+            <div className="space-y-4">
+              {[
+                { icon: Sparkles, color: "#2F6BFF", step: "01", title: "Omnichannel Lead Ingestion", desc: "Websites, social networks, calls captured automatically" },
+                { icon: Workflow, color: "#BFD4FF", step: "02", title: "n8n Qualification Router", desc: "Automated verification and smart routing pipelines" },
+                { icon: LineChart, color: "#34d399", step: "03", title: "CRM Logging & Automated Booking", desc: "Syncs directly with your team calendar" },
+              ].map((flow, i) => (
+                <div key={i} className="flex gap-4 p-3 rounded bg-white/5 border border-white/5 items-start">
+                  <div className="p-2 rounded" style={{ background: `${flow.color}15`, border: `1px solid ${flow.color}30` }}>
+                    <flow.icon size={16} style={{ color: flow.color }} />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[9px] font-mono text-[#BFD4FF]/40">{flow.step}</span>
+                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">{flow.title}</h4>
+                    </div>
+                    <p className="text-[10px] text-[#BFD4FF]/60 mt-0.5">{flow.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ═════════════════════════════════════════════
+          SECTION 4: ENGINE B (SCROLL TRIGGERED)
+          ═════════════════════════════════════════════ */}
+      <motion.div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          opacity: engineBOpacity,
+          scale: engineBScale,
+          zIndex: 5,
+          pointerEvents: engineBPointerEvents,
+        }}
+        className="px-6 sm:px-12 md:px-20 text-slate-100"
+      >
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pointer-events-auto">
+          {/* Left info */}
+          <div className="lg:col-span-5 space-y-4">
+            <span className="inline-block text-[9px] uppercase tracking-[0.2em] font-bold text-red-400 bg-red-950/40 border border-red-500/25 px-3 py-1 rounded">
+              Engine B · Creative Muscle
+            </span>
+            <h2 className="font-serif font-black text-3xl md:text-5xl text-white tracking-tight leading-none">
+              High-Fidelity<br />
+              <em className="text-red-400 italic">Brand Production</em>
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-light">
+              Premium brand photography, cinematic video campaigns, and complete visual guidelines designed to command luxury-tier trust.
+            </p>
+            <Link
+              href="/engine-b"
+              className="inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-wider text-white bg-red-500 hover:bg-red-600 px-4 py-2.5 rounded transition"
+            >
+              Configure Engine B <ArrowRight size={12} />
+            </Link>
+          </div>
+
+          {/* Right portfolio showcase preview */}
+          <div className="lg:col-span-7 grid grid-cols-2 gap-4">
+            {[
+              { label: "Commercial Films", bg: "from-red-950/40", client: "Luxury Auto", icon: Tv },
+              { label: "Coastal Editorials", bg: "from-amber-950/30", client: "Oceana Parfum", icon: Camera },
+              { label: "Corporate Guidelines", bg: "from-violet-950/30", client: "Grovice Labs", icon: Layers },
+              { label: "Social Campaign Reels", bg: "from-pink-950/30", client: "Coastal Resorts", icon: Sparkles },
+            ].map((p, idx) => (
+              <div
+                key={idx}
+                className={`p-5 rounded-lg border border-white/5 bg-gradient-to-br ${p.bg} to-[#020914] flex flex-col justify-between aspect-[16/10]`}
+              >
+                <p.icon size={16} className="text-slate-400" />
+                <div>
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">{p.label}</h4>
+                  <span className="text-[9px] text-slate-500 uppercase tracking-widest font-mono">Client: {p.client}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ═════════════════════════════════════════════
+          SECTION 5: FINAL CALL TO ACTION (SCROLL TRIGGERED)
+          ═════════════════════════════════════════════ */}
+      <motion.div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          opacity: ctaOpacity,
+          zIndex: 6,
+          pointerEvents: ctaPointerEvents,
+        }}
+        className="px-6 text-slate-100"
+      >
+        <div className="max-w-xl text-center space-y-6 pointer-events-auto">
+          <span className="text-[9px] uppercase tracking-[0.25em] font-bold text-[#2F6BFF] block">
+            Configure Your Ecosystem
+          </span>
+          <h2 className="font-serif font-black text-4xl sm:text-6xl text-white tracking-tight leading-none">
+            Scale Your<br />
+            <em className="text-[#BFD4FF] italic">Business OS Today</em>
+          </h2>
+          <p className="text-xs sm:text-sm text-[#BFD4FF]/60 max-w-md mx-auto leading-relaxed font-light">
+            One partner. One operating system. We coordinate your technical automation layers and your entire creative content output.
+          </p>
+
+          <div className="flex flex-wrap gap-4 justify-center pt-2">
+            <a
+              href="tel:+917396621004"
+              className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider text-slate-950 bg-white transition-all duration-300"
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "#DCEBFF";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "#white";
+              }}
+            >
+              Book Scoping Call
+            </a>
+
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-chatbot"))}
+              className="px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider border border-white/20 bg-white/5 text-white transition-all duration-300"
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
+              }}
+            >
+              Chat With OS
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }

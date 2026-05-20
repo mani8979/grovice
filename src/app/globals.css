@@ -4,21 +4,22 @@
 
 /* ── CSS CUSTOM PROPERTIES ── */
 :root {
-  --ocean: #0B2B5C;
-  --ocean-mid: #1A4A8A;
-  --ocean-bright: #2E6BC4;
-  --sky: #D6E8FF;
-  --sky-light: #EEF5FF;
+  --ocean: #071C3D;
+  --ocean-mid: #0D2B5C;
+  --ocean-bright: #2F6BFF;
+  --sky: #DCEBFF;
+  --sky-light: #F9FBFF;
   --white: #FFFFFF;
   --cream: #F7F9FC;
-  --text: #0B1E3D;
+  --text: #071C3D;
   --muted: #5A7AA8;
-  --border: rgba(11,43,92,0.10);
+  --border: rgba(7,28,61,0.08);
+  --metallic-highlight: #BFD4FF;
 
   /* Dark mode legacy */
   --background: #020914;
   --foreground: #f8fafc;
-  --glow-color: rgba(0, 229, 255, 0.4);
+  --glow-color: rgba(47, 107, 255, 0.4);
   --glow-color-violet: rgba(139, 92, 246, 0.4);
 }
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, DM_Sans, Playfair_Display } from "next/font/google";
+import { Outfit, DM_Sans, Playfair_Display, Archivo, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
@@ -27,6 +27,21 @@ const playfair = Playfair_Display({
   weight: ["700", "900"],
 });
 
+const archivo = Archivo({
+  subsets: ["latin"],
+  variable: "--font-archivo",
+  display: "swap",
+  weight: ["900"],
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+  display: "swap",
+  style: ["italic"],
+  weight: ["400", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "GROVICE 2.0 | Visakhapatnam's First Business Operating System",
   description:
@@ -44,7 +59,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${dmSans.variable} ${playfair.variable} scroll-smooth`}
+      className={`${outfit.variable} ${dmSans.variable} ${playfair.variable} ${archivo.variable} ${cormorant.variable} scroll-smooth`}
     >
       <body
         className="antialiased"
