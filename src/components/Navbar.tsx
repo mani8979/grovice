@@ -164,20 +164,6 @@ export default function Navbar() {
             gap: "2.5rem",
           }}
         >
-          <button
-            onClick={() => setIsOpen(false)}
-            style={{
-              position: "absolute",
-              top: "1.4rem",
-              right: "5%",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "#F6F7FB",
-            }}
-          >
-            <X size={26} />
-          </button>
 
           {navLinks.map((link) => (
             <Link
