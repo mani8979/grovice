@@ -90,7 +90,31 @@ export default function LandingPage() {
     return () => clearInterval(interval);
   }, []);
 
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const framesRef = useRef<HTMLImageElement[]>([]);
+  const frameCount = 150;
+
+  useEffect(() => {
+    // Preload images
+    const loadImages = async () => {
+      const frames: HTMLImageElement[] = [];
+      for (let i = 1; i <= frameCount; i++) {
+        const img = new Image();
+        img.src = `/images/frames/frame-${i.toString().padStart(3, '0')}.jpg`;
+        frames.push(img);
+      }
+      framesRef.current = frames;
+
+      // Draw initial frame if available
+      frames[0].onload = () => {
+        if (canvasRef.current) {
+          const ctx = canvasRef.current.getContext('2d');
+          if (ctx) ctx.drawImage(frames[0], 0, 0, 1280, 720);
+        }
+      };
+    };
+    loadImages();
+  }, []);
 
   const { scrollYProgress } = useScroll();
   const smoothScroll = useSpring(scrollYProgress, {
@@ -99,10 +123,19 @@ export default function LandingPage() {
     mass: 0.4,
     restDelta: 0.001,
   });
+
   useMotionValueEvent(smoothScroll, "change", (latest) => {
-    if (videoRef.current && videoRef.current.duration > 0 && videoRef.current.duration !== Infinity) {
-      const time = latest * videoRef.current.duration;
-      videoRef.current.currentTime = Math.max(0, Math.min(time, videoRef.current.duration));
+    if (framesRef.current.length === frameCount && canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d');
+      if (ctx) {
+        // Map 0-1 to frame 1-150 (array index 0-149)
+        let frameIndex = Math.floor(latest * (frameCount - 1));
+        frameIndex = Math.max(0, Math.min(frameIndex, frameCount - 1));
+        
+        requestAnimationFrame(() => {
+          ctx.drawImage(framesRef.current[frameIndex], 0, 0, 1280, 720);
+        });
+      }
     }
   });
 
@@ -214,13 +247,11 @@ export default function LandingPage() {
             overflow: "hidden",
           }}
         >
-          <video
-            ref={videoRef}
-            src="/images/Sunrise_beach_underwater_transition.mp4"
+          <canvas
+            ref={canvasRef}
+            width={1280}
+            height={720}
             className="w-full h-full object-cover"
-            muted
-            playsInline
-            preload="auto"
             style={{ opacity: 0.55 }}
           />
           {/* Gradient overlay so text is always readable */}
@@ -728,13 +759,11 @@ export default function LandingPage() {
             scale: bgScale,
           }}
         >
-          <video
-            ref={videoRef}
-            src="/images/Sunrise_beach_underwater_transition.mp4"
+          <canvas
+            ref={canvasRef}
+            width={1280}
+            height={720}
             className="w-full h-full object-cover"
-            muted
-            playsInline
-            preload="auto"
           />
         </motion.div>
 
