@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
-import { ArrowRight, Phone, Mail, MapPin, Sparkles, Cpu, Camera, Compass } from "lucide-react";
+import { ArrowRight, Phone, Mail, MapPin, Cpu, Camera, Compass, Calendar, Home, Users, Search } from "lucide-react";
 
 /* ── SPOTLIGHT CARD COMPONENT ── */
 function SpotlightCard({
@@ -100,6 +100,10 @@ export default function LandingPage() {
   const logoOpacity = useTransform(smoothScroll, [0, 0.20, 0.25], [1, 1, 0]);
   const welcomeOpacity = useTransform(smoothScroll, [0, 0.18, 0.24], [1, 1, 0]);
   const welcomeY = useTransform(smoothScroll, [0, 0.18, 0.24], ["0px", "-20px"]);
+  const s1PointerEvents = useTransform(smoothScroll, (v) => (v < 0.2) ? "auto" : "none");
+  const bgOpacity = useTransform(smoothScroll, [0.18, 0.24], [1, 0]);
+  const bgScale = useTransform(smoothScroll, [0, 0.25], [1, 1.05]);
+  const videoOpacity = useTransform(smoothScroll, [0.18, 0.24], [0, 0.35]);
 
   const s2Opacity = useTransform(smoothScroll, [0.24, 0.29, 0.44, 0.49], [0, 1, 1, 0]);
   const s2Y = useTransform(smoothScroll, [0.24, 0.29, 0.44, 0.49], ["30px", "0px", "0px", "-30px"]);
@@ -197,60 +201,108 @@ export default function LandingPage() {
         <div className="relative z-10 w-full flex flex-col">
           
           {/* SCENE 01 — HERO / ARRIVAL */}
-          <section className="relative min-h-screen flex flex-col items-center justify-center px-5 py-12">
+          <section 
+            className="relative min-h-screen flex flex-col items-center justify-center px-4 py-24 bg-cover bg-center overflow-hidden"
+            style={{
+              backgroundImage: "url('/images/maldives_resort_hero.png')",
+            }}
+          >
+            {/* Tropical sky-blue overlay that fades to black at the bottom to blend with other sections */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0A2540]/30 via-transparent to-[#040308] z-0" />
+
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, ease: "easeOut" }}
-              className="flex flex-col items-center gap-6 max-w-xl text-center w-full"
+              className="flex flex-col items-center gap-6 max-w-xl text-center w-full relative z-10"
             >
-              {/* Siripuram Badge */}
-              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#FF9E00]/30 bg-[#FF9E00]/10 text-[#FF9E00] text-[8px] font-mono tracking-[0.25em] font-bold uppercase backdrop-blur-md">
-                <Sparkles size={9} className="animate-spin" style={{ animationDuration: "6s" }} /> Siripuram Coastal Node
-              </div>
+              {/* Title */}
+              <h1 
+                className="text-[32px] sm:text-4xl text-white font-bold tracking-tight leading-tight select-none mt-4" 
+                style={{ 
+                  fontFamily: "var(--font-playfair), serif", 
+                  textShadow: "0 2px 12px rgba(0, 0, 0, 0.4)" 
+                }}
+              >
+                Escape to Your <br/>Private Island Paradise
+              </h1>
 
-              {/* Glowing Hero Title Container */}
-              <div className="relative w-full py-6 px-4 bg-white/[0.02] border border-white/5 rounded-3xl backdrop-blur-[4px] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
-                {/* Tech corner accents */}
-                <div className="absolute -top-1 -left-1 w-3.5 h-3.5 border-t border-l border-[#FF9E00]/60 rounded-tl" />
-                <div className="absolute -top-1 -right-1 w-3.5 h-3.5 border-t border-r border-[#FF9E00]/60 rounded-tr" />
-                <div className="absolute -bottom-1 -left-1 w-3.5 h-3.5 border-b border-l border-[#FF4069]/60 rounded-bl" />
-                <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 border-b border-r border-[#FF4069]/60 rounded-br" />
-
-                {/* Coordinate text overlays */}
-                <span className="absolute top-2 left-3 font-mono text-[7px] text-zinc-600 tracking-wider">17.7226° N</span>
-                <span className="absolute top-2 right-3 font-mono text-[7px] text-zinc-600 tracking-wider">83.3152° E</span>
-
-                <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter leading-none select-none text-white font-sans mt-2">
-                  GROVICE <span className="font-serif-elegant text-gradient-neon font-light">2.0</span>
-                </h1>
-                
-                <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] text-[#FF4069] font-mono font-bold mt-3 leading-relaxed">
-                  Visakhapatnam&apos;s First Business Operating System
-                </p>
-              </div>
-
-              <p className="text-[11px] text-zinc-400 font-light max-w-sm leading-relaxed mt-1">
-                Integrating autonomous software pipelines with elite visual studio production to scale local enterprises globally.
+              {/* Subtitle */}
+              <p 
+                className="text-[11px] sm:text-xs text-white/95 max-w-sm leading-relaxed" 
+                style={{ 
+                  textShadow: "0 1px 4px rgba(0, 0, 0, 0.45)" 
+                }}
+              >
+                Embrace the calm of turquoise waters and endless skies. <br/>Where luxury meets serenity at Maldives Beach Resort & Villas.
               </p>
 
-              {/* Call to action arrow */}
-              <motion.button 
-                onClick={() => handleScrollTo(0.26)}
-                whileTap={{ scale: 0.98 }}
-                className="mt-4 px-6 py-2.5 rounded-full border border-white/10 hover:border-[#FF9E00]/50 bg-white/5 hover:bg-[#FF9E00]/10 text-white font-mono text-[9px] tracking-widest uppercase transition-all duration-300 flex items-center gap-2"
-              >
-                Launch System <ArrowRight size={10} className="text-[#FF9E00]" />
-              </motion.button>
+              {/* Mobile Horizontal Configurator Capsule */}
+              <div className="w-full bg-[#0A2540]/65 border border-white/15 rounded-full p-2.5 backdrop-blur-md shadow-2xl flex flex-row items-center justify-between z-20 mt-4 max-w-md">
+                {/* Check-In */}
+                <div className="flex-1 flex flex-col items-center justify-center border-r border-white/10 px-1 text-center relative overflow-hidden">
+                  <Calendar size={11} className="text-[#8EE3F5] mb-0.5" />
+                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Check-In</span>
+                  <input 
+                    type="date" 
+                    defaultValue="2026-05-23" 
+                    className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer [color-scheme:dark] p-0 leading-tight" 
+                    style={{ border: "none", outline: "none" }}
+                  />
+                </div>
+
+                {/* Check-Out */}
+                <div className="flex-1 flex flex-col items-center justify-center border-r border-white/10 px-1 text-center relative overflow-hidden">
+                  <Calendar size={11} className="text-[#8EE3F5] mb-0.5" />
+                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Check-Out</span>
+                  <input 
+                    type="date" 
+                    defaultValue="2026-05-30" 
+                    className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer [color-scheme:dark] p-0 leading-tight" 
+                    style={{ border: "none", outline: "none" }}
+                  />
+                </div>
+
+                {/* Rooms */}
+                <div className="flex-1 flex flex-col items-center justify-center border-r border-white/10 px-1 text-center">
+                  <Home size={11} className="text-[#8EE3F5] mb-0.5" />
+                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Rooms</span>
+                  <select className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer p-0 leading-tight appearance-none">
+                    <option className="bg-[#0A192F] text-white" value="1">1</option>
+                    <option className="bg-[#0A192F] text-white" value="2">2</option>
+                    <option className="bg-[#0A192F] text-white" value="3">3</option>
+                  </select>
+                </div>
+
+                {/* Persons */}
+                <div className="flex-1 flex flex-col items-center justify-center px-1 text-center">
+                  <Users size={11} className="text-[#8EE3F5] mb-0.5" />
+                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Guests</span>
+                  <select className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer p-0 leading-tight appearance-none">
+                    <option className="bg-[#0A192F] text-white" value="1">1</option>
+                    <option className="bg-[#0A192F] text-white" value="2">2</option>
+                    <option className="bg-[#0A192F] text-white" value="3">3</option>
+                    <option className="bg-[#0A192F] text-white" value="4">4</option>
+                  </select>
+                </div>
+
+                {/* Search Button */}
+                <button 
+                  onClick={() => handleScrollTo(0.66)}
+                  className="w-8 h-8 rounded-full bg-[#0B3C73] text-white flex items-center justify-center cursor-pointer transition hover:scale-105 active:scale-95 shrink-0 ml-1 border border-white/10 shadow-[0_2px_8px_rgba(11,60,115,0.3)]"
+                >
+                  <Search size={11} className="text-white" />
+                </button>
+              </div>
             </motion.div>
 
             {/* Scroll Indicator */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 font-mono text-[8px] text-zinc-500 tracking-[0.3em] opacity-80 select-none">
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 font-mono text-[8px] text-white/60 tracking-[0.3em] opacity-80 select-none">
               <span>EXPLORE</span>
               <motion.div
                 animate={{ y: [0, 8, 0] }}
                 transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-                className="w-1.5 h-1.5 rounded-full bg-[#FF4069] shadow-[0_0_8px_#FF4069]"
+                className="w-1.5 h-1.5 rounded-full bg-[#0B3C73] shadow-[0_0_8px_#0B3C73]"
               />
             </div>
           </section>
@@ -544,19 +596,35 @@ export default function LandingPage() {
           )}
         </AnimatePresence>
 
-        {/* ── LAYER 0: Sunset Beach Video Background ── */}
+        {/* ── LAYER 0: Maldives Resort Background Image (Scene 1 only) ── */}
+        <motion.div 
+          className="absolute inset-0 z-0 bg-cover bg-center"
+          style={{ 
+            backgroundImage: "url('/images/maldives_resort_hero.png')",
+            opacity: bgOpacity,
+            scale: bgScale,
+          }}
+        />
+
+        {/* ── LAYER 0.2: Tropical Overlay Gradient ── */}
+        <motion.div
+          className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#0A2540]/25 via-transparent to-[#040308]"
+          style={{ opacity: bgOpacity }}
+        />
+
+        {/* ── LAYER 0.5: Sunset Beach Video Background ── */}
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <video
+          <motion.video
             autoPlay
             loop
             muted
             playsInline
             preload="auto"
             className="absolute inset-0 w-full h-full object-cover scale-[1.03]"
-            style={{ opacity: 0.35 }}
+            style={{ opacity: videoOpacity }}
           >
             <source src="/sunset-beach.mp4" type="video/mp4" />
-          </video>
+          </motion.video>
           <div className="absolute inset-0 bg-gradient-to-b from-[#040308]/90 via-[#040308]/30 to-[#040308]/90" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#040308]/85 via-transparent to-[#040308]/85" />
           <div className="absolute inset-0 bg-gradient-to-tr from-[#FF9E00]/12 via-transparent to-[#7000FF]/15 mix-blend-color-dodge" />
@@ -600,7 +668,7 @@ export default function LandingPage() {
         {/* ── SIDEWAVE-STYLE ROTATING SCROLL DISCOVER TAG ── */}
         <div className="scroll-discover">
           <span>Scroll to Navigate</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#FF9E00] animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#0B3C73] animate-pulse" />
         </div>
 
         {/* ══════════════════════════════════════════════
@@ -608,25 +676,97 @@ export default function LandingPage() {
             ══════════════════════════════════════════════ */}
         <motion.div
           className="absolute inset-0 z-[10] flex flex-col items-center justify-center text-center px-6"
-          style={{ opacity: logoOpacity, pointerEvents: "none" }}
+          style={{ opacity: logoOpacity, pointerEvents: s1PointerEvents }}
         >
           <motion.div
             style={{ opacity: welcomeOpacity, y: welcomeY }}
-            className="flex flex-col items-center gap-5 max-w-4xl"
+            className="flex flex-col items-center gap-6 max-w-5xl"
           >
-            {/* Small Beach Vibe Tag */}
-            <div className="flex items-center gap-2 px-3.5 py-1 rounded-full border border-[#FF9E00]/25 bg-[#FF9E00]/10 text-[#FF9E00] text-[9px] font-mono tracking-[0.25em] font-bold uppercase">
-              <Sparkles size={10} /> Siripuram Coastal Hub
-            </div>
-
-            <h1 className="text-6xl md:text-9xl font-extrabold tracking-tighter leading-none select-none text-white font-sans">
-              GROVICE <span className="font-serif-elegant text-[#FF9E00] font-light">2.0</span>
+            {/* Editorial Title */}
+            <h1 
+              className="text-6xl md:text-7xl font-bold tracking-tight leading-none text-white select-none max-w-4xl"
+              style={{ 
+                fontFamily: "var(--font-playfair), serif", 
+                textShadow: "0 2px 15px rgba(0, 0, 0, 0.4)" 
+              }}
+            >
+              Escape to Your <br/>Private Island Paradise
             </h1>
 
-            <p className="text-[11px] md:text-sm uppercase tracking-[0.35em] text-[#FF4069] font-mono font-bold mt-2 leading-relaxed">
-              Visakhapatnam&apos;s First Business Operating System
+            {/* Subtitle */}
+            <p 
+              className="text-sm md:text-base text-white/95 font-light max-w-2xl leading-relaxed mt-2 select-none"
+              style={{ 
+                textShadow: "0 1px 6px rgba(0, 0, 0, 0.5)" 
+              }}
+            >
+              Embrace the calm of turquoise waters and endless skies. <br/>Where luxury meets serenity at Maldives Beach Resort & Villas.
             </p>
-            <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-[#FF9E00] to-transparent mt-4" />
+
+            {/* Pill Configurator Bar */}
+            <div className="flex flex-row items-center bg-[#0A2540]/55 border border-white/15 rounded-full p-2.5 gap-0 max-w-4xl w-full backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.3)] mt-10 relative z-50">
+              {/* Select 1: Check-In Date */}
+              <div className="flex-1 flex flex-row items-center px-5 border-r border-white/10 text-left hover:bg-white/5 py-1.5 transition rounded-l-full cursor-pointer">
+                <Calendar size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
+                <div className="flex flex-col flex-1">
+                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Check-In Date</span>
+                  <input 
+                    type="date" 
+                    defaultValue="2026-05-23"
+                    className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 [color-scheme:dark] p-0 font-medium"
+                  />
+                </div>
+              </div>
+
+              {/* Select 2: Check-Out Date */}
+              <div className="flex-1 flex flex-row items-center px-5 border-r border-white/10 text-left hover:bg-white/5 py-1.5 transition cursor-pointer">
+                <Calendar size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
+                <div className="flex flex-col flex-1">
+                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Check-Out Date</span>
+                  <input 
+                    type="date" 
+                    defaultValue="2026-05-30"
+                    className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 [color-scheme:dark] p-0 font-medium"
+                  />
+                </div>
+              </div>
+
+              {/* Select 3: Rooms */}
+              <div className="flex-1 flex flex-row items-center px-5 border-r border-white/10 text-left hover:bg-white/5 py-1.5 transition cursor-pointer">
+                <Home size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
+                <div className="flex flex-col flex-1">
+                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Rooms</span>
+                  <select className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 appearance-none font-medium">
+                    <option className="bg-[#0A192F] text-white" value="1">1 Room</option>
+                    <option className="bg-[#0A192F] text-white" value="2">2 Rooms</option>
+                    <option className="bg-[#0A192F] text-white" value="3">3 Rooms</option>
+                    <option className="bg-[#0A192F] text-white" value="4">4+ Rooms</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Select 4: Guests */}
+              <div className="flex-1 flex flex-row items-center px-5 text-left hover:bg-white/5 py-1.5 transition rounded-r-full cursor-pointer">
+                <Users size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
+                <div className="flex flex-col flex-1">
+                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Guests</span>
+                  <select className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 appearance-none font-medium">
+                    <option className="bg-[#0A192F] text-white" value="1">1 Person</option>
+                    <option className="bg-[#0A192F] text-white" value="2">2 Persons</option>
+                    <option className="bg-[#0A192F] text-white" value="3">3 Persons</option>
+                    <option className="bg-[#0A192F] text-white" value="4">4+ Persons</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <button 
+                onClick={() => handleScrollTo(0.55)}
+                className="w-12 h-12 rounded-full bg-[#0B3C73] text-white flex items-center justify-center cursor-pointer transition hover:scale-105 active:scale-95 shrink-0 ml-4 border border-white/10 shadow-[0_4px_12px_rgba(11,60,115,0.35)]"
+              >
+                <Search size={16} className="text-white" />
+              </button>
+            </div>
           </motion.div>
 
           {/* Scroll Indicator */}
