@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Check,
@@ -14,19 +14,27 @@ import {
   Globe,
   Activity,
   Layers,
-  Users
+  Users,
+  Zap,
+  ArrowRight,
+  Shield,
+  TrendingUp,
 } from "lucide-react";
 import Footer from "@/components/Footer";
 
-/* ── SPOTLIGHT CARD HELPER ── */
+/* ══════════════════════════════════════════════════
+   SPOTLIGHT CARD
+   ══════════════════════════════════════════════════ */
 function SpotlightCard({
   children,
   className = "",
-  hoverBorder = true
+  hoverBorder = true,
+  style,
 }: {
   children: React.ReactNode;
   className?: string;
   hoverBorder?: boolean;
+  style?: React.CSSProperties;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -44,27 +52,79 @@ function SpotlightCard({
       ref={cardRef}
       onMouseMove={handleMouseMove}
       className={`spotlight-card ${hoverBorder ? "spotlight-border" : ""} ${className}`}
+      style={style}
     >
       {children}
     </div>
   );
 }
 
+/* ══════════════════════════════════════════════════
+   ANIMATED STAT COUNTER
+   ══════════════════════════════════════════════════ */
+function StatCounter({ value, label, color = "#FF9E00" }: { value: string; label: string; color?: string }) {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { threshold: 0.3 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} style={{ textAlign: "center" }}>
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        animate={visible ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        style={{
+          fontSize: "clamp(1.8rem, 3.5vw, 3rem)",
+          fontWeight: 800,
+          fontFamily: "var(--font-outfit), monospace",
+          letterSpacing: "-0.02em",
+          color,
+        }}
+      >
+        {value}
+      </motion.p>
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={visible ? { opacity: 1 } : {}}
+        transition={{ duration: 0.7, delay: 0.2 }}
+        style={{
+          fontSize: "0.6rem",
+          color: "rgba(240,242,255,0.3)",
+          fontFamily: "var(--font-outfit), monospace",
+          textTransform: "uppercase",
+          letterSpacing: "0.18em",
+          marginTop: "4px",
+          fontWeight: 700,
+        }}
+      >
+        {label}
+      </motion.p>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════
+   MAIN PAGE
+   ══════════════════════════════════════════════════ */
 export default function EngineAPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", website: "", desc: "" });
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const auditSectionRef = useRef<HTMLDivElement>(null);
   const buildSectionRef = useRef<HTMLDivElement>(null);
 
-  const scrollToAudit = () => {
-    auditSectionRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const scrollToBuild = () => {
-    buildSectionRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const scrollToAudit = () => auditSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToBuild = () => buildSectionRef.current?.scrollIntoView({ behavior: "smooth" });
 
   const handleAuditSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,410 +137,661 @@ export default function EngineAPage() {
   };
 
   const bentoCapabilities = [
-    {
-      icon: Cpu,
-      title: "AI Automation Systems",
-      desc: "Autopilot operations. We link n8n processes to lead triggers so data moves without human intervention.",
-      color: "text-[#FF9E00]"
-    },
-    {
-      icon: Bot,
-      title: "AI Voice Agents",
-      desc: "Autonomous smart dialers. Handle inbound lead classification with natural vocal syntax.",
-      color: "text-[#FF4069]"
-    },
-    {
-      icon: Database,
-      title: "CRM + Lead Systems",
-      desc: "Structured pipes syncing lead entries between database replicas and master CRM records.",
-      color: "text-amber-500"
-    },
-    {
-      icon: LayoutDashboard,
-      title: "Dashboards & Analytics",
-      desc: "Clean client admin views. High-performance Next.js panels visualizing key business metrics.",
-      color: "text-rose-400"
-    },
-    {
-      icon: Layers,
-      title: "Custom Software Projects",
-      desc: "Full stack engineering. Robust repositories built to solve specialized administrative requirements.",
-      color: "text-[#FF9E00]"
-    },
-    {
-      icon: Workflow,
-      title: "Workflow Orchestration",
-      desc: "Complex conditional loops routing customer inquiries based on active qualification metrics.",
-      color: "text-[#FF4069]"
-    },
-    {
-      icon: Globe,
-      title: "AI Integrations",
-      desc: "Direct endpoints connecting custom applications to GPT-4 API pipelines seamlessly.",
-      color: "text-amber-500"
-    },
-    {
-      icon: Users,
-      title: "Internal Ops Tools",
-      desc: "Employee portals and resource managers built to optimize team productivity.",
-      color: "text-rose-400"
-    }
+    { icon: Cpu, title: "AI Automation Systems", desc: "Autopilot operations. Link n8n processes to lead triggers so data moves without human intervention.", color: "#FF9E00", glow: "rgba(255,158,0,0.12)" },
+    { icon: Bot, title: "AI Voice Agents", desc: "Autonomous smart dialers. Handle inbound lead classification with natural vocal syntax.", color: "#FF4069", glow: "rgba(255,64,105,0.12)" },
+    { icon: Database, title: "CRM + Lead Systems", desc: "Structured pipes syncing lead entries between database replicas and master CRM records.", color: "#FFD700", glow: "rgba(255,215,0,0.10)" },
+    { icon: LayoutDashboard, title: "Dashboards & Analytics", desc: "Clean client admin views. High-performance Next.js panels visualizing key business metrics.", color: "#9B7FFF", glow: "rgba(112,0,255,0.12)" },
+    { icon: Layers, title: "Custom Software Projects", desc: "Full stack engineering. Robust repositories built to solve specialized administrative requirements.", color: "#FF9E00", glow: "rgba(255,158,0,0.12)" },
+    { icon: Workflow, title: "Workflow Orchestration", desc: "Complex conditional loops routing customer inquiries based on active qualification metrics.", color: "#FF4069", glow: "rgba(255,64,105,0.12)" },
+    { icon: Globe, title: "AI Integrations", desc: "Direct endpoints connecting custom applications to GPT-4 API pipelines seamlessly.", color: "#00E5FF", glow: "rgba(0,229,255,0.10)" },
+    { icon: Users, title: "Internal Ops Tools", desc: "Employee portals and resource managers built to optimize team productivity.", color: "#9B7FFF", glow: "rgba(112,0,255,0.12)" },
   ];
 
+  const inputStyle = (field: string) => ({
+    width: "100%",
+    background: "transparent",
+    border: "none",
+    borderBottom: `1px solid ${focusedField === field ? "#FF9E00" : "rgba(255,255,255,0.12)"}`,
+    padding: "0.75rem 0",
+    fontSize: "0.875rem",
+    color: "#F0F2FF",
+    fontFamily: "var(--font-dm-sans), system-ui",
+    outline: "none",
+    transition: "border-color 0.25s",
+  });
+
   return (
-    <div className="bg-[#040308] text-[#F6F7FB] min-h-screen relative font-sans pt-24 overflow-hidden">
-      
-      {/* Glow backgrounds */}
-      <div className="absolute top-[10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#FF9E00]/5 blur-[120px] pointer-events-none" />
-      <div className="absolute top-[40%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#FF4069]/5 blur-[120px] pointer-events-none" />
+    <div
+      style={{ background: "#040308", color: "#F0F2FF", minHeight: "100vh", position: "relative", fontFamily: "var(--font-dm-sans), system-ui", paddingTop: "5.5rem", overflowX: "hidden" }}
+    >
+      {/* ── Dot grid background ── */}
+      <div className="dot-grid fixed inset-0 pointer-events-none" style={{ zIndex: 0, opacity: 0.4 }} />
 
-      {/* ── HERO SECTION ── */}
-      <section className="relative py-20 md:py-28 px-6 max-w-7xl mx-auto z-10">
+      {/* ── Ambient glows ── */}
+      <div style={{ position: "absolute", top: "8%", left: "-8%", width: "55%", height: "55%", borderRadius: "50%", background: "rgba(255,158,0,0.04)", filter: "blur(130px)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: "45%", right: "-8%", width: "50%", height: "50%", borderRadius: "50%", background: "rgba(255,64,105,0.04)", filter: "blur(130px)", pointerEvents: "none" }} />
+
+      {/* ══════════════════════════════════════════════════════════
+          HERO
+          ══════════════════════════════════════════════════════════ */}
+      <section style={{ position: "relative", padding: "5rem 1.5rem 5rem", maxWidth: "1280px", margin: "0 auto", zIndex: 10 }}>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          <div className="lg:col-span-6 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FF9E00]/20 bg-[#FF9E00]/10">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF9E00] animate-pulse" />
-              <span className="text-[10px] font-mono text-[#FF9E00] uppercase tracking-widest font-bold">
-                ENGINE A // ENTERPRISE CODE
-              </span>
-            </div>
+          {/* Left: Copy */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-6 space-y-7"
+          >
+            <span className="label-badge label-badge-orange">
+              <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#FF9E00" }} className="animate-pulse" />
+              ENGINE A // ENTERPRISE CODE
+            </span>
 
-            <h1 className="text-4xl md:text-7xl font-extrabold tracking-tight leading-none text-white font-sans">
-              Engine A: Future-ready Business Infrastructure
+            <h1
+              style={{
+                fontSize: "clamp(2.2rem, 5vw, 4.5rem)",
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+                lineHeight: 1.08,
+                fontFamily: "var(--font-outfit), system-ui",
+                color: "#F0F2FF",
+              }}
+            >
+              Future-ready{" "}
+              <span className="text-gradient">Business</span>
+              <br />
+              Infrastructure
             </h1>
-            
-            <p className="text-sm md:text-base text-zinc-400 leading-relaxed max-w-xl font-light">
+
+            <p style={{ fontSize: "0.9rem", color: "rgba(240,242,255,0.5)", lineHeight: 1.75, maxWidth: "480px" }}>
               AI systems, automation, CRMs, dashboards, and custom software—built to scale. We turn manual administrative tasks into high-fidelity autonomous code assets.
             </p>
 
-            <div className="flex flex-wrap gap-4 pt-2">
-              <button
-                onClick={scrollToAudit}
-                className="px-8 py-4 rounded-none text-xs font-mono font-bold uppercase tracking-widest text-black bg-gradient-to-r from-[#FF9E00] to-[#FF4069] hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-lg"
-              >
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", paddingTop: "0.5rem" }}>
+              <button onClick={scrollToAudit} className="btn-primary">
+                <Zap size={14} />
                 Book an AI Audit
               </button>
-              <button
-                onClick={scrollToBuild}
-                className="px-8 py-4 rounded-none text-xs font-mono font-bold uppercase tracking-widest border border-white/10 bg-white/5 text-white hover:bg-white/10 transition-all"
-              >
-                See what we build
+              <button onClick={scrollToBuild} className="btn-ghost">
+                See What We Build
+                <ArrowRight size={13} />
               </button>
             </div>
-          </div>
 
-          {/* Graphical Mockup Dashboard */}
-          <div className="lg:col-span-6">
-            <SpotlightCard className="p-6 bg-[#0b0912] border-white/5 rounded-2xl relative overflow-hidden">
-              <div className="flex items-center justify-between border-b border-white/5 pb-3.5 mb-4">
-                <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest font-bold">INFRASTRUCTURE STATUS</span>
-                <span className="text-[8px] font-mono text-emerald-400 bg-emerald-950/30 px-2 py-0.5 border border-emerald-400/20 font-bold">ACTIVE SYSTEM</span>
+            {/* Trust chips */}
+            <div style={{ display: "flex", gap: "1.5rem", paddingTop: "0.5rem" }}>
+              {[
+                { icon: Shield, label: "Zero Pressure" },
+                { icon: TrendingUp, label: "Free Audit Blueprint" },
+                { icon: Check, label: "30-min Strategy Call" },
+              ].map(({ icon: Icon, label }) => (
+                <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.7rem", color: "rgba(240,242,255,0.35)", fontFamily: "var(--font-outfit), monospace" }}>
+                  <Icon size={11} color="rgba(255,158,0,0.5)" />
+                  {label}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Right: Animated Dashboard Mock */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-6"
+          >
+            <SpotlightCard className="glass-card p-7 rounded-[24px]">
+              {/* Window bar */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(255,255,255,0.06)", paddingBottom: "1rem", marginBottom: "1.25rem" }}>
+                <div style={{ display: "flex", gap: "6px" }}>
+                  {["#FF5F57", "#FEBC2E", "#28C840"].map((c) => (
+                    <div key={c} style={{ width: "10px", height: "10px", borderRadius: "50%", background: c, opacity: 0.8 }} />
+                  ))}
+                </div>
+                <span style={{ fontSize: "0.6rem", fontFamily: "var(--font-outfit), monospace", color: "rgba(240,242,255,0.25)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                  GROVICE ENGINE A — INFRASTRUCTURE STATUS
+                </span>
+                <span style={{ fontSize: "0.55rem", fontFamily: "var(--font-outfit), monospace", color: "#22c55e", background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.2)", padding: "0.2rem 0.5rem", borderRadius: "4px", fontWeight: 700 }}>
+                  ● ACTIVE SYSTEM
+                </span>
               </div>
 
-              {/* Mock Dashboard flow */}
-              <div className="space-y-4 font-mono text-[9px] text-zinc-400">
-                <div className="p-3 bg-black/60 border border-white/5 flex items-center justify-between rounded-xl">
-                  <div className="flex items-center gap-2">
-                    <Activity size={12} className="text-[#FF9E00]" />
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem", fontFamily: "var(--font-outfit), monospace", fontSize: "0.7rem", color: "rgba(240,242,255,0.4)" }}>
+                {/* Status row */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "10px", padding: "0.7rem 1rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <Activity size={12} color="#FF9E00" />
                     <span>Edge API Endpoints</span>
                   </div>
-                  <span className="text-[#FF9E00] font-bold">SYNCED (8.4ms)</span>
+                  <span style={{ color: "#FF9E00", fontWeight: 700 }}>SYNCED (8.4ms)</span>
                 </div>
 
-                {/* Animated Line Connection */}
-                <div className="p-4 bg-black/60 border border-white/5 space-y-3 rounded-xl">
-                  <div className="flex justify-between text-[8px] text-zinc-500 font-bold">
+                {/* Pipeline row */}
+                <div style={{ background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "10px", padding: "0.7rem 1rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.55rem", color: "rgba(240,242,255,0.25)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.6rem" }}>
                     <span>TRANSACT TRIGGER</span>
                     <span>AI PIPELINE GATES</span>
                   </div>
-                  <div className="h-10 flex items-center justify-between relative bg-black/40 border border-white/5 px-3 rounded-lg">
-                    <span className="text-white">Webhook</span>
-                    <svg className="flex-1 mx-4 h-4" fill="none" viewBox="0 0 100 16" preserveAspectRatio="none">
-                      <path d="M 0 8 L 100 8" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5" />
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.04)", borderRadius: "8px", padding: "0.5rem 0.75rem" }}>
+                    <span style={{ color: "#F0F2FF", fontWeight: 700, fontSize: "0.65rem" }}>Webhook</span>
+                    <svg className="flex-1 h-4" fill="none" viewBox="0 0 100 16" preserveAspectRatio="none">
+                      <path d="M 0 8 L 100 8" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5" />
                       <path d="M 0 8 L 100 8" stroke="#FF4069" strokeWidth="2" className="animate-stroke-flow" />
                     </svg>
-                    <span className="text-[#FF4069]">GPT-4 Classifier</span>
+                    <span style={{ color: "#FF4069", fontWeight: 700, fontSize: "0.65rem" }}>GPT-4 Classifier</span>
+                  </div>
+                </div>
+
+                {/* Metrics row */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.5rem" }}>
+                  {[
+                    { label: "Active Nodes", val: "12", color: "#FF9E00" },
+                    { label: "Queue Depth", val: "847", color: "#9B7FFF" },
+                    { label: "Success Rate", val: "99.97%", color: "#22c55e" },
+                  ].map(({ label, val, color }) => (
+                    <div key={label} style={{ background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "10px", padding: "0.65rem 0.75rem", textAlign: "center" }}>
+                      <p style={{ fontSize: "0.9rem", fontWeight: 800, color, letterSpacing: "-0.02em" }}>{val}</p>
+                      <p style={{ fontSize: "0.5rem", color: "rgba(240,242,255,0.25)", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: "2px" }}>{label}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Terminal log */}
+                <div style={{ background: "rgba(0,0,0,0.6)", border: "1px solid rgba(255,255,255,0.04)", borderRadius: "10px", padding: "0.75rem 1rem", fontFamily: "monospace" }}>
+                  <p style={{ fontSize: "0.55rem", color: "rgba(240,242,255,0.2)", marginBottom: "0.4rem", letterSpacing: "0.1em" }}>{"// LIVE LOG"}</p>
+                  {[
+                    { time: "16:22:41", msg: "Lead captured → CRM routed → GPT scored", ok: true },
+                    { time: "16:22:38", msg: "Voice agent call completed (2m 14s)", ok: true },
+                    { time: "16:22:35", msg: "Database sync ← 847 records updated", ok: true },
+                  ].map(({ time, msg, ok }) => (
+                    <div key={time} style={{ display: "flex", gap: "0.5rem", fontSize: "0.58rem", color: "rgba(240,242,255,0.4)", marginBottom: "0.2rem" }}>
+                      <span style={{ color: "rgba(240,242,255,0.2)", flexShrink: 0 }}>{time}</span>
+                      <span style={{ color: ok ? "rgba(34,197,94,0.7)" : "rgba(255,64,105,0.7)" }}>→</span>
+                      <span>{msg}</span>
+                    </div>
+                  ))}
+                  <div style={{ display: "flex", alignItems: "center", fontSize: "0.58rem", color: "rgba(240,242,255,0.3)", marginTop: "0.3rem" }}>
+                    <span style={{ color: "#FF9E00" }}>$</span>
+                    <span style={{ marginLeft: "0.35rem" }}>Awaiting next trigger</span>
+                    <span className="terminal-cursor" />
                   </div>
                 </div>
               </div>
             </SpotlightCard>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          STATS BAR
+          ══════════════════════════════════════════════════════════ */}
+      <section style={{ borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)", background: "rgba(8,6,17,0.6)", position: "relative", zIndex: 10 }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "3rem 1.5rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "2rem" }} className="md:grid-cols-4">
+            <StatCounter value="140k+" label="Leads Processed" color="#FF9E00" />
+            <StatCounter value="< 8.4ms" label="Edge Sync Latency" color="#FF4069" />
+            <StatCounter value="99.98%" label="Deploy Uptime" color="#22c55e" />
+            <StatCounter value="80%" label="Manual Task Reduction" color="#9B7FFF" />
           </div>
         </div>
       </section>
 
-      {/* ── WHAT WE BUILD (BENTO GRID) ── */}
-      <section ref={buildSectionRef} className="relative py-20 bg-[#0b0912]/50 border-t border-b border-white/5 z-10">
-        <div className="max-w-7xl mx-auto px-6 space-y-16">
-          <div className="space-y-3 text-center max-w-xl mx-auto">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF9E00] font-bold">
+      {/* ══════════════════════════════════════════════════════════
+          BENTO GRID — CAPABILITIES
+          ══════════════════════════════════════════════════════════ */}
+      <section ref={buildSectionRef} style={{ position: "relative", padding: "6rem 1.5rem", zIndex: 10 }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            style={{ textAlign: "center", marginBottom: "4rem" }}
+          >
+            <span className="label-badge label-badge-orange" style={{ marginBottom: "1rem", display: "inline-flex" }}>
               SYSTEM SPECIFICATIONS
             </span>
-            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white font-sans">
+            <h2
+              style={{
+                fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+                color: "#F0F2FF",
+                fontFamily: "var(--font-outfit), system-ui",
+                marginTop: "1rem",
+              }}
+            >
               Full-Stack Capabilities
             </h2>
-          </div>
+            <p style={{ fontSize: "0.85rem", color: "rgba(240,242,255,0.4)", maxWidth: "480px", margin: "1rem auto 0", lineHeight: 1.7 }}>
+              Every service we offer runs on engineered precision — not guesswork. Here&apos;s what we deploy.
+            </p>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {bentoCapabilities.map((cap, i) => {
               const Icon = cap.icon;
               return (
-                <SpotlightCard key={i} className="p-6 bg-black/40 border-white/5 flex flex-col justify-between min-h-[200px] hover:border-[#FF9E00]/20 rounded-2xl">
-                  <div className={`p-3 rounded-xl bg-[#040308] border border-white/5 ${cap.color} w-fit`}>
-                    <Icon size={20} />
-                  </div>
-                  <div className="mt-6 space-y-2">
-                    <h3 className="text-md font-bold text-white uppercase tracking-wide font-sans">{cap.title}</h3>
-                    <p className="text-xs text-zinc-400 leading-relaxed font-light">{cap.desc}</p>
-                  </div>
-                </SpotlightCard>
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.6, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <SpotlightCard
+                    className="glass-card p-6 rounded-[20px] flex flex-col justify-between h-full"
+                    style={{ minHeight: "240px", position: "relative", overflow: "hidden" }}
+                  >
+                    {/* Top accent color bar */}
+                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1.5px", background: `linear-gradient(90deg, ${cap.color}, transparent)`, borderRadius: "20px 20px 0 0" }} />
+                    {/* Corner glow */}
+                    <div style={{ position: "absolute", top: 0, left: 0, width: "100px", height: "100px", borderRadius: "50%", background: cap.glow, filter: "blur(30px)", pointerEvents: "none" }} />
+
+                    <div
+                      style={{
+                        width: "42px",
+                        height: "42px",
+                        borderRadius: "12px",
+                        background: `${cap.color}12`,
+                        border: `1px solid ${cap.color}22`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: cap.color,
+                        position: "relative",
+                      }}
+                    >
+                      <Icon size={20} />
+                    </div>
+
+                    <div style={{ marginTop: "auto", paddingTop: "1.5rem" }}>
+                      <h3
+                        style={{
+                          fontSize: "0.8rem",
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.07em",
+                          color: "#F0F2FF",
+                          fontFamily: "var(--font-outfit), monospace",
+                          marginBottom: "0.5rem",
+                        }}
+                      >
+                        {cap.title}
+                      </h3>
+                      <p style={{ fontSize: "0.75rem", color: "rgba(240,242,255,0.4)", lineHeight: 1.7 }}>
+                        {cap.desc}
+                      </p>
+                    </div>
+                  </SpotlightCard>
+                </motion.div>
               );
             })}
           </div>
         </div>
       </section>
 
-      {/* ── HOW IT WORKS (TIMELINE) ── */}
-      <section className="relative py-20 px-6 max-w-7xl mx-auto z-10">
-        <div className="space-y-16">
-          <div className="space-y-3 text-center max-w-xl mx-auto">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF4069] font-bold">
-              ORCHESTRATION PIPELINE
-            </span>
-            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white font-sans">
+      {/* ══════════════════════════════════════════════════════════
+          PROCESS TIMELINE
+          ══════════════════════════════════════════════════════════ */}
+      <section style={{ position: "relative", padding: "5rem 1.5rem", background: "rgba(8,6,17,0.5)", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)", zIndex: 10 }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            style={{ textAlign: "center", marginBottom: "4rem" }}
+          >
+            <span className="label-badge label-badge-pink" style={{ marginBottom: "1rem", display: "inline-flex" }}>ORCHESTRATION PIPELINE</span>
+            <h2
+              style={{
+                fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+                color: "#F0F2FF",
+                fontFamily: "var(--font-outfit), system-ui",
+                marginTop: "1rem",
+              }}
+            >
               Integration Process
             </h2>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 relative">
-            {/* Timeline connector track */}
-            <div className="hidden md:block absolute top-[30px] left-[10%] right-[10%] h-px bg-gradient-to-r from-[#FF9E00]/20 via-[#FF4069]/20 to-transparent z-0" />
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 relative">
+            {/* Connector line */}
+            <div
+              className="hidden md:block"
+              style={{ position: "absolute", top: "28px", left: "10%", right: "10%", height: "1px", background: "linear-gradient(90deg, rgba(255,158,0,0.3), rgba(255,64,105,0.3), transparent)", zIndex: 0 }}
+            />
 
             {[
-              { step: "01", name: "AI Audit", desc: "Identify operational bottlenecks & cost loss points." },
-              { step: "02", name: "Blueprint", desc: "Design data schemas & system architecture." },
-              { step: "03", name: "Build", desc: "Deploy workflow modules, APIs, & software repos." },
-              { step: "04", name: "Deploy", desc: "Activate client staging environment gates." },
-              { step: "05", name: "Optimize", desc: "Continuous iteration under real client loads." },
-            ].map((t, idx) => (
-              <div key={idx} className="space-y-4 text-center z-10">
-                <div className="w-14 h-14 rounded-full bg-[#0b0912] border border-white/10 flex items-center justify-center font-mono font-bold text-md text-[#FF9E00] mx-auto shadow-md">
-                  {t.step}
+              { step: "01", name: "AI Audit", desc: "Identify operational bottlenecks & cost loss points.", color: "#FF9E00" },
+              { step: "02", name: "Blueprint", desc: "Design data schemas & system architecture.", color: "#FF9E00" },
+              { step: "03", name: "Build", desc: "Deploy workflow modules, APIs, & software repos.", color: "#FF4069" },
+              { step: "04", name: "Deploy", desc: "Activate client staging environment gates.", color: "#FF4069" },
+              { step: "05", name: "Optimize", desc: "Continuous iteration under real client loads.", color: "#9B7FFF" },
+            ].map(({ step, name, desc, color }, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                style={{ textAlign: "center", position: "relative", zIndex: 10 }}
+              >
+                <div
+                  style={{
+                    width: "56px",
+                    height: "56px",
+                    borderRadius: "50%",
+                    background: "rgba(8,6,17,1)",
+                    border: `1px solid ${color}35`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontFamily: "var(--font-outfit), monospace",
+                    fontWeight: 800,
+                    fontSize: "0.85rem",
+                    color,
+                    margin: "0 auto 1.25rem",
+                    boxShadow: `0 0 20px ${color}15`,
+                  }}
+                >
+                  {step}
                 </div>
-                <div className="space-y-1">
-                  <h4 className="text-sm font-bold text-white uppercase font-sans">{t.name}</h4>
-                  <p className="text-[11px] text-zinc-400 leading-relaxed font-light">{t.desc}</p>
-                </div>
-              </div>
+                <h4 style={{ fontSize: "0.8rem", fontWeight: 700, color: "#F0F2FF", textTransform: "uppercase", letterSpacing: "0.06em", fontFamily: "var(--font-outfit), monospace", marginBottom: "0.4rem" }}>
+                  {name}
+                </h4>
+                <p style={{ fontSize: "0.72rem", color: "rgba(240,242,255,0.4)", lineHeight: 1.65 }}>{desc}</p>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── PROOF / OUTCOMES ── */}
-      <section className="relative py-20 bg-[#0b0912]/50 border-t border-b border-white/5 z-10">
-        <div className="max-w-7xl mx-auto px-6 space-y-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <p className="text-3xl md:text-5xl font-extrabold text-white font-mono">140k+</p>
-              <p className="text-[10px] text-zinc-500 font-mono uppercase tracking-wider mt-1 font-bold">LEADS PROCESSED</p>
-            </div>
-            <div>
-              <p className="text-3xl md:text-5xl font-extrabold text-white font-mono">&lt; 8.4ms</p>
-              <p className="text-[10px] text-zinc-500 font-mono uppercase tracking-wider mt-1 font-bold">EDGE SYNC LATENCY</p>
-            </div>
-            <div>
-              <p className="text-3xl md:text-5xl font-extrabold text-white font-mono">99.98%</p>
-              <p className="text-[10px] text-zinc-500 font-mono uppercase tracking-wider mt-1 font-bold">DEPLOY UPTIME</p>
-            </div>
-            <div>
-              <p className="text-3xl md:text-5xl font-extrabold text-white font-mono">80%</p>
-              <p className="text-[10px] text-zinc-500 font-mono uppercase tracking-wider mt-1 font-bold">MANUAL TASK REDUCTION</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
-            <SpotlightCard className="p-6 bg-black/40 border-white/5 rounded-2xl flex flex-col justify-between min-h-[220px]">
-              <div>
-                <span className="text-[9px] font-mono text-[#FF9E00] font-bold">CASE STUDY 01 // PROPERTIES</span>
-                <h4 className="text-lg font-bold text-white mt-1 font-sans">Siripuram Lands Automation</h4>
-              </div>
-              <div className="space-y-2 mt-4">
-                <p className="text-xs text-zinc-400 font-light"><strong className="text-white font-medium">Problem:</strong> 12 hours/week manually routing Whatsapp chat logs to CRM.</p>
-                <p className="text-xs text-zinc-400 font-light"><strong className="text-white font-medium">System:</strong> Implemented n8n hooks translating chat audio to text pipeline.</p>
-                <p className="text-xs text-[#FF9E00] font-mono font-bold"><strong className="text-white font-medium">Result:</strong> Sync time reduced from 4 hours to sub-10 seconds.</p>
-              </div>
-            </SpotlightCard>
-
-            <SpotlightCard className="p-6 bg-black/40 border-white/5 rounded-2xl flex flex-col justify-between min-h-[220px]">
-              <div>
-                <span className="text-[9px] font-mono text-[#FF4069] font-bold">CASE STUDY 02 // LOGISTICS</span>
-                <h4 className="text-lg font-bold text-white mt-1 font-sans">Vizag Maritime Database Sync</h4>
-              </div>
-              <div className="space-y-2 mt-4">
-                <p className="text-xs text-zinc-400 font-light"><strong className="text-white font-medium">Problem:</strong> API cluster dropouts during coordinate updates.</p>
-                <p className="text-xs text-zinc-400 font-light"><strong className="text-white font-medium">System:</strong> Created custom Edge replication node gate with auto-failovers.</p>
-                <p className="text-xs text-[#FF4069] font-mono font-bold"><strong className="text-white font-medium">Result:</strong> 100% data preservation over 6 months deployment.</p>
-              </div>
-            </SpotlightCard>
-          </div>
-        </div>
-      </section>
-
-      {/* ── START HERE (AI AUDIT FORM OFFER) ── */}
-      <section ref={auditSectionRef} className="relative py-20 md:py-28 px-6 max-w-7xl mx-auto z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          <div className="lg:col-span-5 space-y-6">
-            <span className="inline-block text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF9E00] font-bold">
-              TAKE ACTION
-            </span>
-            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-none font-sans">
-              Book an AI & Infrastructure Audit
-            </h2>
-            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-light">
-              Get a custom software blueprint identifying automation loopholes & data pipelines for your company. Zero pressure.
-            </p>
-
-            <div className="space-y-3 text-xs text-zinc-300 font-mono">
-              <p className="flex items-center gap-2.5"><Check size={12} className="text-[#FF9E00]" /> Custom Node Blueprint Roadmap</p>
-              <p className="flex items-center gap-2.5"><Check size={12} className="text-[#FF9E00]" /> Operational Loop Cost Estimates</p>
-              <p className="flex items-center gap-2.5"><Check size={12} className="text-[#FF9E00]" /> 30-min strategy review call</p>
-            </div>
-          </div>
-
-          <div className="lg:col-span-7">
-            <SpotlightCard className="p-8 bg-[#0b0912] border-white/5 rounded-2xl relative">
-              <AnimatePresence mode="wait">
-                {!formSubmitted ? (
-                  <motion.form
-                    key="form"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onSubmit={handleAuditSubmit}
-                    className="space-y-4"
-                  >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-[10px] text-zinc-500 font-mono block mb-1 uppercase font-bold">Name *</label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          placeholder="Sarah Connor"
-                          className="w-full bg-[#040308] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF9E00] transition"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-[10px] text-zinc-500 font-mono block mb-1 uppercase font-bold">Email *</label>
-                        <input
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          placeholder="sarah@skynet.com"
-                          className="w-full bg-[#040308] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF9E00] transition"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="text-[10px] text-zinc-500 font-mono block mb-1 uppercase font-bold">Website URL</label>
-                      <input
-                        type="url"
-                        value={formData.website}
-                        onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                        placeholder="https://mycompany.com"
-                        className="w-full bg-[#040308] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF9E00] transition"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="text-[10px] text-zinc-500 font-mono block mb-1 uppercase font-bold">Operations bottleneck description</label>
-                      <textarea
-                        rows={3}
-                        value={formData.desc}
-                        onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
-                        placeholder="Explain what workflows are running slow or manually..."
-                        className="w-full bg-[#040308] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF9E00] transition"
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full py-4 text-xs font-mono font-bold uppercase tracking-widest text-black bg-gradient-to-r from-[#FF9E00] to-[#FF4069] hover:opacity-90 transition"
-                    >
-                      Request Audit Blueprint
-                    </button>
-                  </motion.form>
-                ) : (
-                  <motion.div
-                    key="success"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="flex flex-col items-center justify-center text-center py-12 space-y-4"
-                  >
-                    <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                      <Check size={28} />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-white text-lg">Audit Requested!</h4>
-                      <p className="text-xs text-zinc-400 max-w-sm mt-1">
-                        We will analyze your website URL and contact you at {formData.email} within 2 hours to confirm details.
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </SpotlightCard>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ ── */}
-      <section className="relative py-20 bg-[#040308] border-t border-white/5 z-10">
-        <div className="max-w-4xl mx-auto px-6 space-y-12">
-          <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight text-white text-center font-sans">
-            Engine A FAQ
-          </h2>
-
-          <div className="border-t border-white/10 divide-y divide-white/10">
+      {/* ══════════════════════════════════════════════════════════
+          CASE STUDIES
+          ══════════════════════════════════════════════════════════ */}
+      <section style={{ position: "relative", padding: "5rem 1.5rem", zIndex: 10 }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               {
-                q: "What tools do you configure automations in?",
-                a: "We natively build on n8n and Make pipelines, syncing raw logs to HubSpot, Salesforce, Airtable, or custom SQL databases."
+                label: "CASE STUDY 01 // PROPERTIES",
+                title: "Siripuram Lands Automation",
+                color: "#FF9E00",
+                problem: "12 hours/week manually routing WhatsApp chat logs to CRM.",
+                system: "Implemented n8n hooks translating chat audio to text pipeline.",
+                result: "Sync time reduced from 4 hours to sub-10 seconds.",
               },
               {
-                q: "What is the average setup timeline?",
-                a: "Minor automation connections take 1-2 weeks. Sophisticated Next.js client systems or multi-replica database sync gates require 4-6 weeks."
+                label: "CASE STUDY 02 // LOGISTICS",
+                title: "Vizag Maritime Database Sync",
+                color: "#FF4069",
+                problem: "API cluster dropouts during coordinate updates.",
+                system: "Created custom Edge replication node gate with auto-failovers.",
+                result: "100% data preservation over 6 months deployment.",
               },
-              {
-                q: "How does the voice agent coordinate calls?",
-                a: "Our smart voice agents use custom LLMs configured to capture customer phone prompts, query booking charts, and push updates straight to CRM systems."
-              },
-              {
-                q: "Do you offer operational retainers?",
-                a: "Yes. We manage database logs and workflow updates on monthly retainers so you don't experience pipeline downtime."
-              },
-              {
-                q: "Can we migrate from manual Excel processes?",
-                a: "Absolutely. We import legacy records, design structured SQL schemas, and build APIs to automate imports."
-              },
-              {
-                q: "Is there support for custom software codebases?",
-                a: "Yes. Everything we build is pushed to clean GitHub repositories with documented guidelines for your technical teams."
-              }
+            ].map(({ label, title, color, problem, system, result }) => (
+              <SpotlightCard
+                key={title}
+                className="glass-card p-7 rounded-[24px] flex flex-col justify-between"
+                style={{ minHeight: "260px", position: "relative" }}
+              >
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "1.5px", background: `linear-gradient(90deg, ${color}, transparent)`, borderRadius: "24px 24px 0 0" }} />
+                <div>
+                  <span style={{ fontSize: "0.6rem", fontFamily: "var(--font-outfit), monospace", color, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>{label}</span>
+                  <h4 style={{ fontSize: "1.2rem", fontWeight: 700, color: "#F0F2FF", marginTop: "0.5rem", letterSpacing: "-0.02em", fontFamily: "var(--font-outfit), system-ui" }}>{title}</h4>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem", marginTop: "1.25rem" }}>
+                  {[
+                    { key: "Problem", val: problem, valColor: "rgba(240,242,255,0.45)" },
+                    { key: "System", val: system, valColor: "rgba(240,242,255,0.45)" },
+                    { key: "Result", val: result, valColor: color },
+                  ].map(({ key, val, valColor }) => (
+                    <p key={key} style={{ fontSize: "0.78rem", color: valColor, lineHeight: 1.65 }}>
+                      <strong style={{ color: "#F0F2FF", fontWeight: 600 }}>{key}: </strong>
+                      {val}
+                    </p>
+                  ))}
+                </div>
+              </SpotlightCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          AI AUDIT FORM
+          ══════════════════════════════════════════════════════════ */}
+      <section
+        ref={auditSectionRef}
+        style={{ position: "relative", padding: "5rem 1.5rem 6rem", background: "rgba(8,6,17,0.5)", borderTop: "1px solid rgba(255,255,255,0.05)", zIndex: 10 }}
+      >
+        <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            {/* Left */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="lg:col-span-5 space-y-6"
+            >
+              <span className="label-badge label-badge-orange">TAKE ACTION</span>
+              <h2
+                style={{
+                  fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+                  fontWeight: 800,
+                  letterSpacing: "-0.04em",
+                  color: "#F0F2FF",
+                  lineHeight: 1.1,
+                  fontFamily: "var(--font-outfit), system-ui",
+                  marginTop: "0.75rem",
+                }}
+              >
+                Book an AI & Infrastructure Audit
+              </h2>
+              <p style={{ fontSize: "0.85rem", color: "rgba(240,242,255,0.45)", lineHeight: 1.75 }}>
+                Get a custom software blueprint identifying automation loopholes & data pipelines for your company. Zero pressure.
+              </p>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+                {[
+                  "Custom Node Blueprint Roadmap",
+                  "Operational Loop Cost Estimates",
+                  "30-min Strategy Review Call",
+                ].map((item) => (
+                  <div key={item} style={{ display: "flex", alignItems: "center", gap: "0.65rem", fontSize: "0.8rem", color: "rgba(240,242,255,0.6)", fontFamily: "var(--font-outfit), monospace" }}>
+                    <div style={{ width: "18px", height: "18px", borderRadius: "50%", background: "rgba(255,158,0,0.12)", border: "1px solid rgba(255,158,0,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <Check size={10} color="#FF9E00" />
+                    </div>
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Right: Form */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="lg:col-span-7"
+            >
+              <SpotlightCard className="glass-card p-8 rounded-[28px]">
+                <AnimatePresence mode="wait">
+                  {!formSubmitted ? (
+                    <motion.form
+                      key="form"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      onSubmit={handleAuditSubmit}
+                      style={{ display: "flex", flexDirection: "column", gap: "2rem" }}
+                    >
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        {[
+                          { field: "name", label: "Full Name *", placeholder: "Sarah Connor", type: "text", required: true },
+                          { field: "email", label: "Email Address *", placeholder: "sarah@company.com", type: "email", required: true },
+                        ].map(({ field, label, placeholder, type, required }) => (
+                          <div key={field}>
+                            <label style={{ display: "block", fontSize: "0.6rem", color: focusedField === field ? "#FF9E00" : "rgba(240,242,255,0.3)", fontFamily: "var(--font-outfit), monospace", textTransform: "uppercase", letterSpacing: "0.18em", fontWeight: 700, marginBottom: "0.35rem", transition: "color 0.25s" }}>
+                              {label}
+                            </label>
+                            <input
+                              type={type}
+                              required={required}
+                              value={formData[field as keyof typeof formData]}
+                              onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+                              onFocus={() => setFocusedField(field)}
+                              onBlur={() => setFocusedField(null)}
+                              placeholder={placeholder}
+                              style={inputStyle(field)}
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      <div>
+                        <label style={{ display: "block", fontSize: "0.6rem", color: focusedField === "website" ? "#FF9E00" : "rgba(240,242,255,0.3)", fontFamily: "var(--font-outfit), monospace", textTransform: "uppercase", letterSpacing: "0.18em", fontWeight: 700, marginBottom: "0.35rem", transition: "color 0.25s" }}>
+                          Website URL
+                        </label>
+                        <input
+                          type="url"
+                          value={formData.website}
+                          onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                          onFocus={() => setFocusedField("website")}
+                          onBlur={() => setFocusedField(null)}
+                          placeholder="https://mycompany.com"
+                          style={inputStyle("website")}
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ display: "block", fontSize: "0.6rem", color: focusedField === "desc" ? "#FF9E00" : "rgba(240,242,255,0.3)", fontFamily: "var(--font-outfit), monospace", textTransform: "uppercase", letterSpacing: "0.18em", fontWeight: 700, marginBottom: "0.35rem", transition: "color 0.25s" }}>
+                          Operations Bottleneck Description
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={formData.desc}
+                          onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
+                          onFocus={() => setFocusedField("desc")}
+                          onBlur={() => setFocusedField(null)}
+                          placeholder="Describe what workflows are running slow or manually..."
+                          style={{ ...inputStyle("desc"), resize: "none" }}
+                        />
+                      </div>
+
+                      <button type="submit" className="btn-primary" style={{ width: "100%", justifyContent: "center", fontSize: "0.7rem" }}>
+                        <Zap size={14} />
+                        Request Audit Blueprint
+                        <ArrowRight size={14} />
+                      </button>
+                    </motion.form>
+                  ) : (
+                    <motion.div
+                      key="success"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "3rem 1rem", gap: "1.25rem" }}
+                    >
+                      <div style={{ width: "60px", height: "60px", borderRadius: "50%", background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.25)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Check size={28} color="#22c55e" />
+                      </div>
+                      <div>
+                        <h4 style={{ fontWeight: 700, color: "#F0F2FF", fontSize: "1.2rem", letterSpacing: "-0.02em", fontFamily: "var(--font-outfit), system-ui" }}>
+                          Audit Requested!
+                        </h4>
+                        <p style={{ fontSize: "0.8rem", color: "rgba(240,242,255,0.45)", maxWidth: "340px", marginTop: "0.5rem", lineHeight: 1.7 }}>
+                          We&apos;ll analyze your website URL and contact you at {formData.email} within 2 hours to confirm details.
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </SpotlightCard>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          FAQ
+          ══════════════════════════════════════════════════════════ */}
+      <section style={{ position: "relative", padding: "5rem 1.5rem", borderTop: "1px solid rgba(255,255,255,0.05)", zIndex: 10 }}>
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            style={{ textAlign: "center", marginBottom: "3.5rem" }}
+          >
+            <span className="label-badge label-badge-orange" style={{ marginBottom: "1rem", display: "inline-flex" }}>FAQ</span>
+            <h2
+              style={{
+                fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+                color: "#F0F2FF",
+                fontFamily: "var(--font-outfit), system-ui",
+                marginTop: "1rem",
+              }}
+            >
+              Engine A FAQ
+            </h2>
+          </motion.div>
+
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+            {[
+              { q: "What tools do you configure automations in?", a: "We natively build on n8n and Make pipelines, syncing raw logs to HubSpot, Salesforce, Airtable, or custom SQL databases." },
+              { q: "What is the average setup timeline?", a: "Minor automation connections take 1-2 weeks. Sophisticated Next.js client systems or multi-replica database sync gates require 4-6 weeks." },
+              { q: "How does the voice agent coordinate calls?", a: "Our smart voice agents use custom LLMs configured to capture customer phone prompts, query booking charts, and push updates straight to CRM systems." },
+              { q: "Do you offer operational retainers?", a: "Yes. We manage database logs and workflow updates on monthly retainers so you don't experience pipeline downtime." },
+              { q: "Can we migrate from manual Excel processes?", a: "Absolutely. We import legacy records, design structured SQL schemas, and build APIs to automate imports." },
+              { q: "Is there support for custom software codebases?", a: "Yes. Everything we build is pushed to clean GitHub repositories with documented guidelines for your technical teams." },
             ].map((faq, idx) => (
-              <div key={idx} className="py-4 font-sans">
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.05 }}
+                style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+              >
                 <button
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  className="w-full flex items-center justify-between text-left focus:outline-none group"
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "1.25rem 0",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    outline: "none",
+                  }}
                 >
-                  <span className="text-sm font-bold text-white group-hover:text-[#FF9E00] transition-colors">
+                  <span
+                    style={{
+                      fontSize: "0.9rem",
+                      fontWeight: 600,
+                      color: openFaq === idx ? "#FF9E00" : "#F0F2FF",
+                      fontFamily: "var(--font-dm-sans), system-ui",
+                      transition: "color 0.2s",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
                     {faq.q}
                   </span>
-                  <span className="text-zinc-500">
-                    {openFaq === idx ? <Minus size={12} /> : <Plus size={12} />}
+                  <span style={{ color: "rgba(240,242,255,0.3)", flexShrink: 0, marginLeft: "1rem" }}>
+                    {openFaq === idx ? <Minus size={14} /> : <Plus size={14} />}
                   </span>
                 </button>
 
@@ -490,16 +801,16 @@ export default function EngineAPage() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
+                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      style={{ overflow: "hidden" }}
                     >
-                      <p className="text-xs text-zinc-400 leading-relaxed font-light mt-2.5">
+                      <p style={{ fontSize: "0.82rem", color: "rgba(240,242,255,0.5)", lineHeight: 1.75, paddingBottom: "1.25rem" }}>
                         {faq.a}
                       </p>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

@@ -3,16 +3,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
-import { ArrowRight, Phone, Mail, MapPin, Cpu, Camera, Compass, Calendar, Users } from "lucide-react";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence, useMotionValueEvent } from "framer-motion";
+import { ArrowRight, Phone, Mail, MapPin, Cpu, Camera, Compass, Calendar, Users, Zap, TrendingUp, Shield } from "lucide-react";
 
-/* ── SPOTLIGHT CARD COMPONENT ── */
+/* ══════════════════════════════════════════════════
+   SPOTLIGHT CARD COMPONENT
+   ══════════════════════════════════════════════════ */
 function SpotlightCard({
   children,
   className = "",
   hoverBorder = true,
   onClick,
-  style
+  style,
 }: {
   children: React.ReactNode;
   className?: string;
@@ -44,6 +46,11 @@ function SpotlightCard({
   );
 }
 
+
+
+/* ══════════════════════════════════════════════════
+   MAIN PAGE
+   ══════════════════════════════════════════════════ */
 export default function LandingPage() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -51,500 +58,590 @@ export default function LandingPage() {
   const [activeSection, setActiveSection] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [activeFrame, setActiveFrame] = useState(0);
 
-  // Responsive device width listener (runs only on client mount)
   useEffect(() => {
     setMounted(true);
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Fade out loading screen overlay
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1200);
+    const timer = setTimeout(() => setLoading(false), 1400);
     return () => clearTimeout(timer);
   }, []);
 
-  const { scrollYProgress } = useScroll();
-
-  // Snappy spring dynamics for ultra-fast responsive storytelling transitions
-  const smoothScroll = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 24,
-    mass: 0.4,
-    restDelta: 0.001
-  });
-
-  // Track active section index (Desktop only)
+  // Mouse parallax tracking (desktop only)
   useEffect(() => {
     if (isMobile) return;
-    return scrollYProgress.on("change", (latest) => {
-      if (latest < 0.22) {
-        setActiveSection(0);
-      } else if (latest >= 0.22 && latest < 0.48) {
-        setActiveSection(1);
-      } else if (latest >= 0.48 && latest < 0.78) {
-        setActiveSection(2);
-      } else {
-        setActiveSection(3);
-      }
-    });
-  }, [scrollYProgress, isMobile]);
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [isMobile]);
 
-  /* ── Scroll transforms (Calculated for Desktop storytelling) ── */
-  const bgY = useTransform(smoothScroll, [0, 0.25], ["0px", "-30px"]);
-  const logoOpacity = useTransform(smoothScroll, [0, 0.20, 0.25], [1, 1, 0]);
-  const welcomeOpacity = useTransform(smoothScroll, [0, 0.18, 0.24], [1, 1, 0]);
-  const welcomeY = useTransform(smoothScroll, [0, 0.18, 0.24], ["0px", "-20px"]);
-  const s1PointerEvents = useTransform(smoothScroll, (v) => (v < 0.2) ? "auto" : "none");
-  const bgOpacity = useTransform(smoothScroll, [0.18, 0.24], [1, 0]);
-  const bgScale = useTransform(smoothScroll, [0, 0.25], [1, 1.05]);
-
-  const s2Opacity = useTransform(smoothScroll, [0.24, 0.29, 0.44, 0.49], [0, 1, 1, 0]);
-  const s2Y = useTransform(smoothScroll, [0.24, 0.29, 0.44, 0.49], ["30px", "0px", "0px", "-30px"]);
-  const s2Blur = useTransform(smoothScroll, [0.24, 0.30, 0.42, 0.49], ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"]);
-
-  const s3Opacity = useTransform(smoothScroll, [0.49, 0.55, 0.76, 0.81], [0, 1, 1, 0]);
-  const s3Y = useTransform(smoothScroll, [0.49, 0.55, 0.76, 0.81], ["30px", "0px", "0px", "-30px"]);
-  const s3Blur = useTransform(smoothScroll, [0.49, 0.56, 0.74, 0.81], ["blur(12px)", "blur(0px)", "blur(0px)", "blur(12px)"]);
-  const s3PointerEvents = useTransform(smoothScroll, (v) => (v >= 0.49 && v <= 0.80) ? "auto" : "none");
-
-  const s4Opacity = useTransform(smoothScroll, [0.80, 0.86], [0, 1]);
-  const s4Y = useTransform(smoothScroll, [0.80, 0.86], ["30px", "0px"]);
-  const s4GlowSize = useTransform(smoothScroll, [0.80, 0.98], ["350px", "150px"]);
-  const s4PointerEvents = useTransform(smoothScroll, (v) => (v >= 0.80) ? "auto" : "none");
-
-  const [activeFrame, setActiveFrame] = useState(0);
+  // Camera frame cycling
   useEffect(() => {
     const interval = setInterval(() => setActiveFrame(p => (p + 1) % 3), 3000);
     return () => clearInterval(interval);
   }, []);
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const { scrollYProgress } = useScroll();
+  const smoothScroll = useSpring(scrollYProgress, {
+    stiffness: 90,
+    damping: 24,
+    mass: 0.4,
+    restDelta: 0.001,
+  });
+
+  useMotionValueEvent(smoothScroll, "change", (latest) => {
+    if (videoRef.current && !isNaN(videoRef.current.duration)) {
+      videoRef.current.currentTime = latest * videoRef.current.duration;
+    }
+  });
+
+  // Track active section
+  useEffect(() => {
+    if (isMobile) return;
+    return scrollYProgress.on("change", (latest) => {
+      if (latest < 0.22) setActiveSection(0);
+      else if (latest >= 0.22 && latest < 0.48) setActiveSection(1);
+      else if (latest >= 0.48 && latest < 0.78) setActiveSection(2);
+      else setActiveSection(3);
+    });
+  }, [scrollYProgress, isMobile]);
+
+  /* ── Scroll Transforms ── */
+  const bgY = useTransform(smoothScroll, [0, 0.25], ["0px", "-40px"]);
+  const logoOpacity = useTransform(smoothScroll, [0, 0.20, 0.25], [1, 1, 0]);
+  const welcomeOpacity = useTransform(smoothScroll, [0, 0.18, 0.24], [1, 1, 0]);
+  const welcomeY = useTransform(smoothScroll, [0, 0.18, 0.24], ["0px", "-25px", "-40px"]);
+  const s1PointerEvents = useTransform(smoothScroll, (v) => (v < 0.2) ? "auto" : "none");
+  const bgOpacity = useTransform(smoothScroll, [0.16, 0.25], [1, 0.4]);
+  const bgScale = useTransform(smoothScroll, [0, 0.25], [1, 1.06]);
+
+  const s2Opacity = useTransform(smoothScroll, [0.24, 0.29, 0.44, 0.49], [0, 1, 1, 0]);
+  const s2Y = useTransform(smoothScroll, [0.24, 0.29, 0.44, 0.49], ["35px", "0px", "0px", "-35px"]);
+  const s2Blur = useTransform(smoothScroll, [0.24, 0.30, 0.42, 0.49], ["blur(14px)", "blur(0px)", "blur(0px)", "blur(14px)"]);
+
+  const s3Opacity = useTransform(smoothScroll, [0.49, 0.55, 0.76, 0.81], [0, 1, 1, 0]);
+  const s3Y = useTransform(smoothScroll, [0.49, 0.55, 0.76, 0.81], ["35px", "0px", "0px", "-35px"]);
+  const s3Blur = useTransform(smoothScroll, [0.49, 0.56, 0.74, 0.81], ["blur(14px)", "blur(0px)", "blur(0px)", "blur(14px)"]);
+  const s3PointerEvents = useTransform(smoothScroll, (v) => (v >= 0.49 && v <= 0.80) ? "auto" : "none");
+
+  const s4Opacity = useTransform(smoothScroll, [0.80, 0.86], [0, 1]);
+  const s4Y = useTransform(smoothScroll, [0.80, 0.86], ["35px", "0px"]);
+  const s4PointerEvents = useTransform(smoothScroll, (v) => (v >= 0.80) ? "auto" : "none");
+
   const sections = [
     { label: "Origin", desc: "Starting coordinate: Convergence of form & automation.", href: 0 },
     { label: "Identity", desc: "Integrated Core: Where software engineering meets luxury visual assets.", href: 0.3 },
     { label: "Engines", desc: "Decision Gateway: Activate custom backend code or production visuals.", href: 0.6 },
-    { label: "Systems", desc: "Operating System sync: Book strategy consultations & roadmap scoping.", href: 0.9 }
+    { label: "Systems", desc: "Operating System sync: Book strategy consultations & roadmap scoping.", href: 0.9 },
   ];
 
   const handleScrollTo = (progress: number) => {
     if (containerRef.current) {
       const scrollHeight = containerRef.current.scrollHeight - window.innerHeight;
-      window.scrollTo({
-        top: scrollHeight * progress,
-        behavior: "smooth"
-      });
+      window.scrollTo({ top: scrollHeight * progress, behavior: "smooth" });
     }
   };
 
-  // SSR loading placeholder (avoids page flashes before mount)
   if (!mounted) {
-    return (
-      <div className="relative w-full min-h-screen bg-[#040308] text-[#F6F7FB]" />
-    );
+    return <div className="relative w-full min-h-screen bg-[#040308]" />;
   }
 
-  /* ══════════════════════════════════════════════╗
-     ║  BRANCH 1: MOBILE LANDING PAGE VIEW         ║
-     ╚══════════════════════════════════════════════╝ */
+  /* ══════════════════════════════════════════════════════════
+     MOBILE VIEW
+     ══════════════════════════════════════════════════════════ */
   if (isMobile) {
     return (
-      <div className="relative w-full min-h-screen bg-[#040308] text-[#F6F7FB] overflow-x-hidden">
-        {/* ── LOADING SCREEN OVERLAY ── */}
+      <div className="relative w-full min-h-screen bg-[#040308] text-[#F0F2FF] overflow-x-hidden">
+        {/* Loader */}
         <AnimatePresence>
           {loading && (
             <motion.div
               initial={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              exit={{ opacity: 0, transition: { duration: 0.7 } }}
               className="loop-loader-overlay"
             >
-              <div className="loader-spinner mb-5" />
-              <span className="font-mono text-[9px] tracking-[0.35em] text-[#FF9E00] uppercase font-bold">
-                INITIALIZING GROVICE OS...
-              </span>
+              <div className="loader-ring" />
+              <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem" }}>
+                <span
+                  style={{
+                    fontFamily: "var(--font-outfit), monospace",
+                    fontSize: "0.6rem",
+                    letterSpacing: "0.35em",
+                    textTransform: "uppercase",
+                    fontWeight: 700,
+                    background: "linear-gradient(90deg, #FF9E00, #FF4069)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  GROVICE OS
+                </span>
+                <span
+                  style={{
+                    fontFamily: "var(--font-outfit), monospace",
+                    fontSize: "0.52rem",
+                    letterSpacing: "0.25em",
+                    textTransform: "uppercase",
+                    color: "rgba(240,242,255,0.3)",
+                  }}
+                >
+                  Initializing Systems...
+                </span>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* ── LAYER 0: Fixed Background Container ── */}
-        <div className="fixed inset-0 z-0 pointer-events-none h-screen w-full bg-[#040308]" />
-
-        {/* ── LAYER 1: Ambient Glowing Sun Glare Orbs (Mobile Optimized) ── */}
-        <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
-          <div className="absolute top-[10%] left-[-20%] w-72 h-72 bg-[#FF9E00]/10 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: "8s" }} />
-          <div className="absolute top-[35%] right-[-25%] w-80 h-80 bg-[#7000FF]/12 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: "10s" }} />
-          <div className="absolute top-[60%] left-[-15%] w-72 h-72 bg-[#FF4069]/10 rounded-full blur-[100px]" />
-          <div className="absolute bottom-[10%] right-[-10%] w-80 h-80 bg-[#FF9E00]/8 rounded-full blur-[110px]" />
+        {/* Fixed Background Video */}
+        <div className="fixed inset-0 z-0 pointer-events-none opacity-40">
+          <video
+            ref={videoRef}
+            src="/images/Sunrise_beach_underwater_transition.mp4"
+            className="w-full h-full object-cover"
+            muted
+            playsInline
+            preload="auto"
+          />
         </div>
 
-        {/* ── LAYER 2: Content Stack ── */}
+        {/* Ambient Glows */}
+        <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
+          <div className="absolute top-[8%] left-[-25%] w-80 h-80 bg-[#FF9E00]/8 rounded-full blur-[120px]" style={{ animationDuration: "8s" }} />
+          <div className="absolute top-[40%] right-[-30%] w-96 h-96 bg-[#7000FF]/10 rounded-full blur-[130px]" />
+          <div className="absolute top-[65%] left-[-20%] w-80 h-80 bg-[#FF4069]/8 rounded-full blur-[110px]" />
+        </div>
+
         <div className="relative z-10 w-full flex flex-col">
-          
-          {/* SCENE 01 — HERO / ARRIVAL */}
-          <section 
-            className="relative min-h-screen flex flex-col items-center justify-center px-4 py-24 bg-cover bg-center overflow-hidden"
-            style={{
-              backgroundImage: "url('/images/sunrise_beach_hero.png')",
-            }}
+
+          {/* ── SCENE 01: HERO ── */}
+          <section
+            className="relative min-h-screen flex flex-col items-center justify-center px-5 py-28 overflow-hidden"
           >
-            {/* Tropical sky-blue overlay that fades to black at the bottom to blend with other sections */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0A2540]/30 via-transparent to-[#040308] z-0" />
+            {/* Cinematic overlays */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#040308]/55 via-[#040308]/20 to-[#040308] z-0" />
+            <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, transparent 40%, rgba(4,3,8,0.7) 100%)" }} />
+            {/* Light leak */}
+            <div className="absolute top-[15%] left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,215,0,0.12), transparent)", filter: "blur(4px)" }} />
 
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center gap-6 max-w-xl text-center w-full relative z-10"
             >
+              {/* Badge */}
+              <div className="label-badge label-badge-orange">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FF9E00] animate-pulse" />
+                Dual-Engine OS · Visakhapatnam
+              </div>
+
               {/* Title */}
-              <h1 
-                className="text-[36px] sm:text-4xl text-white font-bold tracking-tight leading-tight select-none mt-4" 
-                style={{ 
-                  fontFamily: "var(--font-playfair), serif", 
-                  textShadow: "0 2px 12px rgba(0, 0, 0, 0.4)" 
+              <h1
+                style={{
+                  fontFamily: "var(--font-playfair), serif",
+                  fontSize: "2.4rem",
+                  fontWeight: 700,
+                  lineHeight: 1.12,
+                  letterSpacing: "-0.02em",
+                  color: "#F0F2FF",
+                  textShadow: "0 2px 20px rgba(0,0,0,0.5)",
                 }}
               >
-                GROVICE 2.0 <br/>
-                <span className="text-lg sm:text-2xl font-light italic opacity-90 block mt-1">The Dual-Engine Operating System</span>
+                GROVICE{" "}
+                <span className="text-gradient-shimmer">2.0</span>
+                <br />
+                <span
+                  style={{
+                    fontSize: "1.05rem",
+                    fontWeight: 400,
+                    fontStyle: "italic",
+                    opacity: 0.85,
+                    display: "block",
+                    marginTop: "0.4rem",
+                    letterSpacing: "0",
+                  }}
+                >
+                  The Dual-Engine Operating System
+                </span>
               </h1>
 
-              {/* Subtitle */}
-              <p 
-                className="text-[11px] sm:text-xs text-white/95 max-w-sm leading-relaxed" 
-                style={{ 
-                  textShadow: "0 1px 4px rgba(0, 0, 0, 0.45)" 
+              <p
+                style={{
+                  fontSize: "0.78rem",
+                  color: "rgba(240,242,255,0.8)",
+                  maxWidth: "320px",
+                  lineHeight: 1.7,
+                  textShadow: "0 1px 6px rgba(0,0,0,0.4)",
                 }}
               >
-                Visakhapatnam&apos;s elite business operating system bridging software & creative muscle. Powered by Engine A (AI & Automation) and Engine B (Creative Brand Production).
+                Visakhapatnam&apos;s elite business OS bridging software & creative muscle. Powered by Engine A (AI & Automation) and Engine B (Creative Brand Production).
               </p>
 
-              {/* Mobile Horizontal Configurator Capsule */}
-              <div className="w-full bg-[#0A2540]/65 border border-white/15 rounded-full p-2.5 backdrop-blur-md shadow-2xl flex flex-row items-center justify-between z-20 mt-4 max-w-md">
-                {/* Work Engine */}
-                <div className="flex-1 flex flex-col items-center justify-center border-r border-white/10 px-1 text-center relative overflow-hidden">
-                  <Cpu size={11} className="text-[#8EE3F5] mb-0.5" />
-                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Engine</span>
-                  <select className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer p-0 leading-tight appearance-none">
-                    <option className="bg-[#0A192F] text-white" value="a">Engine A</option>
-                    <option className="bg-[#0A192F] text-white" value="b">Engine B</option>
-                    <option className="bg-[#0A192F] text-white" value="all">Both</option>
-                  </select>
-                </div>
+              {/* Configurator Capsule */}
+              <div
+                className="w-full max-w-md"
+                style={{
+                  background: "rgba(4,3,8,0.7)",
+                  border: "1px solid rgba(255,158,0,0.15)",
+                  borderRadius: "9999px",
+                  padding: "0.6rem 0.6rem 0.6rem 0.5rem",
+                  backdropFilter: "blur(20px)",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0",
+                }}
+              >
+                {[
+                  { icon: Cpu, label: "Engine", options: ["Engine A", "Engine B", "Both"] },
+                  { icon: Compass, label: "Target", options: ["Automations", "Production", "System Audit"] },
+                  { icon: Calendar, label: "Timeline", options: ["Immediate", "30 Days", "Future"] },
+                  { icon: Users, label: "Scope", options: ["1-5 Devs", "6-15 Studio", "Enterprise"] },
+                ].map(({ icon: Icon, label, options }, i) => (
+                  <div
+                    key={label}
+                    className="flex-1 flex flex-col items-center px-1 text-center"
+                    style={{ borderRight: i < 3 ? "1px solid rgba(255,255,255,0.08)" : "none" }}
+                  >
+                    <Icon size={10} color="#8EE3F5" style={{ marginBottom: "1px" }} />
+                    <span style={{ fontSize: "0.45rem", color: "rgba(240,242,255,0.4)", fontFamily: "var(--font-outfit), monospace", textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 700 }}>
+                      {label}
+                    </span>
+                    <select
+                      className="bg-transparent border-0 text-white focus:outline-none w-full text-center cursor-pointer appearance-none"
+                      style={{ fontSize: "0.58rem", fontFamily: "var(--font-outfit), monospace", padding: 0, lineHeight: 1.3 }}
+                    >
+                      {options.map(o => (
+                        <option key={o} className="bg-[#040308]" value={o}>{o}</option>
+                      ))}
+                    </select>
+                  </div>
+                ))}
 
-                {/* System Target */}
-                <div className="flex-1 flex flex-col items-center justify-center border-r border-white/10 px-1 text-center relative overflow-hidden">
-                  <Compass size={11} className="text-[#8EE3F5] mb-0.5" />
-                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Target</span>
-                  <select className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer p-0 leading-tight appearance-none">
-                    <option className="bg-[#0A192F] text-white" value="lead">Automations</option>
-                    <option className="bg-[#0A192F] text-white" value="cine">Production</option>
-                    <option className="bg-[#0A192F] text-white" value="sync">System Audit</option>
-                  </select>
-                </div>
-
-                {/* Launch Timeline */}
-                <div className="flex-1 flex flex-col items-center justify-center border-r border-white/10 px-1 text-center">
-                  <Calendar size={11} className="text-[#8EE3F5] mb-0.5" />
-                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Timeline</span>
-                  <select className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer p-0 leading-tight appearance-none">
-                    <option className="bg-[#0A192F] text-white" value="now">Immediate</option>
-                    <option className="bg-[#0A192F] text-white" value="30">30 Days</option>
-                    <option className="bg-[#0A192F] text-white" value="90">Future</option>
-                  </select>
-                </div>
-
-                {/* Operating Scope */}
-                <div className="flex-1 flex flex-col items-center justify-center px-1 text-center">
-                  <Users size={11} className="text-[#8EE3F5] mb-0.5" />
-                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Scope</span>
-                  <select className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer p-0 leading-tight appearance-none">
-                    <option className="bg-[#0A192F] text-white" value="dev">1-5 Devs</option>
-                    <option className="bg-[#0A192F] text-white" value="assets">6-15 Studio</option>
-                    <option className="bg-[#0A192F] text-white" value="ent">Enterprise</option>
-                  </select>
-                </div>
-
-                {/* Action Arrow Button */}
-                <button 
+                <button
                   onClick={() => handleScrollTo(0.66)}
-                  className="w-8 h-8 rounded-full bg-[#0B3C73] text-white flex items-center justify-center cursor-pointer transition hover:scale-105 active:scale-95 shrink-0 ml-1 border border-white/10 shadow-[0_2px_8px_rgba(11,60,115,0.3)]"
+                  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 ml-1 transition-all hover:scale-105 active:scale-95"
+                  style={{ background: "linear-gradient(135deg, #FF9E00, #FF4069)", boxShadow: "0 4px 14px rgba(255,158,0,0.3)" }}
                 >
-                  <ArrowRight size={11} className="text-white" />
+                  <ArrowRight size={12} color="#000" />
                 </button>
               </div>
             </motion.div>
 
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 font-mono text-[8px] text-white/60 tracking-[0.3em] opacity-80 select-none">
-              <span>EXPLORE</span>
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-                className="w-1.5 h-1.5 rounded-full bg-[#0B3C73] shadow-[0_0_8px_#0B3C73]"
-              />
+            {/* Scroll indicator */}
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+              <span style={{ fontFamily: "var(--font-outfit), monospace", fontSize: "0.52rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(240,242,255,0.4)" }}>
+                EXPLORE
+              </span>
+              <div style={{ width: "22px", height: "36px", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "11px", display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "4px" }}>
+                <motion.div
+                  animate={{ y: [0, 14, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+                  style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#FF9E00" }}
+                />
+              </div>
             </div>
           </section>
 
-          {/* SCENE 02 — IDENTITY BENTO PILLARS */}
-          <section className="relative min-h-screen flex flex-col justify-center px-5 py-24 bg-black/35 backdrop-blur-[2px]">
+          {/* ── SCENE 02: IDENTITY ── */}
+          <section className="relative min-h-screen flex flex-col justify-center px-5 py-24">
             <motion.div
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-xl mx-auto w-full space-y-8"
             >
-              <div className="text-center space-y-2.5">
-                <span className="inline-block text-[9px] font-mono font-bold uppercase tracking-[0.3em] text-[#FFD700] border border-[#FFD700]/30 bg-[#FFD700]/10 px-3.5 py-1">
-                  INTEGRATED CORE
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight text-white">
-                  The Dual-Engine Blueprint
+              <div className="text-center space-y-3">
+                <span className="label-badge label-badge-gold">INTEGRATED CORE</span>
+                <h2
+                  style={{
+                    fontSize: "1.8rem",
+                    fontWeight: 800,
+                    letterSpacing: "-0.03em",
+                    lineHeight: 1.15,
+                    color: "#F0F2FF",
+                    fontFamily: "var(--font-outfit), system-ui",
+                  }}
+                >
+                  Where Code Meets Canvas
                 </h2>
-                <p className="text-[11px] text-zinc-400 max-w-sm mx-auto font-light">
-                  Bridging pure software capability and high-aesthetic brand design on one unified grid coordinate.
+                <p style={{ fontSize: "0.78rem", color: "rgba(240,242,255,0.45)", maxWidth: "280px", margin: "0 auto", lineHeight: 1.7 }}>
+                  One unified grid coordinate bridging pure software capability with high-aesthetic brand design.
                 </p>
               </div>
 
-              {/* Bento Grid */}
-              <div className="grid grid-cols-1 gap-4 w-full">
-                
-                {/* Bento Card 1: AI & Software */}
-                <div className="glass-card p-5 rounded-2xl border-white/5 flex gap-4 items-start relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-[#FF9E00]/5 blur-[20px] rounded-full" />
-                  <div className="p-2.5 rounded-xl bg-[#FF9E00]/10 border border-[#FF9E00]/20 text-[#FF9E00] shrink-0 mt-0.5">
-                    <Cpu size={16} />
-                  </div>
-                  <div className="space-y-1.5">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-mono text-[10px] tracking-wider text-white font-bold uppercase">Software Core</h4>
-                      <span className="font-mono text-[7px] text-[#FF9E00] bg-[#FF9E00]/15 px-1.5 py-0.5 font-semibold">99.9% AUTOPILOT</span>
+              <div className="grid grid-cols-1 gap-4">
+                {[
+                  { icon: Cpu, title: "Software Core", badge: "99.9% AUTOPILOT", badgeClass: "label-badge-orange", desc: "Lead automations, database synchronizers, CRM endpoints, and voice synthesis pipelines built on zero-downtime micro-clouds.", color: "#FF9E00" },
+                  { icon: Camera, title: "Creative Muscle", badge: "RED CINE ENGINE", badgeClass: "label-badge-pink", desc: "Cinematic commercials, editorial fashion photography, vector styling, and high-fidelity social assets curated for conversion.", color: "#FF4069" },
+                  { icon: Compass, title: "Siripuram Grid", badge: "LOCAL DEPLOYMENT", badgeClass: "label-badge-purple", desc: "Synchronized locally out of Visakhapatnam. Direct roadmap audits with immediate engineering support on-ground.", color: "#9B7FFF" },
+                ].map(({ icon: Icon, title, badge, badgeClass, desc, color }) => (
+                  <div
+                    key={title}
+                    className="glass-card p-5 rounded-2xl flex gap-4 items-start"
+                  >
+                    <div
+                      style={{
+                        width: "38px",
+                        height: "38px",
+                        borderRadius: "10px",
+                        background: `${color}15`,
+                        border: `1px solid ${color}25`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                        color: color,
+                      }}
+                    >
+                      <Icon size={16} />
                     </div>
-                    <p className="text-[10px] text-zinc-400 font-light leading-relaxed">
-                      Lead automations, database synchronizers, CRM endpoints, and voice synthesis pipelines. Custom code running on zero-downtime micro-clouds.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Bento Card 2: Visual Production */}
-                <div className="glass-card p-5 rounded-2xl border-white/5 flex gap-4 items-start relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-[#FF4069]/5 blur-[20px] rounded-full" />
-                  <div className="p-2.5 rounded-xl bg-[#FF4069]/10 border border-[#FF4069]/20 text-[#FF4069] shrink-0 mt-0.5">
-                    <Camera size={16} />
-                  </div>
-                  <div className="space-y-1.5">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-mono text-[10px] tracking-wider text-white font-bold uppercase">Creative Muscle</h4>
-                      <span className="font-mono text-[7px] text-[#FF4069] bg-[#FF4069]/15 px-1.5 py-0.5 font-semibold">RED CINE ENGINE</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.4rem" }}>
+                        <h4 style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: "var(--font-outfit), monospace", color: "#F0F2FF" }}>
+                          {title}
+                        </h4>
+                        <span className={`label-badge ${badgeClass}`} style={{ fontSize: "0.45rem", padding: "0.15rem 0.5rem" }}>{badge}</span>
+                      </div>
+                      <p style={{ fontSize: "0.72rem", color: "rgba(240,242,255,0.45)", lineHeight: 1.65 }}>{desc}</p>
                     </div>
-                    <p className="text-[10px] text-zinc-400 font-light leading-relaxed">
-                      Cinematic commercials, editorial fashion photography, vector styling, and high-fidelity social assets curated for conversion.
-                    </p>
                   </div>
-                </div>
-
-                {/* Bento Card 3: Strategic Scoping */}
-                <div className="glass-card p-5 rounded-2xl border-white/5 flex gap-4 items-start relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-[#7000FF]/5 blur-[20px] rounded-full" />
-                  <div className="p-2.5 rounded-xl bg-[#7000FF]/10 border border-[#7000FF]/20 text-[#7000FF] shrink-0 mt-0.5">
-                    <Compass size={16} />
-                  </div>
-                  <div className="space-y-1.5">
-                    <div className="flex justify-between items-center">
-                      <h4 className="font-mono text-[10px] tracking-wider text-white font-bold uppercase">Siripuram Grid</h4>
-                      <span className="font-mono text-[7px] text-[#7000FF] bg-[#7000FF]/15 px-1.5 py-0.5 font-semibold">LOCAL DEPLOYMENT</span>
-                    </div>
-                    <p className="text-[10px] text-zinc-400 font-light leading-relaxed">
-                      Synchronized locally out of Visakhapatnam. We build close, direct roadmap audits with immediate engineering support.
-                    </p>
-                  </div>
-                </div>
-
+                ))}
               </div>
             </motion.div>
           </section>
 
-          {/* SCENE 03 — ENGINE GATEWAY */}
-          <section className="relative min-h-screen flex flex-col justify-center px-5 py-24 bg-black/10">
+          {/* ── SCENE 03: ENGINE GATEWAY ── */}
+          <section className="relative min-h-screen flex flex-col justify-center px-5 py-24">
             <motion.div
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="w-full max-w-xl flex flex-col items-center gap-8 mx-auto"
             >
               <div className="text-center space-y-2">
-                <span className="text-[9px] font-mono uppercase tracking-[0.25em] text-[#FF9E00] font-bold">
-                  DECISION GATEWAY
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white font-sans">
+                <span className="label-badge label-badge-orange">DECISION GATEWAY</span>
+                <h2
+                  style={{
+                    fontSize: "1.9rem",
+                    fontWeight: 800,
+                    letterSpacing: "-0.03em",
+                    color: "#F0F2FF",
+                    fontFamily: "var(--font-outfit), system-ui",
+                    marginTop: "0.5rem",
+                  }}
+                >
                   Choose Your Workspace
                 </h2>
               </div>
 
-              <div className="grid grid-cols-1 gap-6 w-full">
-                
+              <div className="grid grid-cols-1 gap-5 w-full">
                 {/* ENGINE A CARD */}
                 <SpotlightCard
                   onClick={() => router.push("/engine-a")}
-                  className="glass-card p-6 rounded-[24px] border-white/5 flex flex-col justify-between group relative overflow-hidden"
-                  style={{ minHeight: "270px" }}
+                  className="glass-card p-6 rounded-[20px] flex flex-col justify-between group"
+                  style={{ minHeight: "260px" }}
                 >
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-[#FF9E00]/10 to-transparent blur-[40px] pointer-events-none" />
-                  
-                  <div className="space-y-4">
+                  {/* Top accent bar */}
+                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, #FF9E00, rgba(255,158,0,0))", borderRadius: "20px 20px 0 0" }} />
+                  <div className="absolute top-0 right-0 w-48 h-48 pointer-events-none" style={{ background: "radial-gradient(circle at 100% 0%, rgba(255,158,0,0.10), transparent 70%)" }} />
+
+                  <div className="space-y-3">
                     <div className="flex justify-between items-start">
                       <div>
-                        <span className="text-[8px] font-mono text-[#FF9E00] font-bold uppercase tracking-wider">ENGINE A</span>
-                        <h3 className="text-lg font-extrabold tracking-tight text-white mt-0.5 group-hover:text-[#FF9E00] transition-colors duration-300">
+                        <span className="label-badge label-badge-orange" style={{ fontSize: "0.5rem" }}>ENGINE A</span>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 800, letterSpacing: "-0.02em", color: "#F0F2FF", marginTop: "0.4rem", fontFamily: "var(--font-outfit), system-ui" }}
+                          className="group-hover:text-[#FF9E00] transition-colors duration-300"
+                        >
                           Software & AI Systems
                         </h3>
                       </div>
-                      <span className="text-[7px] font-mono border border-[#FF9E00]/30 text-[#FF9E00] bg-[#FF9E00]/10 px-2 py-0.5 font-bold whitespace-nowrap">AUTOMATION_READY</span>
                     </div>
-                    <p className="text-[11px] text-zinc-400 leading-relaxed font-light">
+                    <p style={{ fontSize: "0.75rem", color: "rgba(240,242,255,0.5)", lineHeight: 1.65 }}>
                       AI workflows, voice bots, CRMs, dashboards and custom software pipelines—built to scale.
                     </p>
                   </div>
 
-                  {/* High Tech simulated node map */}
-                  <div className="mt-4 p-3.5 bg-black/50 border border-white/5 rounded-2xl font-mono text-[8px] text-zinc-500 space-y-2.5">
-                    <div className="flex justify-between text-[7px] text-zinc-600 pb-1.5 border-b border-white/5 font-bold">
+                  {/* Mock process stack */}
+                  <div style={{ background: "rgba(0,0,0,0.5)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px", padding: "0.75rem", fontFamily: "var(--font-outfit), monospace", fontSize: "0.62rem", display: "flex", flexDirection: "column", gap: "0.6rem", marginTop: "0.75rem" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", color: "rgba(240,242,255,0.3)", paddingBottom: "0.5rem", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "0.55rem", letterSpacing: "0.1em" }}>
                       <span>LIVE PROCESS STACK</span>
-                      <span className="text-[#FF9E00] animate-pulse">● RUNNING</span>
+                      <span style={{ color: "#FF9E00" }} className="animate-pulse">● RUNNING</span>
                     </div>
-                    
-                    <div className="flex items-center justify-between gap-1">
-                      <span className="px-1.5 py-0.5 bg-white/5 border border-white/10 text-white font-bold rounded">INBOUND</span>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.4rem" }}>
+                      <span style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", padding: "0.2rem 0.5rem", borderRadius: "4px", color: "#F0F2FF", fontWeight: 700, fontSize: "0.55rem" }}>INBOUND</span>
                       <svg className="flex-1 h-3" fill="none" viewBox="0 0 100 12" preserveAspectRatio="none">
                         <path d="M 0 6 L 100 6" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
                         <path d="M 0 6 L 100 6" stroke="#FF9E00" strokeWidth="1.5" className="animate-stroke-flow" />
                       </svg>
-                      <span className="px-1.5 py-0.5 bg-[#7000FF]/20 border border-[#7000FF]/35 text-[#7000FF] font-bold rounded">AI_AGENT</span>
+                      <span style={{ background: "rgba(112,0,255,0.2)", border: "1px solid rgba(112,0,255,0.35)", padding: "0.2rem 0.5rem", borderRadius: "4px", color: "#9B7FFF", fontWeight: 700, fontSize: "0.55rem" }}>AI_AGENT</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 text-[9px] font-mono uppercase tracking-widest text-[#FF9E00] font-bold mt-4">
-                    Launch Engine A <ArrowRight size={10} className="group-hover:translate-x-1.5 transition-transform duration-300" />
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "var(--font-outfit), monospace", fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#FF9E00", marginTop: "1rem" }}>
+                    Launch Engine A <ArrowRight size={11} className="group-hover:translate-x-1.5 transition-transform duration-300" />
                   </div>
                 </SpotlightCard>
 
                 {/* ENGINE B CARD */}
                 <SpotlightCard
                   onClick={() => router.push("/engine-b")}
-                  className="glass-card p-6 rounded-[24px] border-white/5 flex flex-col justify-between group relative overflow-hidden"
-                  style={{ minHeight: "270px" }}
+                  className="glass-card p-6 rounded-[20px] flex flex-col justify-between group"
+                  style={{ minHeight: "260px" }}
                 >
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-[#FF4069]/10 to-transparent blur-[40px] pointer-events-none" />
-                  
-                  <div className="space-y-4">
+                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, #FF4069, rgba(255,64,105,0))", borderRadius: "20px 20px 0 0" }} />
+                  <div className="absolute top-0 right-0 w-48 h-48 pointer-events-none" style={{ background: "radial-gradient(circle at 100% 0%, rgba(255,64,105,0.10), transparent 70%)" }} />
+
+                  <div className="space-y-3">
                     <div className="flex justify-between items-start">
                       <div>
-                        <span className="text-[8px] font-mono text-[#FF4069] font-bold uppercase tracking-wider">ENGINE B</span>
-                        <h3 className="text-lg font-extrabold tracking-tight text-white mt-0.5 group-hover:text-[#FF4069] transition-colors duration-300">
+                        <span className="label-badge label-badge-pink" style={{ fontSize: "0.5rem" }}>ENGINE B</span>
+                        <h3 style={{ fontSize: "1.2rem", fontWeight: 800, letterSpacing: "-0.02em", color: "#F0F2FF", marginTop: "0.4rem", fontFamily: "var(--font-outfit), system-ui" }}
+                          className="group-hover:text-[#FF4069] transition-colors duration-300"
+                        >
                           Creative Muscle
                         </h3>
                       </div>
-                      <span className="text-[7px] font-mono border border-[#FF4069]/30 text-[#FF4069] bg-[#FF4069]/10 px-2 py-0.5 font-bold whitespace-nowrap">STUDIO_ACTIVE</span>
                     </div>
-                    <p className="text-[11px] text-zinc-400 leading-relaxed font-light">
+                    <p style={{ fontSize: "0.75rem", color: "rgba(240,242,255,0.5)", lineHeight: 1.65 }}>
                       Cinematics, photography, branding, and social visuals—built to look premium and convert.
                     </p>
                   </div>
 
-                  {/* Interactive Camera feed strip */}
-                  <div className="mt-4 h-12 rounded-2xl border border-white/5 overflow-hidden relative bg-black/50 flex gap-2 p-1.5">
+                  {/* Camera feed strip */}
+                  <div style={{ height: "52px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)", overflow: "hidden", background: "rgba(0,0,0,0.5)", display: "flex", gap: "6px", padding: "6px", marginTop: "0.75rem" }}>
                     {[
-                      { bg: "from-amber-900/40 to-[#FF4069]/30", label: "CINE_01" },
-                      { bg: "from-[#FF4069]/30 to-[#7000FF]/30", label: "CINE_02" },
-                      { bg: "from-[#7000FF]/30 to-slate-900", label: "RAW_FEED" },
+                      { bg: "linear-gradient(135deg, rgba(120,60,0,0.6), rgba(255,64,105,0.4))", label: "CINE_01" },
+                      { bg: "linear-gradient(135deg, rgba(255,64,105,0.4), rgba(112,0,255,0.4))", label: "CINE_02" },
+                      { bg: "linear-gradient(135deg, rgba(112,0,255,0.4), rgba(15,15,30,1))", label: "RAW_FEED" },
                     ].map((f, i) => (
                       <div
                         key={i}
-                        className={`flex-1 bg-gradient-to-tr ${f.bg} border border-white/10 rounded-lg flex items-center justify-center text-[7px] font-mono text-zinc-400 transition-opacity duration-700 ${activeFrame === i ? "opacity-100 border-[#FF4069]/55" : "opacity-30"}`}
+                        style={{
+                          flex: 1,
+                          background: f.bg,
+                          border: `1px solid ${activeFrame === i ? "rgba(255,64,105,0.5)" : "rgba(255,255,255,0.06)"}`,
+                          borderRadius: "8px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          opacity: activeFrame === i ? 1 : 0.25,
+                          transition: "all 0.7s ease",
+                          fontFamily: "var(--font-outfit), monospace",
+                          fontSize: "0.52rem",
+                          color: "rgba(240,242,255,0.7)",
+                          gap: "4px",
+                        }}
                       >
-                        <span className="flex items-center gap-1">
-                          {activeFrame === i && <span className="w-1 h-1 rounded-full bg-[#FF4069] animate-ping" />}
-                          {f.label}
-                        </span>
+                        {activeFrame === i && <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#FF4069", animation: "blink 1s infinite" }} />}
+                        {f.label}
                       </div>
                     ))}
                   </div>
 
-                  <div className="flex items-center gap-2 text-[9px] font-mono uppercase tracking-widest text-[#FF4069] font-bold mt-4">
-                    Launch Engine B <ArrowRight size={10} className="group-hover:translate-x-1.5 transition-transform duration-300" />
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "var(--font-outfit), monospace", fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#FF4069", marginTop: "1rem" }}>
+                    Launch Engine B <ArrowRight size={11} className="group-hover:translate-x-1.5 transition-transform duration-300" />
                   </div>
                 </SpotlightCard>
-
               </div>
             </motion.div>
           </section>
 
-          {/* SCENE 04 — CONVERSION */}
-          <section className="relative min-h-[85vh] flex flex-col items-center justify-center px-5 py-24 pb-40 bg-black/30">
+          {/* ── SCENE 04: CONVERSION ── */}
+          <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-5 py-24 pb-44">
             <motion.div
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-xl mx-auto space-y-8 flex flex-col items-center text-center w-full"
             >
-              <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#FF9E00] font-bold">
-                ORCHESTRATE YOUR SYSTEM
-              </span>
-              
+              <span className="label-badge label-badge-orange">ORCHESTRATE YOUR SYSTEM</span>
+
               <div className="space-y-3">
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug text-white">
-                  Tell us what you&apos;re building. We&apos;ll map the right engine.
+                <h2
+                  style={{
+                    fontSize: "1.9rem",
+                    fontWeight: 800,
+                    letterSpacing: "-0.03em",
+                    lineHeight: 1.15,
+                    color: "#F0F2FF",
+                    fontFamily: "var(--font-outfit), system-ui",
+                  }}
+                >
+                  Tell us what you&apos;re building.<br />We&apos;ll map the right engine.
                 </h2>
-                <p className="text-[11px] text-zinc-400 max-w-sm mx-auto font-light leading-relaxed">
+                <p style={{ fontSize: "0.78rem", color: "rgba(240,242,255,0.4)", maxWidth: "280px", margin: "0 auto", lineHeight: 1.7 }}>
                   Scoping roadmap calls are scheduled out of our Siripuram hub. Receive an in-depth systems audit.
                 </p>
               </div>
 
-              {/* Conversion box panel */}
-              <div className="w-full glass-card p-6 rounded-[28px] border-white/5 space-y-6 relative overflow-hidden max-w-sm">
-                <div className="absolute -bottom-16 -right-16 w-32 h-32 bg-gradient-to-tr from-[#7000FF]/15 to-transparent blur-xl rounded-full" />
-                <div className="absolute -top-16 -left-16 w-32 h-32 bg-gradient-to-br from-[#FF9E00]/10 to-transparent blur-xl rounded-full" />
-
+              <div className="w-full glass-card p-6 rounded-[24px] space-y-5 max-w-sm">
                 <Link
                   href="/book"
-                  className="w-full py-4 text-[10px] font-mono font-bold uppercase tracking-widest text-black transition-all duration-300 relative overflow-hidden group shadow-[0_8px_25px_rgba(255,158,0,0.2)] rounded-xl flex items-center justify-center gap-2"
-                  style={{ background: "linear-gradient(135deg, #FF9E00 0%, #FF4069 50%, #7000FF 100%)" }}
+                  className="btn-primary w-full justify-center"
+                  style={{ display: "flex", textDecoration: "none", fontSize: "0.65rem", borderRadius: "12px" }}
                 >
-                  <span className="absolute inset-0 w-full h-full bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-                  <span className="relative z-10 flex items-center gap-2 font-black">
-                    Book Strategic Scoping <ArrowRight size={11} />
-                  </span>
+                  <Zap size={13} />
+                  Book Strategic Scoping
+                  <ArrowRight size={13} />
                 </Link>
 
-                <div className="w-full h-px bg-white/5" />
+                <div style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
 
-                <div className="flex flex-col items-center gap-3 font-mono text-[9px] text-zinc-400">
-                  <a href="tel:+917396621004" className="hover:text-white transition flex items-center gap-2.5 py-1 px-3 bg-white/[0.03] border border-white/5 rounded-full">
-                    <Phone size={10} className="text-[#FF9E00]" /> +91-7396621004
-                  </a>
-                  <a href="mailto:grovicedigital@gmail.com" className="hover:text-white transition flex items-center gap-2.5 py-1 px-3 bg-white/[0.03] border border-white/5 rounded-full">
-                    <Mail size={10} className="text-[#FF4069]" /> grovicedigital@gmail.com
-                  </a>
+                <div className="flex flex-col items-center gap-3">
+                  {[
+                    { href: "tel:+917396621004", icon: Phone, label: "+91-7396621004", color: "#FF9E00" },
+                    { href: "mailto:grovicedigital@gmail.com", icon: Mail, label: "grovicedigital@gmail.com", color: "#FF4069" },
+                  ].map(({ href, icon: Icon, label, color }) => (
+                    <a
+                      key={href}
+                      href={href}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        padding: "0.45rem 0.85rem",
+                        background: "rgba(255,255,255,0.03)",
+                        border: "1px solid rgba(255,255,255,0.07)",
+                        borderRadius: "9999px",
+                        color: "rgba(240,242,255,0.5)",
+                        textDecoration: "none",
+                        fontSize: "0.7rem",
+                        fontFamily: "var(--font-outfit), monospace",
+                        transition: "all 0.2s",
+                      }}
+                    >
+                      <Icon size={11} color={color} /> {label}
+                    </a>
+                  ))}
                 </div>
               </div>
             </motion.div>
 
             {/* Micro footer */}
-            <div className="absolute bottom-8 left-0 w-full px-5 flex flex-col justify-between items-center gap-3.5 text-[9px] text-zinc-500 font-mono text-center">
-              <div className="flex items-center gap-1.5">
-                <MapPin size={9} className="text-[#FF4069]" />
-                <span>Visakhapatnam — Siripuram & Gajuwaka</span>
+            <div className="absolute bottom-10 left-0 w-full px-5 flex flex-col items-center gap-2 text-center">
+              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.62rem", color: "rgba(240,242,255,0.25)", fontFamily: "var(--font-outfit), monospace" }}>
+                <MapPin size={9} color="#FF4069" />
+                Visakhapatnam — Siripuram & Gajuwaka
               </div>
-              <p className="opacity-70">&copy; {new Date().getFullYear()} GROVICE. ALL SYSTEMS SYNCED.</p>
-              <a href="https://www.instagram.com/grovice2.0" target="_blank" rel="noopener noreferrer" className="text-[#FF4069]/80 hover:text-[#FF4069] transition uppercase tracking-widest text-[8px] font-bold">
-                @grovice2.0
-              </a>
+              <p style={{ fontSize: "0.6rem", color: "rgba(240,242,255,0.2)", fontFamily: "var(--font-outfit), monospace" }}>
+                © {new Date().getFullYear()} GROVICE. ALL SYSTEMS SYNCED.
+              </p>
             </div>
           </section>
         </div>
@@ -552,64 +649,116 @@ export default function LandingPage() {
     );
   }
 
-  /* ══════════════════════════════════════════════╗
-     ║  BRANCH 2: DESKTOP LANDING PAGE VIEW        ║
-     ╚══════════════════════════════════════════════╝ */
+  /* ══════════════════════════════════════════════════════════
+     DESKTOP VIEW
+     ══════════════════════════════════════════════════════════ */
   return (
     <div
       ref={containerRef}
-      className="relative w-full bg-[#040308] text-[#F6F7FB]"
+      className="relative w-full bg-[#040308] text-[#F0F2FF]"
       style={{ height: "400vh" }}
     >
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
-        {/* ── LOADING SCREEN OVERLAY ── */}
+
+        {/* ── Loader ── */}
         <AnimatePresence>
           {loading && (
             <motion.div
               initial={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              exit={{ opacity: 0, transition: { duration: 0.8 } }}
               className="loop-loader-overlay"
             >
-              <div className="loader-spinner mb-5" />
-              <span className="font-mono text-[9px] tracking-[0.35em] text-[#FF9E00] uppercase font-bold">
-                INITIALIZING GROVICE OS...
-              </span>
+              <div className="loader-ring" />
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6rem" }}>
+                <span
+                  style={{
+                    fontFamily: "var(--font-outfit), monospace",
+                    fontSize: "0.7rem",
+                    letterSpacing: "0.4em",
+                    textTransform: "uppercase",
+                    fontWeight: 800,
+                    background: "linear-gradient(90deg, #FF9E00, #FF4069, #7000FF)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  GROVICE OS
+                </span>
+                <span
+                  style={{
+                    fontFamily: "var(--font-outfit), monospace",
+                    fontSize: "0.55rem",
+                    letterSpacing: "0.28em",
+                    textTransform: "uppercase",
+                    color: "rgba(240,242,255,0.25)",
+                  }}
+                >
+                  Initializing dual-engine systems...
+                </span>
+              </div>
+              {/* Mini dot grid loader */}
+              <div className="loader-dot-grid">
+                {Array.from({ length: 9 }).map((_, i) => (
+                  <span key={i} />
+                ))}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* ── LAYER 0.5: Dark Base Background ── */}
-        <div className="absolute inset-0 z-0 pointer-events-none bg-[#040308]">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#040308]/30 to-[#040308]" />
-        </div>
-
-        {/* ── LAYER 0: Maldives Resort Background Image (Scene 1 only) ── */}
-        <motion.div 
-          className="absolute inset-0 z-0 bg-cover bg-center"
-          style={{ 
-            backgroundImage: "url('/images/sunrise_beach_hero.png')",
+        {/* ── BG: Hero Video ── */}
+        <motion.div
+          className="absolute inset-0 z-0 bg-cover bg-center overflow-hidden"
+          style={{
             opacity: bgOpacity,
             scale: bgScale,
           }}
-        />
-
-        {/* ── LAYER 0.2: Tropical Overlay Gradient ── */}
-        <motion.div
-          className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#0A2540]/25 via-transparent to-[#040308]"
-          style={{ opacity: bgOpacity }}
-        />
-
-        {/* ── LAYER 1: Ambient warm sun glare particles ── */}
-        <motion.div
-          className="absolute inset-0 z-[1] pointer-events-none"
-          style={{ y: bgY }}
         >
-          <div className="absolute top-[15%] left-[20%] w-[320px] h-[320px] bg-[#FF9E00]/8 rounded-full blur-[140px]" />
-          <div className="absolute bottom-[20%] right-[15%] w-[380px] h-[380px] bg-[#7000FF]/10 rounded-full blur-[150px]" />
-          <div className="absolute bottom-1/3 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#FF4069]/15 to-transparent" />
+          <video
+            ref={videoRef}
+            src="/images/Sunrise_beach_underwater_transition.mp4"
+            className="w-full h-full object-cover"
+            muted
+            playsInline
+            preload="auto"
+          />
         </motion.div>
 
-        {/* ── SIDEWAVE-STYLE LEFT LATERAL NAVIGATION MENU ── */}
+        {/* ── BG Overlays ── */}
+        <motion.div
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{ opacity: bgOpacity }}
+        >
+          {/* Cinematic vignette */}
+          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, transparent 35%, rgba(4,3,8,0.75) 100%)" }} />
+          {/* Gradient to dark */}
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(4,3,8,0.35) 0%, transparent 40%, rgba(4,3,8,0.9) 100%)" }} />
+          {/* Light leak effect */}
+          <div style={{ position: "absolute", top: "22%", left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent 0%, rgba(255,215,0,0.15) 35%, rgba(255,158,0,0.08) 55%, transparent 100%)", filter: "blur(6px)" }} />
+        </motion.div>
+
+        {/* ── Dark Base ── */}
+        <div className="absolute inset-0 z-0 pointer-events-none bg-[#040308]" />
+
+        {/* ── Ambient Glows ── */}
+        <motion.div className="absolute inset-0 z-[1] pointer-events-none" style={{ y: bgY }}>
+          <div style={{ position: "absolute", top: "12%", left: "18%", width: "380px", height: "380px", borderRadius: "50%", background: "rgba(255,158,0,0.07)", filter: "blur(140px)" }} />
+          <div style={{ position: "absolute", bottom: "15%", right: "12%", width: "440px", height: "440px", borderRadius: "50%", background: "rgba(112,0,255,0.08)", filter: "blur(160px)" }} />
+        </motion.div>
+
+        {/* ── Mouse-parallax glow orb (desktop) ── */}
+        <div
+          className="pointer-events-none absolute z-[1] w-[500px] h-[500px] rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(255,158,0,0.04) 0%, transparent 70%)",
+            left: `${mousePos.x - 250}px`,
+            top: `${mousePos.y - 250}px`,
+            transition: "left 0.8s cubic-bezier(0.16,1,0.3,1), top 0.8s cubic-bezier(0.16,1,0.3,1)",
+          }}
+        />
+
+        {/* ── LATERAL NAV ── */}
         <div className="lateral-menu">
           {sections.map((sec, idx) => (
             <div
@@ -618,13 +767,13 @@ export default function LandingPage() {
               className={`lateral-menu-item ${activeSection === idx ? "active" : ""}`}
             >
               <div className="lateral-menu-line" />
-              <div className="flex flex-col gap-0.5">
+              <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
                 <span className="lateral-menu-label">{sec.label}</span>
                 {activeSection === idx && (
                   <motion.span
                     initial={{ opacity: 0, x: -5 }}
-                    animate={{ opacity: 0.5, x: 0 }}
-                    className="text-[8px] text-zinc-500 font-mono tracking-wider max-w-[200px]"
+                    animate={{ opacity: 0.4, x: 0 }}
+                    style={{ fontSize: "0.52rem", color: "rgba(240,242,255,0.4)", fontFamily: "var(--font-outfit), monospace", letterSpacing: "0.05em", maxWidth: "180px" }}
                   >
                     {sec.desc}
                   </motion.span>
@@ -634,297 +783,521 @@ export default function LandingPage() {
           ))}
         </div>
 
-        {/* ── SIDEWAVE-STYLE ROTATING SCROLL DISCOVER TAG ── */}
+        {/* ── Scroll Discover ── */}
         <div className="scroll-discover">
           <span>Scroll to Navigate</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#0B3C73] animate-pulse" />
+          <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#FF9E00", boxShadow: "0 0 8px rgba(255,158,0,0.6)" }} className="animate-pulse" />
         </div>
 
-        {/* ══════════════════════════════════════════════
-            SCENE 01 — ARRIVAL  (Hero / First section)
-            ══════════════════════════════════════════════ */}
+        {/* ══════════════════════════════════════════════════════════
+            SCENE 01 — ARRIVAL
+            ══════════════════════════════════════════════════════════ */}
         <motion.div
           className="absolute inset-0 z-[10] flex flex-col items-center justify-center text-center px-6"
           style={{ opacity: logoOpacity, pointerEvents: s1PointerEvents }}
         >
           <motion.div
             style={{ opacity: welcomeOpacity, y: welcomeY }}
-            className="flex flex-col items-center gap-6 max-w-5xl"
+            className="flex flex-col items-center gap-8 max-w-5xl"
           >
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+            >
+              <span className="label-badge label-badge-orange">
+                <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#FF9E00" }} className="animate-pulse" />
+                Dual-Engine OS · Visakhapatnam
+              </span>
+            </motion.div>
+
             {/* Editorial Title */}
-            <h1 
-              className="text-6xl md:text-8xl font-bold tracking-tight leading-none text-white select-none max-w-4xl"
-              style={{ 
-                fontFamily: "var(--font-playfair), serif", 
-                textShadow: "0 2px 15px rgba(0, 0, 0, 0.4)" 
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+              style={{
+                fontFamily: "var(--font-playfair), serif",
+                fontSize: "clamp(3.5rem, 8vw, 7rem)",
+                fontWeight: 700,
+                lineHeight: 1.06,
+                letterSpacing: "-0.02em",
+                color: "#F0F2FF",
+                textShadow: "0 4px 30px rgba(0,0,0,0.4)",
+                maxWidth: "900px",
               }}
             >
-              GROVICE 2.0 <br/>
-              <span className="text-2xl md:text-3xl font-light italic opacity-95 block mt-2">The Dual-Engine Operating System</span>
-            </h1>
+              GROVICE{" "}
+              <span className="text-gradient-shimmer">2.0</span>
+              <br />
+              <span
+                style={{
+                  fontSize: "clamp(1.2rem, 2.5vw, 2rem)",
+                  fontWeight: 400,
+                  fontStyle: "italic",
+                  opacity: 0.9,
+                  display: "block",
+                  marginTop: "0.4rem",
+                  letterSpacing: 0,
+                }}
+              >
+                The Dual-Engine Operating System
+              </span>
+            </motion.h1>
 
             {/* Subtitle */}
-            <p 
-              className="text-sm md:text-base text-white/95 font-light max-w-2xl leading-relaxed mt-2 select-none"
-              style={{ 
-                textShadow: "0 1px 6px rgba(0, 0, 0, 0.5)" 
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+              style={{
+                fontSize: "clamp(0.8rem, 1.5vw, 1rem)",
+                color: "rgba(240,242,255,0.8)",
+                maxWidth: "600px",
+                lineHeight: 1.7,
+                textShadow: "0 1px 8px rgba(0,0,0,0.4)",
               }}
             >
-              Visakhapatnam&apos;s elite business operating system bridging software & creative muscle. <br/>Powered by Engine A (AI & Automation) and Engine B (Creative Brand Production).
-            </p>
+              Visakhapatnam&apos;s elite business operating system bridging software & creative muscle.{" "}
+              <br />
+              Powered by Engine A (AI & Automation) and Engine B (Creative Brand Production).
+            </motion.p>
 
             {/* Pill Configurator Bar */}
-            <div className="flex flex-row items-center bg-[#0A2540]/55 border border-white/15 rounded-full p-2.5 gap-0 max-w-4xl w-full backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.3)] mt-10 relative z-50">
-              {/* Select 1: Work Engine */}
-              <div className="flex-1 flex flex-row items-center px-5 border-r border-white/10 text-left hover:bg-white/5 py-1.5 transition rounded-l-full cursor-pointer">
-                <Cpu size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
-                <div className="flex flex-col flex-1">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Work Engine</span>
-                  <select className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 appearance-none font-medium">
-                    <option className="bg-[#0A192F] text-white" value="a">Engine A: Software & AI</option>
-                    <option className="bg-[#0A192F] text-white" value="b">Engine B: Creative Muscle</option>
-                    <option className="bg-[#0A192F] text-white" value="all">Integrated OS (Both)</option>
-                  </select>
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.0, duration: 0.8 }}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                background: "rgba(4,3,8,0.65)",
+                border: "1px solid rgba(255,158,0,0.15)",
+                borderRadius: "9999px",
+                padding: "0.6rem",
+                gap: 0,
+                maxWidth: "860px",
+                width: "100%",
+                backdropFilter: "blur(24px)",
+                boxShadow: "0 16px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)",
+              }}
+            >
+              {[
+                { icon: Cpu, label: "Work Engine", options: ["Engine A: Software & AI", "Engine B: Creative Muscle", "Integrated OS (Both)"] },
+                { icon: Compass, label: "System Target", options: ["Lead Automations", "Cinematic Production", "Full System Audit"] },
+                { icon: Calendar, label: "Launch Timeline", options: ["Immediate Scoping", "Within 30 Days", "Future Scaling"] },
+                { icon: Users, label: "Operating Scope", options: ["1 - 5 Developer Nodes", "6 - 15 Studio Assets", "Enterprise Scale Sync"] },
+              ].map(({ icon: Icon, label, options }, i) => (
+                <div
+                  key={label}
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    padding: "0.35rem 1.2rem",
+                    borderRight: i < 3 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                    cursor: "pointer",
+                    transition: "background 0.2s",
+                    borderRadius: i === 0 ? "9999px 0 0 9999px" : i === 3 ? "0 9999px 9999px 0" : 0,
+                  }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+                >
+                  <Icon size={14} color="#8EE3F5" style={{ flexShrink: 0, marginRight: "0.6rem" }} />
+                  <div style={{ flex: 1 }}>
+                    <span style={{ display: "block", fontSize: "0.55rem", fontFamily: "var(--font-outfit), monospace", textTransform: "uppercase", letterSpacing: "0.2em", color: "rgba(240,242,255,0.4)", fontWeight: 700, marginBottom: "1px" }}>
+                      {label}
+                    </span>
+                    <select
+                      className="bg-transparent border-0 text-white focus:outline-none w-full cursor-pointer appearance-none font-medium"
+                      style={{ fontSize: "0.78rem", fontFamily: "var(--font-dm-sans), system-ui" }}
+                    >
+                      {options.map(o => (
+                        <option key={o} className="bg-[#040308]" value={o}>{o}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
+              ))}
 
-              {/* Select 2: System Target */}
-              <div className="flex-1 flex flex-row items-center px-5 border-r border-white/10 text-left hover:bg-white/5 py-1.5 transition cursor-pointer">
-                <Compass size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
-                <div className="flex flex-col flex-1">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">System Target</span>
-                  <select className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 appearance-none font-medium">
-                    <option className="bg-[#0A192F] text-white" value="lead">Lead Automations</option>
-                    <option className="bg-[#0A192F] text-white" value="cine">Cinematic Production</option>
-                    <option className="bg-[#0A192F] text-white" value="sync">Full System Audit</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Select 3: Launch Timeline */}
-              <div className="flex-1 flex flex-row items-center px-5 border-r border-white/10 text-left hover:bg-white/5 py-1.5 transition cursor-pointer">
-                <Calendar size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
-                <div className="flex flex-col flex-1">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Launch Timeline</span>
-                  <select className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 appearance-none font-medium">
-                    <option className="bg-[#0A192F] text-white" value="now">Immediate Scoping</option>
-                    <option className="bg-[#0A192F] text-white" value="30">Within 30 Days</option>
-                    <option className="bg-[#0A192F] text-white" value="90">Future Scaling</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Select 4: Operating Scope */}
-              <div className="flex-1 flex flex-row items-center px-5 text-left hover:bg-white/5 py-1.5 transition rounded-r-full cursor-pointer">
-                <Users size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
-                <div className="flex flex-col flex-1">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Operating Scope</span>
-                  <select className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 appearance-none font-medium">
-                    <option className="bg-[#0A192F] text-white" value="dev">1 - 5 Developer Nodes</option>
-                    <option className="bg-[#0A192F] text-white" value="assets">6 - 15 Studio Assets</option>
-                    <option className="bg-[#0A192F] text-white" value="ent">Enterprise Scale Sync</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Action Button */}
-              <button 
+              <button
                 onClick={() => handleScrollTo(0.55)}
-                className="w-12 h-12 rounded-full bg-[#0B3C73] text-white flex items-center justify-center cursor-pointer transition hover:scale-105 active:scale-95 shrink-0 ml-4 border border-white/10 shadow-[0_4px_12px_rgba(11,60,115,0.35)]"
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "50%",
+                  background: "linear-gradient(135deg, #FF9E00, #FF4069)",
+                  border: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  flexShrink: 0,
+                  marginLeft: "0.5rem",
+                  transition: "transform 0.2s, box-shadow 0.2s",
+                  boxShadow: "0 4px 16px rgba(255,158,0,0.3)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.transform = "scale(1.08)";
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 24px rgba(255,158,0,0.45)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(255,158,0,0.3)";
+                }}
               >
-                <ArrowRight size={16} className="text-white" />
+                <ArrowRight size={18} color="#000" />
               </button>
-            </div>
+            </motion.div>
           </motion.div>
 
           {/* Scroll Indicator */}
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 font-mono text-[9px] text-[#FF9E00] tracking-[0.3em] opacity-80 select-none">
-            <span>SCROLL TO EXPLORE</span>
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-              className="w-1.5 h-1.5 rounded-full bg-[#FF4069]"
-            />
-          </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.4, duration: 0.8 }}
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2.5"
+          >
+            <span style={{ fontFamily: "var(--font-outfit), monospace", fontSize: "0.55rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(240,242,255,0.4)" }}>
+              SCROLL TO EXPLORE
+            </span>
+            <div style={{ width: "24px", height: "40px", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "12px", display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "5px" }}>
+              <motion.div
+                animate={{ y: [0, 18, 0] }}
+                transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+                style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#FF9E00", boxShadow: "0 0 6px rgba(255,158,0,0.6)" }}
+              />
+            </div>
+          </motion.div>
         </motion.div>
 
-        {/* ══════════════════════════════════════════════
-            SCENE 02 — IDENTITY LOCK  (Core Info)
-            ══════════════════════════════════════════════ */}
+        {/* ══════════════════════════════════════════════════════════
+            SCENE 02 — IDENTITY LOCK
+            ══════════════════════════════════════════════════════════ */}
         <motion.div
           className="absolute inset-0 z-[10] flex flex-col items-center justify-center text-center px-6"
           style={{ opacity: s2Opacity, y: s2Y, filter: s2Blur, pointerEvents: "none" }}
         >
-          <div className="max-w-4xl space-y-6 pointer-events-none">
-            <span className="inline-block text-[10px] font-mono font-bold uppercase tracking-[0.3em] text-[#FFD700] border border-[#FFD700]/30 bg-[#FFD700]/10 px-4 py-1.5">
-              INTEGRATED CORE
-            </span>
-            <h2 className="text-4xl md:text-8xl font-extrabold tracking-tight leading-[1.02] text-white">
-              One Stop Business Solution
+          <div className="max-w-5xl space-y-8 pointer-events-none">
+            <span className="label-badge label-badge-gold">INTEGRATED CORE</span>
+
+            <h2
+              style={{
+                fontSize: "clamp(2.8rem, 7vw, 6.5rem)",
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+                lineHeight: 1.0,
+                fontFamily: "var(--font-outfit), system-ui",
+              }}
+            >
+              Where Code
+              <br />
+              <span className="text-gradient">Meets Canvas</span>
             </h2>
-            <div className="w-16 h-[2px] bg-[#FF4069] mx-auto my-4" />
-            <p className="text-sm md:text-lg text-zinc-300 font-light max-w-2xl mx-auto leading-relaxed font-sans">
-              Where AI Automation Meets Creative Excellence. Robust code repositories and brand photography timelines under one coordinate grid.
+
+            {/* Animated divider */}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div style={{ width: "80px", height: "2px", background: "linear-gradient(90deg, #FF9E00, #FF4069)" }} />
+            </div>
+
+            <p
+              style={{
+                fontSize: "clamp(0.85rem, 1.5vw, 1.1rem)",
+                color: "rgba(240,242,255,0.55)",
+                maxWidth: "560px",
+                margin: "0 auto",
+                lineHeight: 1.75,
+              }}
+            >
+              AI Automation meets Creative Excellence. Robust code repositories and brand photography timelines under one coordinate grid.
             </p>
+
+            {/* Stat row */}
+            <div style={{ display: "flex", justifyContent: "center", gap: "4rem", paddingTop: "1rem" }}>
+              {[
+                { val: "140k+", label: "Leads Processed", color: "#FF9E00" },
+                { val: "99.98%", label: "Deploy Uptime", color: "#22c55e" },
+                { val: "< 8ms", label: "Edge Latency", color: "#FF4069" },
+              ].map(({ val, label, color }) => (
+                <div key={label} style={{ textAlign: "center" }}>
+                  <p style={{ fontSize: "clamp(1.4rem, 3vw, 2.2rem)", fontWeight: 800, color, fontFamily: "var(--font-outfit), monospace", letterSpacing: "-0.02em" }}>{val}</p>
+                  <p style={{ fontSize: "0.6rem", color: "rgba(240,242,255,0.3)", fontFamily: "var(--font-outfit), monospace", textTransform: "uppercase", letterSpacing: "0.15em", marginTop: "4px" }}>{label}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </motion.div>
 
-        {/* ══════════════════════════════════════════════
-            SCENE 03 — ENGINE GATEWAY  (Gateway picker)
-            ══════════════════════════════════════════════ */}
+        {/* ══════════════════════════════════════════════════════════
+            SCENE 03 — ENGINE GATEWAY
+            ══════════════════════════════════════════════════════════ */}
         <motion.div
           className="absolute inset-0 z-[10] flex flex-col items-center justify-center px-6 py-20"
           style={{ opacity: s3Opacity, y: s3Y, filter: s3Blur, pointerEvents: s3PointerEvents }}
         >
           <div className="w-full max-w-5xl flex flex-col items-center gap-8">
-            <div className="text-center space-y-2">
-              <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF9E00] font-bold">
-                DECISION GATEWAY
-              </span>
-              <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white font-sans">
+            <div className="text-center space-y-3">
+              <span className="label-badge label-badge-orange">DECISION GATEWAY</span>
+              <h2
+                style={{
+                  fontSize: "clamp(2rem, 4vw, 3.5rem)",
+                  fontWeight: 800,
+                  letterSpacing: "-0.03em",
+                  fontFamily: "var(--font-outfit), system-ui",
+                  color: "#F0F2FF",
+                  marginTop: "0.5rem",
+                }}
+              >
                 Pick your engine.
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
               {/* ENGINE A */}
               <SpotlightCard
                 onClick={() => router.push("/engine-a")}
-                className="glass-card p-7 rounded-[24px] border-white/5 flex flex-col justify-between group relative overflow-hidden"
-                style={{ minHeight: "280px" }}
+                className="glass-card p-7 rounded-[24px] flex flex-col justify-between group"
+                style={{ minHeight: "300px", position: "relative" }}
               >
-                <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-[#FF9E00]/10 to-transparent blur-[40px] pointer-events-none" />
-                <div className="space-y-4">
-                  <div className="flex justify-between items-start">
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, #FF9E00, rgba(255,158,0,0))", borderRadius: "24px 24px 0 0" }} />
+                <div style={{ position: "absolute", top: 0, right: 0, width: "220px", height: "220px", background: "radial-gradient(circle at 100% 0%, rgba(255,158,0,0.09), transparent 65%)", pointerEvents: "none" }} />
+
+                <div className="space-y-3">
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                     <div>
-                      <span className="text-[9px] font-mono text-[#FF9E00] font-bold uppercase tracking-wider">ENGINE A</span>
-                      <h3 className="text-xl md:text-2xl font-extrabold tracking-tight text-white mt-0.5 group-hover:text-[#FF9E00] transition-colors duration-300">
+                      <span className="label-badge label-badge-orange" style={{ fontSize: "0.55rem" }}>ENGINE A</span>
+                      <h3
+                        style={{ fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.025em", color: "#F0F2FF", marginTop: "0.5rem", fontFamily: "var(--font-outfit), system-ui", transition: "color 0.3s" }}
+                        className="group-hover:text-[#FF9E00]"
+                      >
                         Software & AI Systems
                       </h3>
                     </div>
-                    <span className="text-[8px] font-mono border border-[#FF9E00]/30 text-[#FF9E00] bg-[#FF9E00]/10 px-2 py-0.5 font-bold whitespace-nowrap">AUTOMATION_READY</span>
+                    <TrendingUp size={18} color="rgba(255,158,0,0.4)" />
                   </div>
-                  <p className="text-[12px] text-zinc-400 leading-relaxed font-light">
+                  <p style={{ fontSize: "0.8rem", color: "rgba(240,242,255,0.45)", lineHeight: 1.7 }}>
                     AI workflows, voice bots, CRMs, dashboards and custom software pipelines—built to scale.
                   </p>
                 </div>
-                <div className="mt-4 p-3 bg-black/40 border border-white/5 rounded-xl font-mono text-[8px] text-zinc-500 space-y-2">
-                  <div className="flex justify-between text-[7px] text-zinc-600 pb-1 border-b border-white/5">
+
+                {/* Animated node map */}
+                <div style={{ background: "rgba(0,0,0,0.5)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "14px", padding: "0.85rem", fontFamily: "var(--font-outfit), monospace", fontSize: "0.65rem", marginTop: "1rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", color: "rgba(240,242,255,0.3)", paddingBottom: "0.6rem", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "0.55rem", letterSpacing: "0.1em", fontWeight: 700, textTransform: "uppercase" }}>
                     <span>LIVE NODE MAP</span>
-                    <span className="text-[#FF9E00]">ACTIVE</span>
+                    <span style={{ color: "#FF9E00" }} className="animate-pulse">● ACTIVE</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="px-1.5 py-0.5 bg-white/5 border border-white/10 text-white font-bold">INBOUND</span>
-                    <svg className="flex-1 mx-2 h-3" fill="none" viewBox="0 0 100 12" preserveAspectRatio="none">
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.5rem", marginTop: "0.6rem" }}>
+                    <span style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", padding: "0.25rem 0.6rem", borderRadius: "5px", color: "#F0F2FF", fontWeight: 700 }}>INBOUND</span>
+                    <svg className="flex-1 h-3" fill="none" viewBox="0 0 100 12" preserveAspectRatio="none">
                       <path d="M 0 6 L 100 6" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
                       <path d="M 0 6 L 100 6" stroke="#FF9E00" strokeWidth="1.5" className="animate-stroke-flow" />
                     </svg>
-                    <span className="px-1.5 py-0.5 bg-[#7000FF]/20 border border-[#7000FF]/35 text-[#7000FF] font-bold">AI_ROUTE</span>
+                    <span style={{ background: "rgba(112,0,255,0.2)", border: "1px solid rgba(112,0,255,0.35)", padding: "0.25rem 0.6rem", borderRadius: "5px", color: "#9B7FFF", fontWeight: 700 }}>AI_ROUTE</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-[#FF9E00] font-bold mt-4">
-                  Launch Engine A <ArrowRight size={12} className="group-hover:translate-x-1.5 transition-transform duration-300" />
+
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "var(--font-outfit), monospace", fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#FF9E00", marginTop: "1rem" }}>
+                  Launch Engine A <ArrowRight size={12} className="group-hover:translate-x-2 transition-transform duration-300" />
                 </div>
               </SpotlightCard>
 
               {/* ENGINE B */}
               <SpotlightCard
                 onClick={() => router.push("/engine-b")}
-                className="glass-card p-7 rounded-[24px] border-white/5 flex flex-col justify-between group relative overflow-hidden"
-                style={{ minHeight: "280px" }}
+                className="glass-card p-7 rounded-[24px] flex flex-col justify-between group"
+                style={{ minHeight: "300px", position: "relative" }}
               >
-                <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-[#FF4069]/10 to-transparent blur-[40px] pointer-events-none" />
-                <div className="space-y-4">
-                  <div className="flex justify-between items-start">
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, #FF4069, rgba(255,64,105,0))", borderRadius: "24px 24px 0 0" }} />
+                <div style={{ position: "absolute", top: 0, right: 0, width: "220px", height: "220px", background: "radial-gradient(circle at 100% 0%, rgba(255,64,105,0.09), transparent 65%)", pointerEvents: "none" }} />
+
+                <div className="space-y-3">
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                     <div>
-                      <span className="text-[9px] font-mono text-[#FF4069] font-bold uppercase tracking-wider">ENGINE B</span>
-                      <h3 className="text-xl md:text-2xl font-extrabold tracking-tight text-white mt-0.5 group-hover:text-[#FF4069] transition-colors duration-300">
+                      <span className="label-badge label-badge-pink" style={{ fontSize: "0.55rem" }}>ENGINE B</span>
+                      <h3
+                        style={{ fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.025em", color: "#F0F2FF", marginTop: "0.5rem", fontFamily: "var(--font-outfit), system-ui", transition: "color 0.3s" }}
+                        className="group-hover:text-[#FF4069]"
+                      >
                         Creative Muscle
                       </h3>
                     </div>
-                    <span className="text-[8px] font-mono border border-[#FF4069]/30 text-[#FF4069] bg-[#FF4069]/10 px-2 py-0.5 font-bold whitespace-nowrap">STUDIO_ACTIVE</span>
+                    <Camera size={18} color="rgba(255,64,105,0.4)" />
                   </div>
-                  <p className="text-[12px] text-zinc-400 leading-relaxed font-light">
+                  <p style={{ fontSize: "0.8rem", color: "rgba(240,242,255,0.45)", lineHeight: 1.7 }}>
                     Cinematics, photography, branding, and social visuals—built to look premium and convert.
                   </p>
                 </div>
-                <div className="mt-4 h-12 rounded-xl border border-white/5 overflow-hidden relative bg-black/40 flex gap-1.5 p-1.5">
+
+                {/* Camera feed strip */}
+                <div style={{ height: "60px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.06)", overflow: "hidden", background: "rgba(0,0,0,0.5)", display: "flex", gap: "6px", padding: "6px", marginTop: "1rem" }}>
                   {[
-                    { bg: "from-amber-900/60 to-[#FF4069]/50", label: "CAM_01" },
-                    { bg: "from-[#FF4069]/50 to-[#7000FF]/50", label: "CAM_02" },
-                    { bg: "from-[#7000FF]/50 to-slate-900", label: "CAM_03" },
+                    { bg: "linear-gradient(135deg, rgba(140,70,0,0.7), rgba(255,64,105,0.5))", label: "CAM_01" },
+                    { bg: "linear-gradient(135deg, rgba(255,64,105,0.5), rgba(112,0,255,0.5))", label: "CAM_02" },
+                    { bg: "linear-gradient(135deg, rgba(112,0,255,0.5), rgba(10,10,20,1))", label: "CAM_03" },
                   ].map((f, i) => (
                     <div
                       key={i}
-                      className={`flex-1 bg-gradient-to-tr ${f.bg} border border-white/10 flex items-center justify-center text-[7px] font-mono text-zinc-300 transition-opacity duration-700 ${activeFrame === i ? "opacity-100" : "opacity-25"}`}
+                      style={{
+                        flex: 1,
+                        background: f.bg,
+                        border: `1px solid ${activeFrame === i ? "rgba(255,64,105,0.55)" : "rgba(255,255,255,0.06)"}`,
+                        borderRadius: "10px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        opacity: activeFrame === i ? 1 : 0.2,
+                        transition: "all 0.7s ease",
+                        fontFamily: "var(--font-outfit), monospace",
+                        fontSize: "0.6rem",
+                        color: "rgba(240,242,255,0.8)",
+                        gap: "4px",
+                      }}
                     >
+                      {activeFrame === i && <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#FF4069", animation: "blink 1s infinite" }} />}
                       {f.label}
                     </div>
                   ))}
                 </div>
-                <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-[#FF4069] font-bold mt-4">
-                  Launch Engine B <ArrowRight size={12} className="group-hover:translate-x-1.5 transition-transform duration-300" />
+
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "var(--font-outfit), monospace", fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#FF4069", marginTop: "1rem" }}>
+                  Launch Engine B <ArrowRight size={12} className="group-hover:translate-x-2 transition-transform duration-300" />
                 </div>
               </SpotlightCard>
             </div>
           </div>
         </motion.div>
 
-        {/* ── SCENE 04 — CONVERSION ── */}
+        {/* ══════════════════════════════════════════════════════════
+            SCENE 04 — CONVERSION CTA
+            ══════════════════════════════════════════════════════════ */}
         <motion.div
           className="absolute inset-0 z-[10] flex flex-col items-center justify-center text-center px-6"
           style={{ opacity: s4Opacity, y: s4Y, pointerEvents: s4PointerEvents }}
         >
-          <div className="max-w-3xl mx-auto space-y-8 relative flex flex-col items-center">
-            {/* Sunset glowing background target */}
-            <motion.div
-              style={{ width: s4GlowSize, height: s4GlowSize }}
-              className="absolute rounded-full bg-[#FF4069]/10 blur-[80px] pointer-events-none"
-            />
+          {/* Mouse-following background glow */}
+          <div
+            style={{
+              position: "absolute",
+              width: "600px",
+              height: "600px",
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(255,64,105,0.06) 0%, transparent 70%)",
+              left: `${mousePos.x - 300}px`,
+              top: `${mousePos.y - 300}px`,
+              transition: "left 0.6s cubic-bezier(0.16,1,0.3,1), top 0.6s cubic-bezier(0.16,1,0.3,1)",
+              pointerEvents: "none",
+            }}
+          />
 
-            <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-[#FF9E00] font-bold">
-              ORCHESTRATE YOUR OS
-            </span>
-            <h2 className="text-3xl md:text-6xl font-extrabold tracking-tight leading-[1.08] text-white">
-              Tell us what you&apos;re building. <br/>We&apos;ll map the right engine.
+          <div className="max-w-3xl mx-auto space-y-10 relative flex flex-col items-center">
+            <span className="label-badge label-badge-orange">ORCHESTRATE YOUR OS</span>
+
+            <h2
+              style={{
+                fontSize: "clamp(2.5rem, 6vw, 5.5rem)",
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+                lineHeight: 1.08,
+                fontFamily: "var(--font-outfit), system-ui",
+                color: "#F0F2FF",
+              }}
+            >
+              Tell us what you&apos;re building.{" "}
+              <br />
+              <span className="text-gradient">We&apos;ll map the right engine.</span>
             </h2>
 
-            <div className="flex flex-col items-center gap-6 pt-4">
+            <div className="flex flex-col items-center gap-6">
               <Link
                 href="/book"
-                className="px-12 py-4.5 text-xs font-mono font-bold uppercase tracking-widest text-black transition-all duration-300 relative overflow-hidden group shadow-[0_12px_35px_rgba(255,158,0,0.25)]"
-                style={{ background: "linear-gradient(135deg, #FF9E00 0%, #FF4069 50%, #7000FF 100%)" }}
+                className="btn-primary"
+                style={{ textDecoration: "none", fontSize: "0.7rem", display: "inline-flex" }}
               >
-                <span className="absolute inset-0 w-full h-full bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-                <span className="relative z-10 flex items-center gap-2">
-                  Book a Call <ArrowRight size={13} />
-                </span>
+                <Zap size={14} />
+                Book a Strategy Call
+                <ArrowRight size={14} />
               </Link>
 
-              <div className="flex flex-col sm:flex-row items-center gap-5 font-mono text-[11px] text-zinc-400">
-                <a href="tel:+917396621004" className="hover:text-white transition flex items-center gap-2">
-                  <Phone size={11} className="text-[#FF9E00]" /> +91-7396621004
-                </a>
-                <span className="hidden sm:inline text-zinc-700">|</span>
-                <a href="mailto:grovicedigital@gmail.com" className="hover:text-white transition flex items-center gap-2">
-                  <Mail size={11} className="text-[#FF4069]" /> grovicedigital@gmail.com
-                </a>
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                {[
+                  { href: "tel:+917396621004", icon: Phone, label: "+91-7396621004", color: "#FF9E00" },
+                  { href: "mailto:grovicedigital@gmail.com", icon: Mail, label: "grovicedigital@gmail.com", color: "#FF4069" },
+                ].map(({ href, icon: Icon, label, color }) => (
+                  <a
+                    key={href}
+                    href={href}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      padding: "0.5rem 1rem",
+                      background: "rgba(255,255,255,0.03)",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                      borderRadius: "9999px",
+                      color: "rgba(240,242,255,0.5)",
+                      textDecoration: "none",
+                      fontSize: "0.75rem",
+                      fontFamily: "var(--font-outfit), monospace",
+                      transition: "all 0.2s",
+                    }}
+                    onMouseEnter={(e) => {
+                      const el = e.currentTarget as HTMLElement;
+                      el.style.color = color;
+                      el.style.borderColor = `${color}40`;
+                      el.style.background = `${color}08`;
+                    }}
+                    onMouseLeave={(e) => {
+                      const el = e.currentTarget as HTMLElement;
+                      el.style.color = "rgba(240,242,255,0.5)";
+                      el.style.borderColor = "rgba(255,255,255,0.08)";
+                      el.style.background = "rgba(255,255,255,0.03)";
+                    }}
+                  >
+                    <Icon size={12} color={color} /> {label}
+                  </a>
+                ))}
+              </div>
+
+              {/* Trust badges */}
+              <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", marginTop: "0.5rem" }}>
+                {[
+                  { icon: Shield, label: "Zero Pressure Calls" },
+                  { icon: TrendingUp, label: "Free Systems Audit" },
+                ].map(({ icon: Icon, label }) => (
+                  <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "rgba(240,242,255,0.3)", fontSize: "0.65rem", fontFamily: "var(--font-outfit), monospace" }}>
+                    <Icon size={11} color="rgba(255,158,0,0.5)" />
+                    {label}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
           {/* Micro footer */}
-          <div className="absolute bottom-8 left-0 w-full px-8 flex flex-col md:flex-row justify-between items-center gap-3 text-[9px] text-zinc-500 font-mono">
-            <div className="flex items-center gap-1.5">
-              <MapPin size={9} className="text-[#FF4069]" />
-              <span>Visakhapatnam — Siripuram & Gajuwaka</span>
+          <div className="absolute bottom-8 left-0 w-full px-8 flex flex-col md:flex-row justify-between items-center gap-3"
+            style={{ fontSize: "0.6rem", color: "rgba(240,242,255,0.2)", fontFamily: "var(--font-outfit), monospace", letterSpacing: "0.06em" }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+              <MapPin size={9} color="#FF4069" />
+              Visakhapatnam — Siripuram & Gajuwaka
             </div>
-            <p>&copy; {new Date().getFullYear()} GROVICE. ALL SYSTEMS SYNCED.</p>
-            <a href="https://www.instagram.com/grovice2.0" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF4069] transition">
+            <p>© {new Date().getFullYear()} GROVICE. ALL SYSTEMS SYNCED.</p>
+            <a
+              href="https://www.instagram.com/grovice2.0"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "rgba(255,64,105,0.4)", textDecoration: "none", transition: "color 0.2s", letterSpacing: "0.1em", textTransform: "uppercase" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#FF4069"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(255,64,105,0.4)"; }}
+            >
               @grovice2.0
             </a>
           </div>
         </motion.div>
+
       </div>
     </div>
   );
