@@ -578,6 +578,11 @@ export default function LandingPage() {
           )}
         </AnimatePresence>
 
+        {/* ── LAYER 0.5: Dark Base Background ── */}
+        <div className="absolute inset-0 z-0 pointer-events-none bg-[#040308]">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#040308]/30 to-[#040308]" />
+        </div>
+
         {/* ── LAYER 0: Maldives Resort Background Image (Scene 1 only) ── */}
         <motion.div 
           className="absolute inset-0 z-0 bg-cover bg-center"
@@ -593,11 +598,6 @@ export default function LandingPage() {
           className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#0A2540]/25 via-transparent to-[#040308]"
           style={{ opacity: bgOpacity }}
         />
-
-        {/* ── LAYER 0.5: Dark Base Background ── */}
-        <div className="absolute inset-0 z-0 pointer-events-none bg-[#040308]">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#040308]/30 to-[#040308]" />
-        </div>
 
         {/* ── LAYER 1: Ambient warm sun glare particles ── */}
         <motion.div
