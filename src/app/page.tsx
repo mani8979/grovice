@@ -100,10 +100,14 @@ export default function LandingPage() {
     restDelta: 0.001,
   });
 
-  useMotionValueEvent(smoothScroll, "change", (latest) => {
-    if (videoRef.current && !isNaN(videoRef.current.duration)) {
-      videoRef.current.currentTime = latest * videoRef.current.duration;
-    }
+  // Scroll-driven video: maps scroll progress 0→0.25 (scene 1 range) to full video duration
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const vid = videoRef.current;
+    if (!vid || isNaN(vid.duration)) return;
+    // Clamp to scene 1 range and remap 0–0.25 → 0–1
+    const clamped = Math.min(Math.max(latest, 0), 0.27);
+    const t = clamped / 0.27;
+    vid.currentTime = t * vid.duration;
   });
 
   // Track active section
@@ -204,16 +208,28 @@ export default function LandingPage() {
           )}
         </AnimatePresence>
 
-        {/* Fixed Background Video */}
-        <div className="fixed inset-0 z-0 pointer-events-none opacity-40">
+        {/* ── MOBILE: Scroll-driven hero video (fixed behind all content) ── */}
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 0,
+            pointerEvents: "none",
+            overflow: "hidden",
+          }}
+        >
           <video
             ref={videoRef}
-            src="/images/Sunrise_beach_underwater_transition.mp4"
+            src="/sunset-beach.mp4"
             className="w-full h-full object-cover"
             muted
             playsInline
             preload="auto"
+            style={{ opacity: 0.55 }}
           />
+          {/* Gradient overlay so text is always readable */}
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(4,3,8,0.35) 0%, rgba(4,3,8,0.15) 50%, rgba(4,3,8,0.92) 100%)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, transparent 40%, rgba(4,3,8,0.6) 100%)" }} />
         </div>
 
         {/* Ambient Glows */}
@@ -707,17 +723,18 @@ export default function LandingPage() {
           )}
         </AnimatePresence>
 
-        {/* ── BG: Hero Video ── */}
+        {/* ── DESKTOP: Scroll-driven hero video ── */}
         <motion.div
-          className="absolute inset-0 z-0 bg-cover bg-center overflow-hidden"
+          className="absolute inset-0 overflow-hidden"
           style={{
+            zIndex: 2,
             opacity: bgOpacity,
             scale: bgScale,
           }}
         >
           <video
             ref={videoRef}
-            src="/images/Sunrise_beach_underwater_transition.mp4"
+            src="/sunset-beach.mp4"
             className="w-full h-full object-cover"
             muted
             playsInline
@@ -725,31 +742,33 @@ export default function LandingPage() {
           />
         </motion.div>
 
-        {/* ── BG Overlays ── */}
+        {/* ── Cinematic overlays (above video, fade with scroll) ── */}
         <motion.div
-          className="absolute inset-0 z-0 pointer-events-none"
-          style={{ opacity: bgOpacity }}
+          className="absolute inset-0 pointer-events-none"
+          style={{ zIndex: 3, opacity: bgOpacity }}
         >
-          {/* Cinematic vignette */}
-          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, transparent 35%, rgba(4,3,8,0.75) 100%)" }} />
-          {/* Gradient to dark */}
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(4,3,8,0.35) 0%, transparent 40%, rgba(4,3,8,0.9) 100%)" }} />
-          {/* Light leak effect */}
-          <div style={{ position: "absolute", top: "22%", left: 0, right: 0, height: "2px", background: "linear-gradient(90deg, transparent 0%, rgba(255,215,0,0.15) 35%, rgba(255,158,0,0.08) 55%, transparent 100%)", filter: "blur(6px)" }} />
+          {/* Vignette */}
+          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, transparent 30%, rgba(4,3,8,0.72) 100%)" }} />
+          {/* Top-to-bottom gradient */}
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(4,3,8,0.30) 0%, transparent 35%, rgba(4,3,8,0.88) 100%)" }} />
+          {/* Warm light leak */}
+          <div style={{ position: "absolute", top: "22%", left: 0, right: 0, height: "3px", background: "linear-gradient(90deg, transparent 0%, rgba(255,215,0,0.18) 35%, rgba(255,158,0,0.10) 55%, transparent 100%)", filter: "blur(6px)" }} />
         </motion.div>
 
-        {/* ── Dark Base ── */}
-        <div className="absolute inset-0 z-0 pointer-events-none bg-[#040308]" />
+        {/* ── Dark base — sits BEHIND video (z-index 1) ── */}
+        <div className="absolute inset-0 pointer-events-none bg-[#040308]" style={{ zIndex: 1 }} />
+
+
 
         {/* ── Ambient Glows ── */}
-        <motion.div className="absolute inset-0 z-[1] pointer-events-none" style={{ y: bgY }}>
+        <motion.div className="absolute inset-0 pointer-events-none" style={{ zIndex: 4, y: bgY }}>
           <div style={{ position: "absolute", top: "12%", left: "18%", width: "380px", height: "380px", borderRadius: "50%", background: "rgba(255,158,0,0.07)", filter: "blur(140px)" }} />
           <div style={{ position: "absolute", bottom: "15%", right: "12%", width: "440px", height: "440px", borderRadius: "50%", background: "rgba(112,0,255,0.08)", filter: "blur(160px)" }} />
         </motion.div>
 
         {/* ── Mouse-parallax glow orb (desktop) ── */}
         <div
-          className="pointer-events-none absolute z-[1] w-[500px] h-[500px] rounded-full"
+          className="pointer-events-none absolute w-[500px] h-[500px] rounded-full"
           style={{
             background: "radial-gradient(circle, rgba(255,158,0,0.04) 0%, transparent 70%)",
             left: `${mousePos.x - 250}px`,

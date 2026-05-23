@@ -33,8 +33,10 @@ export default function Navbar() {
         style={{
           position: "fixed",
           top: scrolled ? "0.6rem" : "1rem",
-          left: "50%",
-          transform: "translateX(-50%)",
+          left: 0,
+          right: 0,
+          marginLeft: "auto",
+          marginRight: "auto",
           width: "94%",
           maxWidth: "1200px",
           zIndex: 1000,
@@ -42,7 +44,7 @@ export default function Navbar() {
           alignItems: "center",
           justifyContent: "space-between",
           padding: scrolled ? "0.55rem 1.4rem" : "0.75rem 1.8rem",
-          transition: "all 0.45s cubic-bezier(0.16,1,0.3,1)",
+          transition: "top 0.45s cubic-bezier(0.16,1,0.3,1), padding 0.45s cubic-bezier(0.16,1,0.3,1), background 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s cubic-bezier(0.16,1,0.3,1)",
           background: scrolled
             ? "rgba(4, 3, 8, 0.90)"
             : "rgba(4, 3, 8, 0.65)",
