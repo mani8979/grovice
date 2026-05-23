@@ -188,7 +188,7 @@ export default function LandingPage() {
           <section 
             className="relative min-h-screen flex flex-col items-center justify-center px-4 py-24 bg-cover bg-center overflow-hidden"
             style={{
-              backgroundImage: "url('/images/maldives_resort_hero.png')",
+              backgroundImage: "url('/images/sunrise_beach_hero.png')",
             }}
           >
             {/* Tropical sky-blue overlay that fades to black at the bottom to blend with other sections */}
@@ -202,13 +202,14 @@ export default function LandingPage() {
             >
               {/* Title */}
               <h1 
-                className="text-[32px] sm:text-4xl text-white font-bold tracking-tight leading-tight select-none mt-4" 
+                className="text-[36px] sm:text-4xl text-white font-bold tracking-tight leading-tight select-none mt-4" 
                 style={{ 
                   fontFamily: "var(--font-playfair), serif", 
                   textShadow: "0 2px 12px rgba(0, 0, 0, 0.4)" 
                 }}
               >
-                Escape to Your <br/>Coastal Business Paradise
+                GROVICE 2.0 <br/>
+                <span className="text-lg sm:text-2xl font-light italic opacity-90 block mt-1">The Dual-Engine Operating System</span>
               </h1>
 
               {/* Subtitle */}
@@ -218,7 +219,7 @@ export default function LandingPage() {
                   textShadow: "0 1px 4px rgba(0, 0, 0, 0.45)" 
                 }}
               >
-                Embrace the power of automated systems and elite creative workflows. <br/>Where software engineering meets cinematic production in Visakhapatnam.
+                Visakhapatnam&apos;s elite business operating system bridging software & creative muscle. Powered by Engine A (AI & Automation) and Engine B (Creative Brand Production).
               </p>
 
               {/* Mobile Horizontal Configurator Capsule */}
@@ -581,7 +582,7 @@ export default function LandingPage() {
         <motion.div 
           className="absolute inset-0 z-0 bg-cover bg-center"
           style={{ 
-            backgroundImage: "url('/images/maldives_resort_hero.png')",
+            backgroundImage: "url('/images/sunrise_beach_hero.png')",
             opacity: bgOpacity,
             scale: bgScale,
           }}
@@ -652,13 +653,14 @@ export default function LandingPage() {
           >
             {/* Editorial Title */}
             <h1 
-              className="text-6xl md:text-7xl font-bold tracking-tight leading-none text-white select-none max-w-4xl"
+              className="text-6xl md:text-8xl font-bold tracking-tight leading-none text-white select-none max-w-4xl"
               style={{ 
                 fontFamily: "var(--font-playfair), serif", 
                 textShadow: "0 2px 15px rgba(0, 0, 0, 0.4)" 
               }}
             >
-              Escape to Your <br/>Coastal Business Paradise
+              GROVICE 2.0 <br/>
+              <span className="text-2xl md:text-3xl font-light italic opacity-95 block mt-2">The Dual-Engine Operating System</span>
             </h1>
 
             {/* Subtitle */}
@@ -668,7 +670,7 @@ export default function LandingPage() {
                 textShadow: "0 1px 6px rgba(0, 0, 0, 0.5)" 
               }}
             >
-              Embrace the power of automated systems and elite creative workflows. <br/>Where software engineering meets cinematic production in Visakhapatnam.
+              Visakhapatnam&apos;s elite business operating system bridging software & creative muscle. <br/>Powered by Engine A (AI & Automation) and Engine B (Creative Brand Production).
             </p>
 
             {/* Pill Configurator Bar */}
