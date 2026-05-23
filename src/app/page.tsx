@@ -101,13 +101,11 @@ export default function LandingPage() {
   });
 
   // Scroll-driven video: maps scroll progress 0→0.25 (scene 1 range) to full video duration
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const vid = videoRef.current;
-    if (!vid || isNaN(vid.duration)) return;
-    // Clamp to scene 1 range and remap 0–0.25 → 0–1
-    const clamped = Math.min(Math.max(latest, 0), 0.27);
-    const t = clamped / 0.27;
-    vid.currentTime = t * vid.duration;
+  useMotionValueEvent(smoothScroll, "change", (latest) => {
+    if (videoRef.current && videoRef.current.duration > 0 && videoRef.current.duration !== Infinity) {
+      const time = latest * videoRef.current.duration;
+      videoRef.current.currentTime = Math.max(0, Math.min(time, videoRef.current.duration));
+    }
   });
 
   // Track active section
