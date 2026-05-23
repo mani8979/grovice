@@ -94,7 +94,7 @@ body {
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
   box-shadow: 0 12px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05);
-  transition: all 400ms cubic-bezier(.16,1,0.3,1);
+  transition: all 200ms cubic-bezier(.16,1,0.3,1);
 }
 
 .glass-card:hover {
@@ -133,7 +133,7 @@ body {
   width: 1.5rem;
   height: 2px;
   background: rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
 }
 
 .lateral-menu-item.active .lateral-menu-line {
@@ -147,7 +147,7 @@ body {
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: rgba(246, 247, 251, 0.4);
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   opacity: 0;
   transform: translateX(-10px);
   pointer-events: none;

@@ -71,11 +71,11 @@ export default function LandingPage() {
 
   const { scrollYProgress } = useScroll();
 
-  // Smooth out scroll progress using spring dynamics for cinematic speed transitions
+  // Snappy spring dynamics for ultra-fast responsive storytelling transitions
   const smoothScroll = useSpring(scrollYProgress, {
-    stiffness: 40,
-    damping: 18,
-    mass: 0.8,
+    stiffness: 90,
+    damping: 24,
+    mass: 0.4,
     restDelta: 0.001
   });
 
@@ -174,6 +174,7 @@ export default function LandingPage() {
             loop
             muted
             playsInline
+            preload="auto"
             className="absolute inset-0 w-full h-full object-cover"
             style={{ opacity: 0.38 }}
           >
@@ -550,6 +551,7 @@ export default function LandingPage() {
             loop
             muted
             playsInline
+            preload="auto"
             className="absolute inset-0 w-full h-full object-cover scale-[1.03]"
             style={{ opacity: 0.35 }}
           >

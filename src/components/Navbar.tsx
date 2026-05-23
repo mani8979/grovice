@@ -35,7 +35,7 @@ export default function Navbar() {
           alignItems: "center",
           justifyContent: "space-between",
           padding: scrolled ? "1rem 6%" : "1.6rem 6%",
-          transition: "all 0.5s cubic-bezier(0.16,1,0.3,1)",
+          transition: "all 0.25s cubic-bezier(0.16,1,0.3,1)",
           background: scrolled ? "rgba(5, 6, 10, 0.95)" : "transparent",
           backdropFilter: scrolled ? "blur(20px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
@@ -84,7 +84,7 @@ export default function Navbar() {
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
                   opacity: isActive ? 1 : 0.6,
-                  transition: "opacity 0.3s, color 0.3s",
+                  transition: "opacity 0.15s, color 0.15s",
                 }}
                 onMouseEnter={(e) => { 
                   (e.currentTarget as HTMLElement).style.opacity = "1";
@@ -112,7 +112,7 @@ export default function Navbar() {
               letterSpacing: "0.15em",
               textTransform: "uppercase",
               textDecoration: "none",
-              transition: "all 0.3s",
+              transition: "all 0.15s",
               boxShadow: "0 0 15px rgba(255, 158, 0, 0.25)",
             }}
             onMouseEnter={(e) => {
