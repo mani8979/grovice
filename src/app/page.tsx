@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, useScroll, useTransform, useSpring, AnimatePresence, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import { ArrowRight, Phone, Mail, MapPin, Cpu, Camera, Compass, Calendar, Users, Zap, TrendingUp, Shield } from "lucide-react";
 
 /* ══════════════════════════════════════════════════
@@ -100,12 +100,6 @@ export default function LandingPage() {
     restDelta: 0.001,
   });
 
-  // Scroll-driven video: maps scroll progress 0→0.25 (scene 1 range) to full video duration
-  useMotionValueEvent(smoothScroll, "change", (latest) => {
-    if (videoRef.current && videoRef.current.duration > 0 && videoRef.current.duration !== Infinity) {
-      const time = latest * videoRef.current.duration;
-      videoRef.current.currentTime = Math.max(0, Math.min(time, videoRef.current.duration));
-    }
   });
 
   // Track active section
@@ -218,8 +212,10 @@ export default function LandingPage() {
         >
           <video
             ref={videoRef}
-            src="/sunset-beach.mp4"
+            src="/images/Sunrise_beach_underwater_transition.mp4"
             className="w-full h-full object-cover"
+            autoPlay
+            loop
             muted
             playsInline
             preload="auto"
@@ -732,8 +728,10 @@ export default function LandingPage() {
         >
           <video
             ref={videoRef}
-            src="/sunset-beach.mp4"
+            src="/images/Sunrise_beach_underwater_transition.mp4"
             className="w-full h-full object-cover"
+            autoPlay
+            loop
             muted
             playsInline
             preload="auto"
