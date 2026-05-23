@@ -69,10 +69,7 @@ export default function LandingPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
+  const { scrollYProgress } = useScroll();
 
   // Smooth out scroll progress using spring dynamics for cinematic speed transitions
   const smoothScroll = useSpring(scrollYProgress, {
