@@ -47,7 +47,7 @@ export default function Chatbot() {
         addMessage(
           "bot",
           <div>
-            <p className="mb-2 font-semibold text-[#00D2FF]">Engine A: AI Automation & Software</p>
+            <p className="mb-2 font-semibold text-[#FF9E00]">Engine A: AI Automation & Software</p>
             <p className="mb-2 text-zinc-300">We design and integrate smart infrastructure:</p>
             <ul className="list-disc pl-4 mb-3 text-xs space-y-1 text-zinc-400 font-light">
               <li>AI Automation Systems & Workflows</li>
@@ -56,7 +56,7 @@ export default function Chatbot() {
               <li>Custom Next.js Dashboards & Client Portals</li>
             </ul>
             <div className="flex flex-wrap gap-2 mt-2">
-              <Link href="/engine-a" className="text-[10px] font-mono font-bold uppercase tracking-wider bg-cyan-500 hover:bg-cyan-600 text-black px-3 py-1.5 transition" onClick={() => setIsOpen(false)}>
+              <Link href="/engine-a" className="text-[10px] font-mono font-bold uppercase tracking-wider bg-[#FF9E00] hover:bg-[#e08b00] text-black px-3 py-1.5 transition" onClick={() => setIsOpen(false)}>
                 Explore Engine A
               </Link>
               <button 
@@ -72,7 +72,7 @@ export default function Chatbot() {
         addMessage(
           "bot",
           <div>
-            <p className="mb-2 font-semibold text-[#FF4FD8]">Engine B: Cinematic Creative Muscle</p>
+            <p className="mb-2 font-semibold text-[#FF4069]">Engine B: Cinematic Creative Muscle</p>
             <p className="mb-2 text-zinc-300">Premium branding, campaign shoots, and content scales:</p>
             <ul className="list-disc pl-4 mb-3 text-xs space-y-1 text-zinc-400 font-light">
               <li>Cinematic Commercial Films & Reels</li>
@@ -80,7 +80,7 @@ export default function Chatbot() {
               <li>Logo Visual Branding & Guidelines</li>
             </ul>
             <div className="flex flex-wrap gap-2 mt-2">
-              <Link href="/engine-b" className="text-[10px] font-mono font-bold uppercase tracking-wider bg-pink-500 hover:bg-pink-600 text-black px-3 py-1.5 transition" onClick={() => setIsOpen(false)}>
+              <Link href="/engine-b" className="text-[10px] font-mono font-bold uppercase tracking-wider bg-[#FF4069] hover:bg-[#e03058] text-black px-3 py-1.5 transition" onClick={() => setIsOpen(false)}>
                 Explore Engine B
               </Link>
               <button 
@@ -96,14 +96,14 @@ export default function Chatbot() {
         addMessage(
           "bot",
           <div>
-            <p className="mb-2 font-semibold text-[#7A5CFF]">Let us map the right engine.</p>
+            <p className="mb-2 font-semibold text-[#FF4069]">Let us map the right engine.</p>
             <p className="mb-3 text-zinc-300 text-xs leading-relaxed font-light">
               Depending on whether you need custom backend tools (Engine A) or elite creative film production (Engine B), we will formulate a personalized coordinate blueprint.
             </p>
             <div className="flex flex-wrap gap-2 mt-2">
               <button 
                 onClick={() => handleOptionClick("Book a Discovery Call", "book_call")}
-                className="text-[10px] font-mono font-bold uppercase tracking-wider bg-gradient-to-r from-cyan-400 to-purple-500 text-black px-4 py-2 transition"
+                className="text-[10px] font-mono font-bold uppercase tracking-wider bg-gradient-to-r from-[#FF9E00] to-[#FF4069] text-black px-4 py-2 transition"
               >
                 Book a Call 📞
               </button>
@@ -123,9 +123,9 @@ export default function Chatbot() {
           <div>
             <p className="mb-2 text-xs">Let&apos;s coordinate a strategy call! You can reach us instantly at:</p>
             <div className="space-y-1.5 text-[11px] text-zinc-300 font-mono">
-              <p className="flex items-center gap-2"><Phone size={12} className="text-cyan-400" /> +91-7396621004</p>
-              <p className="flex items-center gap-2"><Mail size={12} className="text-[#FF4FD8]" /> grovicedigital@gmail.com</p>
-              <p className="flex items-center gap-2"><Award size={12} className="text-[#7A5CFF]" /> Vizag (Siripuram & Gajuwaka)</p>
+              <p className="flex items-center gap-2"><Phone size={12} className="text-[#FF9E00]" /> +91-7396621004</p>
+              <p className="flex items-center gap-2"><Mail size={12} className="text-[#FF4069]" /> grovicedigital@gmail.com</p>
+              <p className="flex items-center gap-2"><Award size={12} className="text-[#FF9E00]" /> Vizag (Siripuram & Gajuwaka)</p>
             </div>
             <p className="mt-3 text-zinc-400 text-xs">Or drop contact details to request an immediate call back:</p>
             <button 
@@ -133,7 +133,7 @@ export default function Chatbot() {
                 setLeadInfo((prev) => ({ ...prev, service: "General Scoping Call" }));
                 setFormStep("lead");
               }}
-              className="mt-2.5 text-[10px] font-mono font-bold uppercase tracking-wider bg-cyan-500 hover:bg-cyan-600 text-black py-2 rounded transition w-full text-center"
+              className="mt-2.5 text-[10px] font-mono font-bold uppercase tracking-wider bg-[#FF9E00] hover:bg-[#e08b00] text-black py-2 rounded transition w-full text-center font-bold"
             >
               Request Call Back
             </button>
@@ -210,7 +210,7 @@ export default function Chatbot() {
             transition={{ type: "spring", damping: 25, stiffness: 220 }}
             className="w-[340px] sm:w-[380px] h-[500px] rounded-xl flex flex-col overflow-hidden text-slate-100 shadow-2xl"
             style={{
-              background: "rgba(10, 11, 16, 0.95)",
+              background: "rgba(11, 9, 18, 0.95)",
               backdropFilter: "blur(20px)",
               border: "1px solid rgba(255, 255, 255, 0.1)",
             }}
@@ -219,12 +219,12 @@ export default function Chatbot() {
             <div className="p-4 border-b border-white/5 flex items-center justify-between" style={{ background: "rgba(255,255,255,0.02)" }}>
               <div className="flex items-center gap-2">
                 <div className="relative">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#00D2FF] to-[#7A5CFF] flex items-center justify-center relative">
-                    <div className="absolute inset-0.5 rounded-full bg-[#0A0B10] flex items-center justify-center">
-                      <span className="w-3 h-3 rounded-full bg-[#00D2FF] animate-pulse" />
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#FF9E00] to-[#FF4069] flex items-center justify-center relative">
+                    <div className="absolute inset-0.5 rounded-full bg-[#040308] flex items-center justify-center">
+                      <span className="w-3 h-3 rounded-full bg-[#FF9E00] animate-pulse" />
                     </div>
                   </div>
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-[#0A0B10]" />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-[#040308]" />
                 </div>
                 <div>
                   <h4 className="font-mono text-xs tracking-wider uppercase text-white font-bold">Grovice Assistant</h4>
@@ -251,9 +251,9 @@ export default function Chatbot() {
                   <div
                     className={`max-w-[85%] rounded px-3.5 py-2.5 text-xs shadow-md whitespace-pre-line ${
                       msg.sender === "user"
-                        ? "bg-[#7A5CFF] text-white font-semibold"
+                        ? "bg-[#FF4069] text-white font-semibold"
                         : "bg-white/5 border border-white/5 text-zinc-200"
-                    }`}
+                     }`}
                   >
                     {msg.text}
                   </div>
@@ -267,7 +267,7 @@ export default function Chatbot() {
                   className="flex justify-start"
                 >
                   <div className="bg-white/5 border border-white/5 text-slate-400 rounded px-3.5 py-2.5 text-xs flex items-center gap-2">
-                    <Loader2 size={14} className="animate-spin text-[#00D2FF]" />
+                    <Loader2 size={14} className="animate-spin text-[#FF9E00]" />
                     Processing...
                   </div>
                 </motion.div>
@@ -278,10 +278,10 @@ export default function Chatbot() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-[#0A0B10]/95 border border-white/10 rounded p-4 space-y-3"
+                  className="bg-[#0b0912]/95 border border-white/10 rounded p-4 space-y-3"
                 >
                   <div className="flex justify-between items-center">
-                    <p className="font-semibold text-xs text-[#00D2FF] uppercase tracking-wider">Brief Booking Form</p>
+                    <p className="font-semibold text-xs text-[#FF9E00] uppercase tracking-wider">Brief Booking Form</p>
                     <button onClick={() => setFormStep("chat")} className="text-[10px] text-zinc-500 hover:text-white">Cancel</button>
                   </div>
                   <form onSubmit={handleLeadSubmit} className="space-y-2">
@@ -290,7 +290,7 @@ export default function Chatbot() {
                       <input
                         type="text"
                         required
-                        className="w-full bg-white/5 border border-white/10 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#00D2FF]"
+                        className="w-full bg-white/5 border border-white/10 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#FF9E00]"
                         value={leadInfo.name}
                         onChange={(e) => setLeadInfo({ ...leadInfo, name: e.target.value })}
                         placeholder="Sarah Connor"
@@ -301,7 +301,7 @@ export default function Chatbot() {
                       <input
                         type="email"
                         required
-                        className="w-full bg-white/5 border border-white/10 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#00D2FF]"
+                        className="w-full bg-white/5 border border-white/10 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#FF9E00]"
                         value={leadInfo.email}
                         onChange={(e) => setLeadInfo({ ...leadInfo, email: e.target.value })}
                         placeholder="sarah@skynet.com"
@@ -311,7 +311,7 @@ export default function Chatbot() {
                       <label className="text-[9px] text-zinc-400 block mb-1 uppercase font-bold tracking-wider">Phone</label>
                       <input
                         type="tel"
-                        className="w-full bg-white/5 border border-white/10 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#00D2FF]"
+                        className="w-full bg-white/5 border border-white/10 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#FF9E00]"
                         value={leadInfo.phone}
                         onChange={(e) => setLeadInfo({ ...leadInfo, phone: e.target.value })}
                         placeholder="+91 98765 43210"
@@ -319,7 +319,7 @@ export default function Chatbot() {
                     </div>
                     <button
                       type="submit"
-                      className="w-full mt-2 bg-[#7A5CFF] hover:bg-purple-600 text-white text-xs font-bold py-2 rounded transition"
+                      className="w-full mt-2 bg-[#FF4069] hover:bg-[#e03058] text-white text-xs font-bold py-2 rounded transition"
                     >
                       Book Scoping Call
                     </button>
@@ -364,12 +364,12 @@ export default function Chatbot() {
                   disabled={isLoading}
                   onChange={(e) => setInputValue(e.target.value)}
                   placeholder={isLoading ? "Please wait..." : "Ask anything..."}
-                  className="flex-1 bg-white/5 border border-white/10 rounded px-3 py-2 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-[#7A5CFF] transition disabled:opacity-50"
+                  className="flex-1 bg-white/5 border border-white/10 rounded px-3 py-2 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-[#FF9E00] transition disabled:opacity-50"
                 />
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="p-2 rounded bg-[#7A5CFF] hover:bg-purple-600 text-white transition flex items-center justify-center disabled:opacity-50"
+                  className="p-2 rounded bg-[#FF4069] hover:bg-[#e03058] text-white transition flex items-center justify-center disabled:opacity-50"
                 >
                   <Send size={14} />
                 </button>
@@ -405,19 +405,19 @@ export default function Chatbot() {
             background: "rgba(255, 255, 255, 0.05)",
             backdropFilter: "blur(20px)",
             border: "1px solid rgba(255, 255, 255, 0.15)",
-            boxShadow: "0 0 20px rgba(122, 92, 255, 0.25)",
+            boxShadow: "0 0 20px rgba(255, 158, 0, 0.25)",
           }}
         >
           {/* Glow Ring */}
-          <div className="absolute inset-0 rounded-full border border-[#7A5CFF]/40 animate-ping opacity-45 pointer-events-none" />
+          <div className="absolute inset-0 rounded-full border border-[#FF9E00]/40 animate-ping opacity-45 pointer-events-none" />
 
           {/* Center Orb */}
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#00D2FF] to-[#FF4FD8] flex items-center justify-center relative">
-            <div className="absolute inset-0.5 rounded-full bg-[#0A0B10] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#FF9E00] to-[#FF4069] flex items-center justify-center relative">
+            <div className="absolute inset-0.5 rounded-full bg-[#040308] flex items-center justify-center">
               {isOpen ? (
                 <X size={16} className="text-white" />
               ) : (
-                <span className="w-2.5 h-2.5 rounded-full bg-[#7A5CFF] animate-pulse" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#FF4069] animate-pulse" />
               )}
             </div>
           </div>

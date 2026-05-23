@@ -16,9 +16,7 @@ import {
 } from "lucide-react";
 import Footer from "@/components/Footer";
 
-/* ═════════════════════════════════════════════
-    SPOTLIGHT CARD HELPER
-   ═════════════════════════════════════════════ */
+/* ── SPOTLIGHT CARD HELPER ── */
 function SpotlightCard({
   children,
   className = "",
@@ -77,12 +75,12 @@ export default function EngineBPage() {
   };
 
   const capabilities = [
-    { icon: Camera, title: "Photography", desc: "Premium editorial captures featuring coastal light and clean styling.", color: "text-[#FF4FD8]" },
-    { icon: Film, title: "Videography", desc: "Commercial-grade cinema clips matching international brand benchmarks.", color: "text-purple-400" },
-    { icon: Layers, title: "Branding", desc: "Complete visual identities built to look authoritative and premium.", color: "text-blue-400" },
-    { icon: Sparkles, title: "Social Media", desc: "Algorithmic reels and aesthetic layouts tailored for high luxury.", color: "text-pink-400" },
-    { icon: Tv, title: "Creative Production", desc: "Full-scale scriptwriting, location hunting, and casting workflows.", color: "text-[#FF4FD8]" },
-    { icon: ImageIcon, title: "Marketing Visuals", desc: "Premium ad vectors and brochures built to look human-designed.", color: "text-[#00D2FF]" }
+    { icon: Camera, title: "Photography", desc: "Premium editorial captures featuring coastal light and clean styling.", color: "text-[#FF4069]" },
+    { icon: Film, title: "Videography", desc: "Commercial-grade cinema clips matching international brand benchmarks.", color: "text-amber-500" },
+    { icon: Layers, title: "Branding", desc: "Complete visual identities built to look authoritative and premium.", color: "text-[#FF9E00]" },
+    { icon: Sparkles, title: "Social Media", desc: "Algorithmic reels and aesthetic layouts tailored for high luxury.", color: "text-[#FF4069]" },
+    { icon: Tv, title: "Creative Production", desc: "Full-scale scriptwriting, location hunting, and casting workflows.", color: "text-amber-500" },
+    { icon: ImageIcon, title: "Marketing Visuals", desc: "Premium ad vectors and brochures built to look human-designed.", color: "text-[#FF9E00]" }
   ];
 
   const casePortfolios = [
@@ -93,7 +91,7 @@ export default function EngineBPage() {
       concept: "Minimalist bottles shot on natural RK Beach wet sands using early morning blue hour rays.",
       outputs: "32 high-resolution retouched assets + 3 campaign posters.",
       result: "42% increase in online boutique conversions.",
-      accent: "border-[#FF4FD8]/25 text-[#FF4FD8]"
+      accent: "border-[#FF4069]/25 text-[#FF4069]"
     },
     {
       title: "Siripuram Commercial Launch Film",
@@ -102,26 +100,24 @@ export default function EngineBPage() {
       concept: "Cinematic frames following developers scrolling n8n node systems in glass cabins.",
       outputs: "60-sec master campaign cut + 3 optimized reels.",
       result: "100% workstation booking capacity reached in 14 days.",
-      accent: "border-purple-500/25 text-purple-400"
+      accent: "border-[#FF9E00]/25 text-[#FF9E00]"
     }
   ];
 
   return (
-    <div className="bg-[#05060A] text-[#F6F7FB] min-h-screen relative font-sans pt-24 overflow-hidden">
+    <div className="bg-[#040308] text-[#F6F7FB] min-h-screen relative font-sans pt-24 overflow-hidden">
       
       {/* Editorial glowing accents */}
-      <div className="absolute top-[12%] right-[-10%] w-[50%] h-[50%] rounded-full bg-pink-500/5 blur-[125px] pointer-events-none" />
-      <div className="absolute top-[45%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#7A5CFF]/5 blur-[125px] pointer-events-none" />
+      <div className="absolute top-[12%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#FF4069]/5 blur-[125px] pointer-events-none" />
+      <div className="absolute top-[45%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#7000FF]/5 blur-[125px] pointer-events-none" />
 
-      {/* ═════════════════════════════════════════════
-          B1 — HERO SECTION (EDITORIAL CINEMA)
-          ═════════════════════════════════════════════ */}
+      {/* ── HERO SECTION ── */}
       <section className="relative py-20 md:py-28 px-6 max-w-7xl mx-auto z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-pink-500/20 bg-pink-950/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF4FD8] animate-pulse" />
-              <span className="text-[10px] font-mono text-[#FF4FD8] uppercase tracking-widest font-bold">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FF4069]/20 bg-[#FF4069]/10">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF4069] animate-pulse" />
+              <span className="text-[10px] font-mono text-[#FF4069] uppercase tracking-widest font-bold">
                 ENGINE B // VISUAL LABS
               </span>
             </div>
@@ -137,7 +133,7 @@ export default function EngineBPage() {
             <div className="flex flex-wrap gap-4 pt-2">
               <button
                 onClick={scrollToConsult}
-                className="px-8 py-4 rounded-none text-xs font-mono font-bold uppercase tracking-widest text-black bg-gradient-to-r from-[#FF4FD8] to-[#7A5CFF] hover:opacity-90 transition-all duration-300"
+                className="px-8 py-4 rounded-none text-xs font-mono font-bold uppercase tracking-widest text-black bg-gradient-to-r from-[#FF4069] to-[#FF9E00] hover:opacity-90 transition-all duration-300 shadow-md"
               >
                 Book a Creative Consult
               </button>
@@ -153,34 +149,32 @@ export default function EngineBPage() {
           {/* Cinematic Editorial Mock Frames */}
           <div className="lg:col-span-5 grid grid-cols-2 gap-4">
             <div className="space-y-4">
-              <div className="aspect-[3/4] bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 relative overflow-hidden flex items-center justify-center">
+              <div className="aspect-[3/4] bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 relative overflow-hidden flex items-center justify-center rounded-2xl">
                 <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">[ VIZAG_COAST_01 ]</span>
-                <div className="absolute inset-0 bg-[#FF4FD8]/5 mix-blend-color-dodge" />
+                <div className="absolute inset-0 bg-[#FF4069]/5 mix-blend-color-dodge" />
               </div>
-              <div className="aspect-square bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 relative overflow-hidden flex items-center justify-center">
+              <div className="aspect-square bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 relative overflow-hidden flex items-center justify-center rounded-2xl">
                 <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">[ SHOT_02 ]</span>
               </div>
             </div>
             <div className="space-y-4 pt-8">
-              <div className="aspect-square bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 relative overflow-hidden flex items-center justify-center">
+              <div className="aspect-square bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 relative overflow-hidden flex items-center justify-center rounded-2xl">
                 <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">[ EDITORIAL_03 ]</span>
               </div>
-              <div className="aspect-[3/4] bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 relative overflow-hidden flex items-center justify-center">
+              <div className="aspect-[3/4] bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 relative overflow-hidden flex items-center justify-center rounded-2xl">
                 <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">[ SHOT_04 ]</span>
-                <div className="absolute inset-0 bg-cyan-500/5 mix-blend-color-dodge" />
+                <div className="absolute inset-0 bg-[#FF9E00]/5 mix-blend-color-dodge" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ═════════════════════════════════════════════
-          B2 — CAPABILITIES (EDITORIAL GRID)
-          ═════════════════════════════════════════════ */}
-      <section className="relative py-20 bg-[#0A0B10] border-t border-b border-white/5 z-10">
+      {/* ── CAPABILITIES ── */}
+      <section className="relative py-20 bg-[#0b0912]/50 border-t border-b border-white/5 z-10">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
           <div className="space-y-3 text-center max-w-xl mx-auto">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF4FD8]">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF4069] font-bold">
               STUDIO CAPABILITIES
             </span>
             <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white font-sans">
@@ -192,12 +186,12 @@ export default function EngineBPage() {
             {capabilities.map((cap, i) => {
               const Icon = cap.icon;
               return (
-                <SpotlightCard key={i} className="p-6 bg-black/40 border-white/5 flex flex-col justify-between min-h-[180px] hover:border-pink-500/20">
-                  <div className={`p-3 rounded-xl bg-[#05060A] border border-white/5 ${cap.color} w-fit`}>
+                <SpotlightCard key={i} className="p-6 bg-black/40 border-white/5 flex flex-col justify-between min-h-[180px] hover:border-[#FF4069]/20 rounded-2xl">
+                  <div className={`p-3 rounded-xl bg-[#040308] border border-white/5 ${cap.color} w-fit`}>
                     <Icon size={20} />
                   </div>
                   <div className="mt-6 space-y-2">
-                    <h3 className="text-md font-bold text-white uppercase tracking-wide">{cap.title}</h3>
+                    <h3 className="text-md font-bold text-white uppercase tracking-wide font-sans">{cap.title}</h3>
                     <p className="text-xs text-zinc-400 leading-relaxed font-light">{cap.desc}</p>
                   </div>
                 </SpotlightCard>
@@ -207,13 +201,11 @@ export default function EngineBPage() {
         </div>
       </section>
 
-      {/* ═════════════════════════════════════════════
-          B3 — PORTFOLIO (FEATURED + GALLERY)
-          ═════════════════════════════════════════════ */}
+      {/* ── PORTFOLIO ── */}
       <section ref={portfolioRef} className="relative py-20 px-6 max-w-7xl mx-auto z-10">
         <div className="space-y-16">
           <div className="space-y-3 text-center max-w-xl mx-auto">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-purple-400">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF9E00] font-bold">
               PRODUCTION EXHIBITION
             </span>
             <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white font-sans">
@@ -223,16 +215,16 @@ export default function EngineBPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {casePortfolios.map((item, idx) => (
-              <SpotlightCard key={idx} className="p-8 bg-[#0A0B10] border-white/5 rounded-2xl flex flex-col justify-between aspect-[4/3]">
+              <SpotlightCard key={idx} className="p-8 bg-[#0b0912] border-white/5 rounded-2xl flex flex-col justify-between aspect-[4/3]">
                 <div className="flex justify-between items-center pb-4 border-b border-white/5">
                   <span className={`text-[9px] font-mono font-bold border px-2 py-0.5 rounded-none ${item.accent}`}>
                     {item.tag}
                   </span>
-                  <Play size={14} className="text-zinc-600 hover:text-white transition-colors cursor-pointer" />
+                  <Play size={14} className="text-zinc-500 hover:text-white transition-colors cursor-pointer" />
                 </div>
 
                 <div className="my-6 space-y-4">
-                  <h3 className="text-xl font-bold text-white leading-tight">{item.title}</h3>
+                  <h3 className="text-xl font-bold text-white leading-tight font-sans">{item.title}</h3>
                   <div className="grid grid-cols-1 gap-2 text-xs text-zinc-400 font-light">
                     <p><strong className="text-white font-medium">Goal:</strong> {item.goal}</p>
                     <p><strong className="text-white font-medium">Concept:</strong> {item.concept}</p>
@@ -240,7 +232,7 @@ export default function EngineBPage() {
                   </div>
                 </div>
 
-                <div className="border-t border-white/5 pt-4 text-xs font-mono text-[#00D2FF] font-bold">
+                <div className="border-t border-white/5 pt-4 text-xs font-mono text-[#FF9E00] font-bold">
                   RESULT: {item.result}
                 </div>
               </SpotlightCard>
@@ -249,13 +241,11 @@ export default function EngineBPage() {
         </div>
       </section>
 
-      {/* ═════════════════════════════════════════════
-          B4 — PROCESS
-          ═════════════════════════════════════════════ */}
-      <section className="relative py-20 bg-[#0A0B10] border-t border-b border-white/5 z-10">
+      {/* ── PROCESS ── */}
+      <section className="relative py-20 bg-[#0b0912]/50 border-t border-b border-white/5 z-10">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
           <div className="space-y-3 text-center max-w-xl mx-auto">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF4FD8]">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF4069] font-bold">
               TIMELINE STEPS
             </span>
             <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white font-sans">
@@ -271,11 +261,11 @@ export default function EngineBPage() {
               { step: "04", name: "Launch", desc: "Asset formats packaged for direct conversion launch campaigns." },
             ].map((p, idx) => (
               <div key={idx} className="space-y-4 text-center">
-                <div className="w-14 h-14 rounded-full bg-black border border-white/10 flex items-center justify-center font-mono font-bold text-md text-[#FF4FD8] mx-auto shadow-md">
+                <div className="w-14 h-14 rounded-full bg-black border border-white/10 flex items-center justify-center font-mono font-bold text-md text-[#FF4069] mx-auto shadow-md">
                   {p.step}
                 </div>
                 <div className="space-y-1">
-                  <h4 className="text-sm font-bold text-white uppercase">{p.name}</h4>
+                  <h4 className="text-sm font-bold text-white uppercase font-sans">{p.name}</h4>
                   <p className="text-[11px] text-zinc-400 leading-relaxed font-light">{p.desc}</p>
                 </div>
               </div>
@@ -284,13 +274,11 @@ export default function EngineBPage() {
         </div>
       </section>
 
-      {/* ═════════════════════════════════════════════
-          B5 — PACKAGES (PREMIUM CARDS)
-          ═════════════════════════════════════════════ */}
+      {/* ── PACKAGES ── */}
       <section className="relative py-20 px-6 max-w-7xl mx-auto z-10">
         <div className="space-y-16">
           <div className="space-y-3 text-center max-w-xl mx-auto">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-purple-400">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF9E00] font-bold">
               PRICING SYSTEMS
             </span>
             <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white font-sans">
@@ -300,10 +288,10 @@ export default function EngineBPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Package Essentials */}
-            <SpotlightCard className="p-8 bg-[#0A0B10] border-white/5 rounded-2xl flex flex-col justify-between min-h-[400px]">
+            <SpotlightCard className="p-8 bg-[#0b0912] border-white/5 rounded-2xl flex flex-col justify-between min-h-[400px]">
               <div>
                 <span className="text-[9px] font-mono text-zinc-500 block uppercase">TIER 01</span>
-                <h3 className="text-xl font-bold text-white mt-1">Essentials</h3>
+                <h3 className="text-xl font-bold text-white mt-1 font-sans">Essentials</h3>
                 <p className="text-2xl font-extrabold text-white mt-3 font-mono">₹25,000<span className="text-xs text-zinc-500 font-normal"> / project</span></p>
                 
                 <ul className="mt-6 space-y-3 text-xs text-zinc-400 font-light">
@@ -319,13 +307,13 @@ export default function EngineBPage() {
             </SpotlightCard>
 
             {/* Package Studio */}
-            <SpotlightCard className="p-8 bg-[#0A0B10] border-purple-500/30 rounded-2xl flex flex-col justify-between min-h-[400px] relative">
-              <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-purple-500 text-black text-[9px] font-mono font-bold uppercase tracking-wider px-3 py-1">
+            <SpotlightCard className="p-8 bg-[#0b0912] border-[#FF4069]/30 rounded-2xl flex flex-col justify-between min-h-[400px] relative">
+              <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-[#FF4069] text-black text-[9px] font-mono font-bold uppercase tracking-wider px-3 py-1">
                 RECOMMENDED
               </div>
               <div>
-                <span className="text-[9px] font-mono text-purple-400 block uppercase">TIER 02</span>
-                <h3 className="text-xl font-bold text-white mt-1">Studio</h3>
+                <span className="text-[9px] font-mono text-[#FF4069] block uppercase">TIER 02</span>
+                <h3 className="text-xl font-bold text-white mt-1 font-sans">Studio</h3>
                 <p className="text-2xl font-extrabold text-white mt-3 font-mono">₹60,000<span className="text-xs text-zinc-500 font-normal"> / project</span></p>
 
                 <ul className="mt-6 space-y-3 text-xs text-zinc-400 font-light">
@@ -335,16 +323,16 @@ export default function EngineBPage() {
                   <li className="flex items-center gap-2">✔ High-end sound editing</li>
                 </ul>
               </div>
-              <button onClick={scrollToConsult} className="mt-8 py-3 w-full bg-purple-600 text-xs font-mono font-bold uppercase text-white hover:bg-purple-700 transition">
+              <button onClick={scrollToConsult} className="mt-8 py-3 w-full bg-[#FF4069] text-xs font-mono font-bold uppercase text-white hover:bg-[#e03058] transition">
                 Select Studio
               </button>
             </SpotlightCard>
 
             {/* Package Campaign */}
-            <SpotlightCard className="p-8 bg-[#0A0B10] border-white/5 rounded-2xl flex flex-col justify-between min-h-[400px]">
+            <SpotlightCard className="p-8 bg-[#0b0912] border-white/5 rounded-2xl flex flex-col justify-between min-h-[400px]">
               <div>
-                <span className="text-[9px] font-mono text-[#FF4FD8] block uppercase">TIER 03</span>
-                <h3 className="text-xl font-bold text-white mt-1">Campaign</h3>
+                <span className="text-[9px] font-mono text-[#FF9E00] block uppercase font-bold">TIER 03</span>
+                <h3 className="text-xl font-bold text-white mt-1 font-sans">Campaign</h3>
                 <p className="text-2xl font-extrabold text-white mt-3 font-mono">₹1,50,000<span className="text-xs text-zinc-500 font-normal"> / project</span></p>
 
                 <ul className="mt-6 space-y-3 text-xs text-zinc-400 font-light">
@@ -354,7 +342,7 @@ export default function EngineBPage() {
                   <li className="flex items-center gap-2">✔ Continuous Retainer options</li>
                 </ul>
               </div>
-              <button onClick={scrollToConsult} className="mt-8 py-3 w-full border border-[#FF4FD8]/30 text-xs font-mono font-bold uppercase text-[#FF4FD8] hover:bg-[#FF4FD8]/5 transition">
+              <button onClick={scrollToConsult} className="mt-8 py-3 w-full border border-[#FF9E00]/30 text-xs font-mono font-bold uppercase text-[#FF9E00] hover:bg-[#FF9E00]/5 transition">
                 Select Campaign
               </button>
             </SpotlightCard>
@@ -362,25 +350,23 @@ export default function EngineBPage() {
         </div>
       </section>
 
-      {/* ═════════════════════════════════════════════
-          B6 — ENGINE B FAQ & BRIEF SUBMIT
-          ═════════════════════════════════════════════ */}
-      <section ref={consultRef} className="relative py-20 bg-[#050507] border-t border-white/5 z-10">
+      {/* ── FAQ & BRIEF SUBMIT ── */}
+      <section ref={consultRef} className="relative py-20 bg-[#040308] border-t border-white/5 z-10">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-16">
           
           {/* Brief Form */}
           <div className="lg:col-span-6 space-y-6">
-            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF4FD8]">
+            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-[#FF4069] font-bold">
               WORK WITH US
             </span>
-            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-none">
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white leading-none font-sans">
               Initiate Creative Brief
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed font-light">
               Send your parameters and our studio coordinators will outline visual concepts for your campaign.
             </p>
 
-            <SpotlightCard className="p-6 bg-[#0A0B10] border-white/5 rounded-2xl">
+            <SpotlightCard className="p-6 bg-[#0b0912] border-white/5 rounded-2xl">
               <AnimatePresence mode="wait">
                 {!formSubmitted ? (
                   <motion.form
@@ -400,7 +386,7 @@ export default function EngineBPage() {
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="Sarah Connor"
-                          className="w-full bg-[#05060A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF4FD8]"
+                          className="w-full bg-[#040308] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF4069] transition"
                         />
                       </div>
                       <div>
@@ -411,7 +397,7 @@ export default function EngineBPage() {
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="sarah@skynet.com"
-                          className="w-full bg-[#05060A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF4FD8]"
+                          className="w-full bg-[#040308] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF4069] transition"
                         />
                       </div>
                     </div>
@@ -421,7 +407,7 @@ export default function EngineBPage() {
                       <select
                         value={formData.category}
                         onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                        className="w-full bg-[#05060A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF4FD8]"
+                        className="w-full bg-[#040308] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF4069] cursor-pointer"
                       >
                         <option value="video">Cinematic Video</option>
                         <option value="photo">Brand Photography</option>
@@ -436,13 +422,13 @@ export default function EngineBPage() {
                         value={formData.scope}
                         onChange={(e) => setFormData({ ...formData, scope: e.target.value })}
                         placeholder="Explain your product campaign or brand refresh scope..."
-                        className="w-full bg-[#05060A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF4FD8]"
+                        className="w-full bg-[#040308] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF4069] transition"
                       />
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full py-4 text-xs font-mono font-bold uppercase tracking-widest text-black bg-gradient-to-r from-[#FF4FD8] to-purple-500 hover:opacity-90 transition-opacity"
+                      className="w-full py-4 text-xs font-mono font-bold uppercase tracking-widest text-black bg-gradient-to-r from-[#FF4069] to-purple-500 hover:opacity-90 transition"
                     >
                       Submit Brief
                     </button>
@@ -471,7 +457,7 @@ export default function EngineBPage() {
 
           {/* FAQs */}
           <div className="lg:col-span-6 space-y-6">
-            <h3 className="text-2xl font-extrabold text-white">Engine B FAQ</h3>
+            <h3 className="text-2xl font-extrabold text-white font-sans">Engine B FAQ</h3>
             
             <div className="border-t border-white/10 divide-y divide-white/10">
               {[
@@ -501,7 +487,7 @@ export default function EngineBPage() {
                     onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                     className="w-full flex items-center justify-between text-left focus:outline-none group"
                   >
-                    <span className="text-sm font-bold text-white group-hover:text-[#FF4FD8] transition-colors">
+                    <span className="text-sm font-bold text-white group-hover:text-[#FF4069] transition-colors">
                       {faq.q}
                     </span>
                     <span className="text-zinc-500">
@@ -531,7 +517,6 @@ export default function EngineBPage() {
         </div>
       </section>
 
-      {/* Render the unified footer at the bottom of the page */}
       <Footer />
     </div>
   );

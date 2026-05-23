@@ -5,9 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Phone, Mail, MapPin, Check, Sparkles } from "lucide-react";
 import Footer from "@/components/Footer";
 
-/* ═════════════════════════════════════════════
-    SPOTLIGHT CARD HELPER
-   ═════════════════════════════════════════════ */
+/* ── SPOTLIGHT CARD HELPER ── */
 function SpotlightCard({
   children,
   className = "",
@@ -66,11 +64,11 @@ export default function BookPage() {
   };
 
   return (
-    <div className="bg-[#05060A] text-[#F6F7FB] min-h-screen relative font-sans pt-28 overflow-hidden flex flex-col">
+    <div className="bg-[#040308] text-[#F6F7FB] min-h-screen relative font-sans pt-28 overflow-hidden flex flex-col">
       
       {/* Background ambient lighting */}
-      <div className="absolute top-[20%] left-[-15%] w-[60%] h-[60%] rounded-full bg-cyan-500/5 blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-[20%] right-[-15%] w-[60%] h-[60%] rounded-full bg-purple-600/5 blur-[130px] pointer-events-none" />
+      <div className="absolute top-[20%] left-[-15%] w-[60%] h-[60%] rounded-full bg-[#FF9E00]/5 blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-[20%] right-[-15%] w-[60%] h-[60%] rounded-full bg-[#FF4069]/5 blur-[130px] pointer-events-none" />
 
       <main className="flex-grow max-w-7xl mx-auto px-6 w-full z-10 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
@@ -78,9 +76,9 @@ export default function BookPage() {
           {/* Left Panel: Contact Info */}
           <div className="lg:col-span-5 space-y-8">
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-purple-500/20 bg-purple-950/20 w-fit">
-                <Sparkles size={12} className="text-[#7A5CFF]" />
-                <span className="text-[10px] font-mono text-[#7A5CFF] uppercase tracking-widest font-bold">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#FF4069]/20 bg-[#FF4069]/10 w-fit">
+                <Sparkles size={12} className="text-[#FF4069]" />
+                <span className="text-[10px] font-mono text-[#FF4069] uppercase tracking-widest font-bold">
                   SCHEDULING PORTAL
                 </span>
               </div>
@@ -97,31 +95,31 @@ export default function BookPage() {
             {/* Direct Information Box */}
             <div className="space-y-4 font-mono text-xs text-zinc-400">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded bg-[#0A0B10] border border-white/5 flex items-center justify-center text-cyan-400">
+                <div className="w-10 h-10 rounded bg-[#0b0912] border border-white/5 flex items-center justify-center text-[#FF9E00]">
                   <Phone size={14} />
                 </div>
                 <div>
-                  <p className="text-zinc-600 text-[9px] uppercase tracking-wider">Direct Hotline</p>
+                  <p className="text-zinc-600 text-[9px] uppercase tracking-wider font-bold">Direct Hotline</p>
                   <a href="tel:+917396621004" className="hover:text-white transition">+91-7396621004</a>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded bg-[#0A0B10] border border-white/5 flex items-center justify-center text-purple-400">
+                <div className="w-10 h-10 rounded bg-[#0b0912] border border-white/5 flex items-center justify-center text-[#FF4069]">
                   <Mail size={14} />
                 </div>
                 <div>
-                  <p className="text-zinc-600 text-[9px] uppercase tracking-wider">Email Inquiry</p>
+                  <p className="text-zinc-600 text-[9px] uppercase tracking-wider font-bold">Email Inquiry</p>
                   <a href="mailto:grovicedigital@gmail.com" className="hover:text-white transition">grovicedigital@gmail.com</a>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded bg-[#0A0B10] border border-white/5 flex items-center justify-center text-pink-400">
+                <div className="w-10 h-10 rounded bg-[#0b0912] border border-white/5 flex items-center justify-center text-[#FF4069]">
                   <MapPin size={14} />
                 </div>
                 <div>
-                  <p className="text-zinc-600 text-[9px] uppercase tracking-wider">HQ Location</p>
+                  <p className="text-zinc-600 text-[9px] uppercase tracking-wider font-bold">HQ Location</p>
                   <span className="text-zinc-300">Visakhapatnam — Siripuram & Gajuwaka</span>
                 </div>
               </div>
@@ -130,7 +128,7 @@ export default function BookPage() {
 
           {/* Right Panel: Short Form */}
           <div className="lg:col-span-7">
-            <SpotlightCard className="p-8 md:p-10 bg-[#0A0B10] border-white/5 rounded-[24px] relative">
+            <SpotlightCard className="p-8 md:p-10 bg-[#0b0912] border-white/5 rounded-[24px] relative">
               <AnimatePresence mode="wait">
                 {!formSubmitted ? (
                   <motion.form
@@ -150,7 +148,7 @@ export default function BookPage() {
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="Sarah Connor"
-                          className="w-full bg-[#05060A] border border-white/10 rounded px-4.5 py-3 text-xs text-white focus:outline-none focus:border-[#7A5CFF] transition-all"
+                          className="w-full bg-[#040308] border border-white/10 rounded px-4.5 py-3 text-xs text-white focus:outline-none focus:border-[#FF9E00] transition-all"
                         />
                       </div>
                       
@@ -161,7 +159,7 @@ export default function BookPage() {
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           placeholder="+91 98765 43210"
-                          className="w-full bg-[#05060A] border border-white/10 rounded px-4.5 py-3 text-xs text-white focus:outline-none focus:border-[#7A5CFF] transition-all"
+                          className="w-full bg-[#040308] border border-white/10 rounded px-4.5 py-3 text-xs text-white focus:outline-none focus:border-[#FF9E00] transition-all"
                         />
                       </div>
                     </div>
@@ -174,7 +172,7 @@ export default function BookPage() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="sarah@skynet.com"
-                        className="w-full bg-[#05060A] border border-white/10 rounded px-4.5 py-3 text-xs text-white focus:outline-none focus:border-[#7A5CFF] transition-all"
+                        className="w-full bg-[#040308] border border-white/10 rounded px-4.5 py-3 text-xs text-white focus:outline-none focus:border-[#FF9E00] transition-all"
                       />
                     </div>
 
@@ -183,7 +181,7 @@ export default function BookPage() {
                       <select
                         value={formData.engine}
                         onChange={(e) => setFormData({ ...formData, engine: e.target.value })}
-                        className="w-full bg-[#05060A] border border-white/10 rounded px-4.5 py-3 text-xs text-white focus:outline-none focus:border-[#7A5CFF] cursor-pointer"
+                        className="w-full bg-[#040308] border border-white/10 rounded px-4.5 py-3 text-xs text-white focus:outline-none focus:border-[#FF9E00] cursor-pointer"
                       >
                         <option value="engine-a">Engine A (AI / Software / Systems)</option>
                         <option value="engine-b">Engine B (Creative / Branding / Video)</option>
@@ -198,13 +196,13 @@ export default function BookPage() {
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         placeholder="Explain project requirements, goals, and desired schedule timeline..."
-                        className="w-full bg-[#05060A] border border-white/10 rounded px-4.5 py-3 text-xs text-white focus:outline-none focus:border-[#7A5CFF] transition-all resize-none"
+                        className="w-full bg-[#040308] border border-white/10 rounded px-4.5 py-3 text-xs text-white focus:outline-none focus:border-[#FF9E00] transition-all resize-none"
                       />
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full py-4.5 text-xs font-mono font-bold uppercase tracking-widest text-black bg-gradient-to-r from-[#00D2FF] via-[#7A5CFF] to-[#FF4FD8] hover:opacity-90 transition-all duration-300"
+                      className="w-full py-4.5 text-xs font-mono font-bold uppercase tracking-widest text-black bg-gradient-to-r from-[#FF9E00] via-[#FF4069] to-[#7000FF] hover:opacity-90 transition-all duration-300"
                     >
                       Request Consultation
                     </button>
@@ -234,7 +232,6 @@ export default function BookPage() {
         </div>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

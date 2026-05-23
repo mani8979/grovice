@@ -59,9 +59,9 @@ export default function Navbar() {
           }}
         >
           GROVICE
-          <span style={{ color: "#00D2FF", fontWeight: "bold" }}>2.0</span>
+          <span style={{ color: "#FF9E00", fontWeight: "bold" }}>2.0</span>
           <span
-            className="w-1.5 h-1.5 rounded-full bg-[#00D2FF] animate-pulse"
+            className="w-1.5 h-1.5 rounded-full bg-[#FF9E00] animate-pulse"
           />
         </Link>
 
@@ -89,7 +89,7 @@ export default function Navbar() {
                 }}
                 onMouseEnter={(e) => { 
                   (e.currentTarget as HTMLElement).style.opacity = "1";
-                  (e.currentTarget as HTMLElement).style.color = "#00D2FF";
+                  (e.currentTarget as HTMLElement).style.color = "#FF9E00";
                 }}
                 onMouseLeave={(e) => { 
                   (e.currentTarget as HTMLElement).style.opacity = isActive ? "1" : "0.6";
@@ -103,7 +103,7 @@ export default function Navbar() {
           <Link
             href="/book"
             style={{
-              background: "linear-gradient(135deg, #00D2FF 0%, #7A5CFF 50%, #FF4FD8 100%)",
+              background: "linear-gradient(135deg, #FF9E00 0%, #FF4069 50%, #7000FF 100%)",
               color: "#000000",
               padding: "0.6rem 1.4rem",
               borderRadius: "0px",
@@ -114,14 +114,14 @@ export default function Navbar() {
               textTransform: "uppercase",
               textDecoration: "none",
               transition: "all 0.3s",
-              boxShadow: "0 0 15px rgba(0, 210, 255, 0.25)",
+              boxShadow: "0 0 15px rgba(255, 158, 0, 0.25)",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 25px rgba(0, 210, 255, 0.5)";
+              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 25px rgba(255, 158, 0, 0.5)";
               (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 15px rgba(0, 210, 255, 0.25)";
+              (e.currentTarget as HTMLElement).style.boxShadow = "0 0 15px rgba(255, 158, 0, 0.25)";
               (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
             }}
           >
@@ -156,7 +156,7 @@ export default function Navbar() {
             right: 0,
             bottom: 0,
             zIndex: 999,
-            background: "rgba(5, 6, 10, 0.98)",
+            background: "rgba(4, 3, 8, 0.98)",
             backdropFilter: "blur(24px)",
             display: "flex",
             flexDirection: "column",
@@ -204,7 +204,7 @@ export default function Navbar() {
             onClick={() => setIsOpen(false)}
             style={{
               marginTop: "1rem",
-              background: "linear-gradient(135deg, #00D2FF 0%, #7A5CFF 50%, #FF4FD8 100%)",
+              background: "linear-gradient(135deg, #FF9E00 0%, #FF4069 50%, #7000FF 100%)",
               color: "#000000",
               padding: "0.8rem 2.2rem",
               borderRadius: "0px",
@@ -214,7 +214,7 @@ export default function Navbar() {
               letterSpacing: "0.15em",
               textTransform: "uppercase",
               textDecoration: "none",
-              boxShadow: "0 0 15px rgba(0, 210, 255, 0.25)",
+              boxShadow: "0 0 15px rgba(255, 158, 0, 0.25)",
             }}
           >
             Launch OS
