@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
-import { ArrowRight, Phone, Mail, MapPin, Cpu, Camera, Compass, Calendar, Home, Users, Search } from "lucide-react";
+import { ArrowRight, Phone, Mail, MapPin, Cpu, Camera, Compass, Calendar, Users } from "lucide-react";
 
 /* ── SPOTLIGHT CARD COMPONENT ── */
 function SpotlightCard({
@@ -103,7 +103,6 @@ export default function LandingPage() {
   const s1PointerEvents = useTransform(smoothScroll, (v) => (v < 0.2) ? "auto" : "none");
   const bgOpacity = useTransform(smoothScroll, [0.18, 0.24], [1, 0]);
   const bgScale = useTransform(smoothScroll, [0, 0.25], [1, 1.05]);
-  const videoOpacity = useTransform(smoothScroll, [0.18, 0.24], [0, 0.35]);
 
   const s2Opacity = useTransform(smoothScroll, [0.24, 0.29, 0.44, 0.49], [0, 1, 1, 0]);
   const s2Y = useTransform(smoothScroll, [0.24, 0.29, 0.44, 0.49], ["30px", "0px", "0px", "-30px"]);
@@ -171,23 +170,8 @@ export default function LandingPage() {
           )}
         </AnimatePresence>
 
-        {/* ── LAYER 0: Fixed Sunset Video Background ── */}
-        <div className="fixed inset-0 z-0 pointer-events-none h-screen w-full">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ opacity: 0.38 }}
-          >
-            <source src="/sunset-beach.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#040308]/90 via-[#040308]/20 to-[#040308]/95" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#040308]/85 via-transparent to-[#040308]/85" />
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#FF9E00]/12 via-transparent to-[#7000FF]/15 mix-blend-color-dodge" />
-        </div>
+        {/* ── LAYER 0: Fixed Background Container ── */}
+        <div className="fixed inset-0 z-0 pointer-events-none h-screen w-full bg-[#040308]" />
 
         {/* ── LAYER 1: Ambient Glowing Sun Glare Orbs (Mobile Optimized) ── */}
         <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
@@ -224,7 +208,7 @@ export default function LandingPage() {
                   textShadow: "0 2px 12px rgba(0, 0, 0, 0.4)" 
                 }}
               >
-                Escape to Your <br/>Private Island Paradise
+                Escape to Your <br/>Coastal Business Paradise
               </h1>
 
               {/* Subtitle */}
@@ -234,64 +218,61 @@ export default function LandingPage() {
                   textShadow: "0 1px 4px rgba(0, 0, 0, 0.45)" 
                 }}
               >
-                Embrace the calm of turquoise waters and endless skies. <br/>Where luxury meets serenity at Maldives Beach Resort & Villas.
+                Embrace the power of automated systems and elite creative workflows. <br/>Where software engineering meets cinematic production in Visakhapatnam.
               </p>
 
               {/* Mobile Horizontal Configurator Capsule */}
               <div className="w-full bg-[#0A2540]/65 border border-white/15 rounded-full p-2.5 backdrop-blur-md shadow-2xl flex flex-row items-center justify-between z-20 mt-4 max-w-md">
-                {/* Check-In */}
+                {/* Work Engine */}
                 <div className="flex-1 flex flex-col items-center justify-center border-r border-white/10 px-1 text-center relative overflow-hidden">
-                  <Calendar size={11} className="text-[#8EE3F5] mb-0.5" />
-                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Check-In</span>
-                  <input 
-                    type="date" 
-                    defaultValue="2026-05-23" 
-                    className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer [color-scheme:dark] p-0 leading-tight" 
-                    style={{ border: "none", outline: "none" }}
-                  />
-                </div>
-
-                {/* Check-Out */}
-                <div className="flex-1 flex flex-col items-center justify-center border-r border-white/10 px-1 text-center relative overflow-hidden">
-                  <Calendar size={11} className="text-[#8EE3F5] mb-0.5" />
-                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Check-Out</span>
-                  <input 
-                    type="date" 
-                    defaultValue="2026-05-30" 
-                    className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer [color-scheme:dark] p-0 leading-tight" 
-                    style={{ border: "none", outline: "none" }}
-                  />
-                </div>
-
-                {/* Rooms */}
-                <div className="flex-1 flex flex-col items-center justify-center border-r border-white/10 px-1 text-center">
-                  <Home size={11} className="text-[#8EE3F5] mb-0.5" />
-                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Rooms</span>
+                  <Cpu size={11} className="text-[#8EE3F5] mb-0.5" />
+                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Engine</span>
                   <select className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer p-0 leading-tight appearance-none">
-                    <option className="bg-[#0A192F] text-white" value="1">1</option>
-                    <option className="bg-[#0A192F] text-white" value="2">2</option>
-                    <option className="bg-[#0A192F] text-white" value="3">3</option>
+                    <option className="bg-[#0A192F] text-white" value="a">Engine A</option>
+                    <option className="bg-[#0A192F] text-white" value="b">Engine B</option>
+                    <option className="bg-[#0A192F] text-white" value="all">Both</option>
                   </select>
                 </div>
 
-                {/* Persons */}
+                {/* System Target */}
+                <div className="flex-1 flex flex-col items-center justify-center border-r border-white/10 px-1 text-center relative overflow-hidden">
+                  <Compass size={11} className="text-[#8EE3F5] mb-0.5" />
+                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Target</span>
+                  <select className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer p-0 leading-tight appearance-none">
+                    <option className="bg-[#0A192F] text-white" value="lead">Automations</option>
+                    <option className="bg-[#0A192F] text-white" value="cine">Production</option>
+                    <option className="bg-[#0A192F] text-white" value="sync">System Audit</option>
+                  </select>
+                </div>
+
+                {/* Launch Timeline */}
+                <div className="flex-1 flex flex-col items-center justify-center border-r border-white/10 px-1 text-center">
+                  <Calendar size={11} className="text-[#8EE3F5] mb-0.5" />
+                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Timeline</span>
+                  <select className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer p-0 leading-tight appearance-none">
+                    <option className="bg-[#0A192F] text-white" value="now">Immediate</option>
+                    <option className="bg-[#0A192F] text-white" value="30">30 Days</option>
+                    <option className="bg-[#0A192F] text-white" value="90">Future</option>
+                  </select>
+                </div>
+
+                {/* Operating Scope */}
                 <div className="flex-1 flex flex-col items-center justify-center px-1 text-center">
                   <Users size={11} className="text-[#8EE3F5] mb-0.5" />
-                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Guests</span>
+                  <span className="text-[7px] text-white/55 font-mono uppercase tracking-wider font-bold">Scope</span>
                   <select className="bg-transparent border-0 text-white text-[9px] font-sans focus:outline-none w-full text-center cursor-pointer p-0 leading-tight appearance-none">
-                    <option className="bg-[#0A192F] text-white" value="1">1</option>
-                    <option className="bg-[#0A192F] text-white" value="2">2</option>
-                    <option className="bg-[#0A192F] text-white" value="3">3</option>
-                    <option className="bg-[#0A192F] text-white" value="4">4</option>
+                    <option className="bg-[#0A192F] text-white" value="dev">1-5 Devs</option>
+                    <option className="bg-[#0A192F] text-white" value="assets">6-15 Studio</option>
+                    <option className="bg-[#0A192F] text-white" value="ent">Enterprise</option>
                   </select>
                 </div>
 
-                {/* Search Button */}
+                {/* Action Arrow Button */}
                 <button 
                   onClick={() => handleScrollTo(0.66)}
                   className="w-8 h-8 rounded-full bg-[#0B3C73] text-white flex items-center justify-center cursor-pointer transition hover:scale-105 active:scale-95 shrink-0 ml-1 border border-white/10 shadow-[0_2px_8px_rgba(11,60,115,0.3)]"
                 >
-                  <Search size={11} className="text-white" />
+                  <ArrowRight size={11} className="text-white" />
                 </button>
               </div>
             </motion.div>
@@ -612,22 +593,9 @@ export default function LandingPage() {
           style={{ opacity: bgOpacity }}
         />
 
-        {/* ── LAYER 0.5: Sunset Beach Video Background ── */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <motion.video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover scale-[1.03]"
-            style={{ opacity: videoOpacity }}
-          >
-            <source src="/sunset-beach.mp4" type="video/mp4" />
-          </motion.video>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#040308]/90 via-[#040308]/30 to-[#040308]/90" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#040308]/85 via-transparent to-[#040308]/85" />
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#FF9E00]/12 via-transparent to-[#7000FF]/15 mix-blend-color-dodge" />
+        {/* ── LAYER 0.5: Dark Base Background ── */}
+        <div className="absolute inset-0 z-0 pointer-events-none bg-[#040308]">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#040308]/30 to-[#040308]" />
         </div>
 
         {/* ── LAYER 1: Ambient warm sun glare particles ── */}
@@ -690,7 +658,7 @@ export default function LandingPage() {
                 textShadow: "0 2px 15px rgba(0, 0, 0, 0.4)" 
               }}
             >
-              Escape to Your <br/>Private Island Paradise
+              Escape to Your <br/>Coastal Business Paradise
             </h1>
 
             {/* Subtitle */}
@@ -700,61 +668,59 @@ export default function LandingPage() {
                 textShadow: "0 1px 6px rgba(0, 0, 0, 0.5)" 
               }}
             >
-              Embrace the calm of turquoise waters and endless skies. <br/>Where luxury meets serenity at Maldives Beach Resort & Villas.
+              Embrace the power of automated systems and elite creative workflows. <br/>Where software engineering meets cinematic production in Visakhapatnam.
             </p>
 
             {/* Pill Configurator Bar */}
             <div className="flex flex-row items-center bg-[#0A2540]/55 border border-white/15 rounded-full p-2.5 gap-0 max-w-4xl w-full backdrop-blur-md shadow-[0_12px_40px_rgba(0,0,0,0.3)] mt-10 relative z-50">
-              {/* Select 1: Check-In Date */}
+              {/* Select 1: Work Engine */}
               <div className="flex-1 flex flex-row items-center px-5 border-r border-white/10 text-left hover:bg-white/5 py-1.5 transition rounded-l-full cursor-pointer">
-                <Calendar size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
+                <Cpu size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
                 <div className="flex flex-col flex-1">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Check-In Date</span>
-                  <input 
-                    type="date" 
-                    defaultValue="2026-05-23"
-                    className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 [color-scheme:dark] p-0 font-medium"
-                  />
-                </div>
-              </div>
-
-              {/* Select 2: Check-Out Date */}
-              <div className="flex-1 flex flex-row items-center px-5 border-r border-white/10 text-left hover:bg-white/5 py-1.5 transition cursor-pointer">
-                <Calendar size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
-                <div className="flex flex-col flex-1">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Check-Out Date</span>
-                  <input 
-                    type="date" 
-                    defaultValue="2026-05-30"
-                    className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 [color-scheme:dark] p-0 font-medium"
-                  />
-                </div>
-              </div>
-
-              {/* Select 3: Rooms */}
-              <div className="flex-1 flex flex-row items-center px-5 border-r border-white/10 text-left hover:bg-white/5 py-1.5 transition cursor-pointer">
-                <Home size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
-                <div className="flex flex-col flex-1">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Rooms</span>
+                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Work Engine</span>
                   <select className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 appearance-none font-medium">
-                    <option className="bg-[#0A192F] text-white" value="1">1 Room</option>
-                    <option className="bg-[#0A192F] text-white" value="2">2 Rooms</option>
-                    <option className="bg-[#0A192F] text-white" value="3">3 Rooms</option>
-                    <option className="bg-[#0A192F] text-white" value="4">4+ Rooms</option>
+                    <option className="bg-[#0A192F] text-white" value="a">Engine A: Software & AI</option>
+                    <option className="bg-[#0A192F] text-white" value="b">Engine B: Creative Muscle</option>
+                    <option className="bg-[#0A192F] text-white" value="all">Integrated OS (Both)</option>
                   </select>
                 </div>
               </div>
 
-              {/* Select 4: Guests */}
+              {/* Select 2: System Target */}
+              <div className="flex-1 flex flex-row items-center px-5 border-r border-white/10 text-left hover:bg-white/5 py-1.5 transition cursor-pointer">
+                <Compass size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
+                <div className="flex flex-col flex-1">
+                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">System Target</span>
+                  <select className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 appearance-none font-medium">
+                    <option className="bg-[#0A192F] text-white" value="lead">Lead Automations</option>
+                    <option className="bg-[#0A192F] text-white" value="cine">Cinematic Production</option>
+                    <option className="bg-[#0A192F] text-white" value="sync">Full System Audit</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Select 3: Launch Timeline */}
+              <div className="flex-1 flex flex-row items-center px-5 border-r border-white/10 text-left hover:bg-white/5 py-1.5 transition cursor-pointer">
+                <Calendar size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
+                <div className="flex flex-col flex-1">
+                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Launch Timeline</span>
+                  <select className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 appearance-none font-medium">
+                    <option className="bg-[#0A192F] text-white" value="now">Immediate Scoping</option>
+                    <option className="bg-[#0A192F] text-white" value="30">Within 30 Days</option>
+                    <option className="bg-[#0A192F] text-white" value="90">Future Scaling</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Select 4: Operating Scope */}
               <div className="flex-1 flex flex-row items-center px-5 text-left hover:bg-white/5 py-1.5 transition rounded-r-full cursor-pointer">
                 <Users size={15} className="text-[#8EE3F5] mr-2 shrink-0" />
                 <div className="flex flex-col flex-1">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Guests</span>
+                  <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-white/60 font-bold">Operating Scope</span>
                   <select className="bg-transparent border-0 text-white font-sans text-xs focus:outline-none w-full cursor-pointer mt-0.5 appearance-none font-medium">
-                    <option className="bg-[#0A192F] text-white" value="1">1 Person</option>
-                    <option className="bg-[#0A192F] text-white" value="2">2 Persons</option>
-                    <option className="bg-[#0A192F] text-white" value="3">3 Persons</option>
-                    <option className="bg-[#0A192F] text-white" value="4">4+ Persons</option>
+                    <option className="bg-[#0A192F] text-white" value="dev">1 - 5 Developer Nodes</option>
+                    <option className="bg-[#0A192F] text-white" value="assets">6 - 15 Studio Assets</option>
+                    <option className="bg-[#0A192F] text-white" value="ent">Enterprise Scale Sync</option>
                   </select>
                 </div>
               </div>
@@ -764,7 +730,7 @@ export default function LandingPage() {
                 onClick={() => handleScrollTo(0.55)}
                 className="w-12 h-12 rounded-full bg-[#0B3C73] text-white flex items-center justify-center cursor-pointer transition hover:scale-105 active:scale-95 shrink-0 ml-4 border border-white/10 shadow-[0_4px_12px_rgba(11,60,115,0.35)]"
               >
-                <Search size={16} className="text-white" />
+                <ArrowRight size={16} className="text-white" />
               </button>
             </div>
           </motion.div>
