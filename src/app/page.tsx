@@ -49,6 +49,13 @@ export default function LandingPage() {
     else if (latest < 0.5) setActiveSection(1);
     else if (latest < 0.75) setActiveSection(2);
     else setActiveSection(3);
+
+    if (videoRef.current && videoRef.current.readyState >= 1) {
+      const dur = videoRef.current.duration;
+      if (dur && !isNaN(dur)) {
+        videoRef.current.currentTime = latest * dur;
+      }
+    }
   });
 
   /* ── Scroll Transforms ── */
@@ -130,8 +137,6 @@ export default function LandingPage() {
           >
             <video
               ref={videoRef}
-              autoPlay
-              loop
               muted
               playsInline
               preload="auto"
