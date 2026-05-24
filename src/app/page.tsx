@@ -122,6 +122,16 @@ export default function LandingPage() {
     loadImages();
   }, []);
 
+  // Ensure initial frame is drawn after hydration when canvas becomes available
+  useEffect(() => {
+    if (mounted && framesRef.current.length > 0 && canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d');
+      if (ctx && framesRef.current[0].complete) {
+        ctx.drawImage(framesRef.current[0], 0, 0, 1280, 720);
+      }
+    }
+  }, [mounted]);
+
   const { scrollYProgress } = useScroll();
   const smoothScroll = useSpring(scrollYProgress, {
     stiffness: 90,
