@@ -244,11 +244,11 @@ export default function LandingPage() {
             width={1280}
             height={720}
             className="w-full h-full object-cover"
-            style={{ opacity: 0.85 }}
+            style={{ opacity: 1 }}
           />
           {/* Gradient overlay so text is always readable */}
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(4,3,8,0.35) 0%, rgba(4,3,8,0.15) 50%, rgba(4,3,8,0.92) 100%)" }} />
-          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, transparent 40%, rgba(4,3,8,0.6) 100%)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(4,3,8,0.2) 0%, transparent 50%, rgba(4,3,8,0.85) 100%)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, transparent 50%, rgba(4,3,8,0.4) 100%)" }} />
         </div>
 
         {/* Ambient Glows */}
@@ -265,8 +265,8 @@ export default function LandingPage() {
             className="relative min-h-screen flex flex-col items-center justify-center px-5 py-28 overflow-hidden"
           >
             {/* Cinematic overlays */}
-            <div className="absolute inset-0 bg-gradient-to-b from-[#040308]/55 via-[#040308]/20 to-[#040308] z-0" />
-            <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, transparent 40%, rgba(4,3,8,0.7) 100%)" }} />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#040308]/20 via-transparent to-[#040308] z-0" />
+            <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, transparent 50%, rgba(4,3,8,0.4) 100%)" }} />
             {/* Light leak */}
             <div className="absolute top-[15%] left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,215,0,0.12), transparent)", filter: "blur(4px)" }} />
 
