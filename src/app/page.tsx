@@ -12,10 +12,10 @@ import { ArrowRight, Phone, Mail, MapPin } from "lucide-react";
 export default function LandingPage() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [loading, setLoading] = useState(true);
-
+  const [preloadProgress, setPreloadProgress] = useState(0);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
 
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -29,42 +29,78 @@ export default function LandingPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Dismiss loader immediately on mobile and safely trigger video play
+  // Preload all 300 background frames
   useEffect(() => {
     if (!mounted) return;
-    if (isMobile) {
-      setLoading(false);
-      const video = videoRef.current;
-      if (video) {
-        video.play().catch((err) => {
-          console.warn("Autoplay blocked, user interaction may be required:", err);
-        });
-      }
+
+    const totalFrames = 300;
+    let loadedCount = 0;
+    const loadedImages: HTMLImageElement[] = [];
+
+    for (let i = 1; i <= totalFrames; i++) {
+      const img = new Image();
+      const paddedIndex = String(i).padStart(3, '0');
+      img.src = `/images/bg-frames/ezgif-frame-${paddedIndex}.jpg`;
+
+      img.onload = () => {
+        loadedCount++;
+        setPreloadProgress(Math.floor((loadedCount / totalFrames) * 100));
+
+        // Draw the first frame immediately once it loads so the page isn't blank
+        if (i === 1) {
+          requestAnimationFrame(() => {
+            const canvas = canvasRef.current;
+            if (canvas) {
+              const ctx = canvas.getContext("2d");
+              if (ctx) {
+                const vw = img.naturalWidth;
+                const vh = img.naturalHeight;
+                const cw = canvas.width = window.innerWidth;
+                const ch = canvas.height = window.innerHeight;
+                const scale = Math.max(cw / vw, ch / vh);
+                const dw = vw * scale;
+                const dh = vh * scale;
+                ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+              }
+            }
+          });
+        }
+
+        if (loadedCount === totalFrames) {
+          setLoading(false);
+        }
+      };
+
+      img.onerror = () => {
+        loadedCount++;
+        setPreloadProgress(Math.floor((loadedCount / totalFrames) * 100));
+        if (loadedCount === totalFrames) {
+          setLoading(false);
+        }
+      };
+
+      loadedImages[i - 1] = img;
     }
-  }, [mounted, isMobile]);
 
-
+    imagesRef.current = loadedImages;
+  }, [mounted]);
 
   // ── CANVAS SCROLL SCRUBBING ──
-  // IMPORTANT: dependency is [mounted] not [] ── the video/canvas elements only exist
-  // in the DOM after mounted=true. With [], the effect runs when refs are null.
   useEffect(() => {
     if (!mounted) return;
-    const video = videoRef.current;
     const canvas = canvasRef.current;
-    if (!video || !canvas) return;
+    if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     let active = true;
     let rafId = 0;
-    let lastDrawnTime = -1;
-    let blobUrl = "";
-    let scrollTimeout: NodeJS.Timeout | null = null;
 
-    // Velocity tracking for smooth, momentum-aware scrubbing
-    let targetProgress = 0;         // 0–1 from scroll
+    // Smooth scroll position tracking
+    let targetProgress = 0;
+    let currentFrame = 0;
+    const totalFrames = 300;
 
     // Size canvas to fill viewport
     const sizeCanvas = () => {
@@ -75,148 +111,62 @@ export default function LandingPage() {
     };
     sizeCanvas();
 
-    // Draw current video frame to canvas with cover-fit
-    const drawFrame = () => {
-      if (!active || video.readyState < 2) return;
-      if (video.currentTime === lastDrawnTime) return;
-      lastDrawnTime = video.currentTime;
-      const vw = video.videoWidth;
-      const vh = video.videoHeight;
-      if (!vw || !vh) return;
+    // Draw current image frame to canvas with cover-fit
+    const drawFrame = (frameIndex: number) => {
+      const img = imagesRef.current[frameIndex];
+      if (!img || !img.complete || img.naturalWidth === 0) return;
+
+      const vw = img.naturalWidth;
+      const vh = img.naturalHeight;
       const cw = canvas.width;
       const ch = canvas.height;
       const scale = Math.max(cw / vw, ch / vh);
       const dw = vw * scale;
       const dh = vh * scale;
-      ctx.drawImage(video, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
     };
 
-    // ── RAF LOOP: Bidirectional smooth playback ──
-    // Forward  → native play() with velocity-driven playbackRate (buttery GPU decode)
-    // Backward → lerp seek (fast because Blob is in-memory RAM, no network)
+    // Smooth loop with linear interpolation (lerp)
     const loop = () => {
-      if (active && video.duration) {
-        const target = targetProgress * video.duration;
-        const diff = target - video.currentTime;
-        const absDiff = Math.abs(diff);
+      if (!active) return;
 
-        if (diff > 0.015) {
-          // ── FORWARD: drive playbackRate by how far behind we are ──
-          // Base: 1.0x. Each 0.5s of lag adds ~1x speed. Capped at 6x for fast flings.
-          const rate = Math.max(0.5, Math.min(6.0, 1.0 + absDiff * 2.0));
-          video.playbackRate = rate;
-          if (video.paused) video.play().catch(() => {});
+      const targetFrame = targetProgress * (totalFrames - 1);
+      // Smoothen the frame transitions
+      currentFrame += (targetFrame - currentFrame) * 0.12;
 
-        } else if (diff < -0.015) {
-          // ── BACKWARD: smooth lerp seek ──
-          // Seek size scales with how far behind we are (min 0.06s, max 0.25s per frame)
-          // Blob URL means seeks are instant in-memory with no HTTP round-trip.
-          video.pause();
-          if (!video.seeking) {
-            const step = Math.max(0.06, Math.min(0.25, absDiff * 0.35));
-            video.currentTime = video.currentTime - step;
-          }
+      const frameToDraw = Math.min(totalFrames - 1, Math.max(0, Math.round(currentFrame)));
+      drawFrame(frameToDraw);
 
-        } else {
-          // ── IN ZONE: stop playing, maintain exact target frame ──
-          if (!video.paused) {
-            video.pause();
-            if (Math.abs(video.currentTime - target) > 0.01) {
-              video.currentTime = target;
-            }
-          }
-        }
-      }
-
-      drawFrame();
       rafId = requestAnimationFrame(loop);
     };
     rafId = requestAnimationFrame(loop);
 
-    // ── SCROLL HANDLER: track velocity & update target progress ──
+    // Track scroll velocity/position
     const onScroll = () => {
       const container = containerRef.current;
       if (!container) return;
 
       const total = container.offsetHeight - window.innerHeight;
       targetProgress = total > 0 ? Math.min(1, Math.max(0, window.scrollY / total)) : 0;
-
-      // Debounce: when scroll stops, snap perfectly to target frame
-      if (scrollTimeout) clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        if (active && video.duration) {
-          video.pause();
-          video.playbackRate = 1.0;
-          video.currentTime = targetProgress * video.duration;
-        }
-      }, 150);
-    };
-
-    // ── INIT: warm-up decoder then dismiss loader ──
-    const initVideo = () => {
-      if (!active) return;
-      sizeCanvas();
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            video.pause();
-            video.currentTime = 0;
-            drawFrame();
-            setLoading(false);
-          })
-          .catch(() => {
-            video.currentTime = 0;
-            drawFrame();
-            setLoading(false);
-          });
-      } else {
-        video.pause();
-        video.currentTime = 0;
-        drawFrame();
-        setLoading(false);
-      }
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    const onResize = () => { sizeCanvas(); lastDrawnTime = -1; drawFrame(); };
+    
+    const onResize = () => {
+      sizeCanvas();
+      const frameToDraw = Math.min(totalFrames - 1, Math.max(0, Math.round(currentFrame)));
+      drawFrame(frameToDraw);
+    };
     window.addEventListener("resize", onResize);
 
-    video.addEventListener("loadedmetadata", initVideo);
-    video.addEventListener("loadeddata", drawFrame);
-    video.addEventListener("seeked", drawFrame);
-    video.addEventListener("timeupdate", drawFrame);
-
-    // ── BLOB PRELOAD: eliminate all HTTP range-request seek latency ──
-    fetch("/videos/beach-bg.mp4")
-      .then((res) => {
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        return res.blob();
-      })
-      .then((blob) => {
-        if (!active) return;
-        blobUrl = URL.createObjectURL(blob);
-        video.src = blobUrl;
-        video.load();
-      })
-      .catch(() => {
-        if (active) { video.src = "/videos/beach-bg.mp4"; video.load(); }
-      });
-
-    const fallbackTimeout = setTimeout(() => { if (active) setLoading(false); }, 5000);
+    // Initial positioning
+    onScroll();
 
     return () => {
       active = false;
-      clearTimeout(fallbackTimeout);
-      if (scrollTimeout) clearTimeout(scrollTimeout);
       cancelAnimationFrame(rafId);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
-      video.removeEventListener("loadedmetadata", initVideo);
-      video.removeEventListener("loadeddata", drawFrame);
-      video.removeEventListener("seeked", drawFrame);
-      video.removeEventListener("timeupdate", drawFrame);
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
     };
   }, [mounted]);
 
@@ -287,24 +237,38 @@ export default function LandingPage() {
             exit={{ opacity: 0, transition: { duration: 1.2 } }}
             className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#040308]"
           >
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.5rem", width: "280px" }}>
+              {/* Spinner */}
               <motion.div 
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
                 style={{ width: "60px", height: "60px", border: "1px solid rgba(255,158,0,0.3)", borderTopColor: "#FF9E00", borderRadius: "50%" }}
               />
+              {/* Label */}
               <span
                 style={{
                   fontFamily: "var(--font-outfit), monospace",
-                  fontSize: "0.8rem",
-                  letterSpacing: "0.5em",
+                  fontSize: "0.7rem",
+                  letterSpacing: "0.4em",
                   textTransform: "uppercase",
                   fontWeight: 800,
                   color: "#F0F2FF",
                 }}
               >
-                LOADING CONTENT
+                LOADING FRAMES — {preloadProgress}%
               </span>
+              {/* Progress bar */}
+              <div style={{ width: "100%", height: "1px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", overflow: "hidden" }}>
+                <motion.div
+                  style={{
+                    height: "100%",
+                    background: "linear-gradient(90deg, #FF9E00, #FF4069)",
+                    borderRadius: "2px",
+                  }}
+                  animate={{ width: `${preloadProgress}%` }}
+                  transition={{ ease: "linear", duration: 0.2 }}
+                />
+              </div>
             </div>
           </motion.div>
         )}
@@ -312,59 +276,18 @@ export default function LandingPage() {
 
       <div className={isMobile ? "relative min-h-screen w-full" : "sticky top-0 left-0 w-full h-screen overflow-hidden"}>
 
-        {/* ── BACKGROUND VIDEO ── */}
-        <div className={isMobile ? "fixed inset-0 z-0 bg-[#040308]" : "absolute inset-0 z-0 bg-[#040308]"}>
+        {/* ── BACKGROUND FRAMES (Canvas) ── */}
+        <div className="absolute inset-0 z-0 bg-[#040308]">
           <motion.div
             className="absolute inset-0 w-full h-full"
             style={{ opacity: bgOpacity, scale: bgScale }}
           >
-            {isMobile ? (
-              <video
-                ref={videoRef}
-                src="/videos/beach-bg.mp4"
-                muted
-                playsInline
-                loop
-                autoPlay
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  opacity: 0.5,
-                  pointerEvents: "none"
-                }}
-              />
-            ) : (
-              <>
-                {/* Video: opacity 0.001 NOT 0 ── Chrome only decodes frames for visible, laid-out elements */}
-                <video
-                  ref={videoRef}
-                  src="/videos/beach-bg.mp4"
-                  muted
-                  playsInline
-                  preload="auto"
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "1px",
-                    height: "1px",
-                    opacity: 0.001,
-                    pointerEvents: "none",
-                    overflow: "hidden"
-                  }}
-                />
-                {/* Canvas — renders exact video frames driven by scroll */}
-                <canvas
-                  ref={canvasRef}
-                  className="absolute inset-0 w-full h-full"
-                  style={{ display: "block" }}
-                />
-              </>
-            )}
+            {/* Unified canvas for both mobile & desktop — draws preloaded image frames */}
+            <canvas
+              ref={canvasRef}
+              className="absolute inset-0 w-full h-full"
+              style={{ display: "block" }}
+            />
           </motion.div>
           
           {/* Light cinematic overlays — keeps video clearly visible */}
