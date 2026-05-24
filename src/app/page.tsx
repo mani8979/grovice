@@ -60,6 +60,7 @@ export default function LandingPage() {
   const [mounted, setMounted] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [activeFrame, setActiveFrame] = useState(0);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -107,6 +108,7 @@ export default function LandingPage() {
 
       // Draw initial frame if available
       const drawInitial = () => {
+        setImagesLoaded(true);
         if (canvasRef.current) {
           const ctx = canvasRef.current.getContext('2d');
           if (ctx) ctx.drawImage(frames[0], 0, 0, 1280, 720);
@@ -130,7 +132,7 @@ export default function LandingPage() {
         ctx.drawImage(framesRef.current[0], 0, 0, 1280, 720);
       }
     }
-  }, [mounted]);
+  }, [mounted, imagesLoaded]);
 
   const { scrollYProgress } = useScroll();
   const smoothScroll = useSpring(scrollYProgress, {
