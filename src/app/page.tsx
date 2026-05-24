@@ -18,7 +18,6 @@ export default function LandingPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
-  const [videoDuration, setVideoDuration] = useState(0);
 
   useEffect(() => {
     setMounted(true);
@@ -51,8 +50,15 @@ export default function LandingPage() {
     else if (latest < 0.75) setActiveSection(2);
     else setActiveSection(3);
 
-    if (videoRef.current && videoDuration > 0) {
-      videoRef.current.currentTime = latest * videoDuration;
+    if (videoRef.current) {
+      const dur = videoRef.current.duration;
+      if (dur && !isNaN(dur)) {
+        requestAnimationFrame(() => {
+          if (videoRef.current) {
+            videoRef.current.currentTime = latest * dur;
+          }
+        });
+      }
     }
   });
 
@@ -137,8 +143,8 @@ export default function LandingPage() {
               ref={videoRef}
               muted
               playsInline
+              preload="auto"
               className="w-full h-full object-cover"
-              onLoadedMetadata={(e) => setVideoDuration(e.currentTarget.duration)}
             >
               {/* NOTE: Place your generated beach video in public/videos/beach-bg.mp4 */}
               <source src="/videos/beach-bg.mp4" type="video/mp4" />
@@ -196,7 +202,7 @@ export default function LandingPage() {
             SCENE 01 — ORIGIN
             ══════════════════════════════════════════════════════════ */}
         <motion.div
-          className={`absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 ${isMobile ? 'relative h-screen' : ''}`}
+          className={`${isMobile ? 'relative h-screen' : 'absolute inset-0'} z-10 flex flex-col items-center justify-center text-center px-6`}
           style={{ opacity: isMobile ? 1 : s1Opacity, y: isMobile ? "0vh" : s1Y, pointerEvents: isMobile ? "auto" : s1PointerEvents }}
         >
           <div className="flex flex-col items-center gap-8 max-w-5xl mix-blend-screen">
@@ -234,8 +240,8 @@ export default function LandingPage() {
             SCENE 02 — CORE
             ══════════════════════════════════════════════════════════ */}
         <motion.div
-          className={`absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 ${isMobile ? 'relative h-screen' : ''}`}
-          style={{ opacity: isMobile ? 1 : s2Opacity, y: isMobile ? "0vh" : s2Y, pointerEvents: "none" }}
+          className={`${isMobile ? 'relative h-screen' : 'absolute inset-0'} z-10 flex flex-col items-center justify-center text-center px-6`}
+          style={{ opacity: isMobile ? 1 : s2Opacity, y: isMobile ? "0vh" : s2Y, pointerEvents: isMobile ? "auto" : "none" }}
         >
           <div className="max-w-6xl w-full flex flex-col md:flex-row items-center justify-between gap-12 mix-blend-screen">
             <div className="text-left md:w-1/2">
@@ -275,7 +281,7 @@ export default function LandingPage() {
             SCENE 03 — ENGINES
             ══════════════════════════════════════════════════════════ */}
         <motion.div
-          className={`absolute inset-0 z-10 flex flex-col justify-center px-6 ${isMobile ? 'relative h-screen' : ''}`}
+          className={`${isMobile ? 'relative h-screen' : 'absolute inset-0'} z-10 flex flex-col justify-center px-6`}
           style={{ opacity: isMobile ? 1 : s3Opacity, y: isMobile ? "0vh" : s3Y, pointerEvents: isMobile ? "auto" : s3PointerEvents }}
         >
           <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row gap-12 md:gap-24 items-center mix-blend-screen">
@@ -324,7 +330,7 @@ export default function LandingPage() {
             SCENE 04 — INITIATE
             ══════════════════════════════════════════════════════════ */}
         <motion.div
-          className={`absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6 ${isMobile ? 'relative min-h-[90vh]' : ''}`}
+          className={`${isMobile ? 'relative min-h-[90vh]' : 'absolute inset-0'} z-10 flex flex-col items-center justify-center text-center px-6`}
           style={{ opacity: isMobile ? 1 : s4Opacity, y: isMobile ? "0vh" : s4Y, pointerEvents: isMobile ? "auto" : s4PointerEvents }}
         >
           <div className="max-w-4xl mx-auto space-y-12 relative flex flex-col items-center mix-blend-screen">
