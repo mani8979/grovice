@@ -156,7 +156,7 @@ export default function LandingPage() {
   const welcomeOpacity = useTransform(smoothScroll, [0, 0.18, 0.24], [1, 1, 0]);
   const welcomeY = useTransform(smoothScroll, [0, 0.18, 0.24], ["0px", "-25px", "-40px"]);
   const s1PointerEvents = useTransform(smoothScroll, (v) => (v < 0.2) ? "auto" : "none");
-  const bgOpacity = useTransform(smoothScroll, [0.16, 0.25], [1, 0.4]);
+  const bgOpacity = useTransform(smoothScroll, [0.16, 0.25], [1, 0.8]);
   const bgScale = useTransform(smoothScroll, [0, 0.25], [1, 1.06]);
 
   const s2Opacity = useTransform(smoothScroll, [0.24, 0.29, 0.44, 0.49], [0, 1, 1, 0]);
@@ -252,7 +252,7 @@ export default function LandingPage() {
             width={1280}
             height={720}
             className="w-full h-full object-cover"
-            style={{ opacity: 0.55 }}
+            style={{ opacity: 0.85 }}
           />
           {/* Gradient overlay so text is always readable */}
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(4,3,8,0.35) 0%, rgba(4,3,8,0.15) 50%, rgba(4,3,8,0.92) 100%)" }} />
