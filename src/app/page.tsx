@@ -106,12 +106,18 @@ export default function LandingPage() {
       framesRef.current = frames;
 
       // Draw initial frame if available
-      frames[0].onload = () => {
+      const drawInitial = () => {
         if (canvasRef.current) {
           const ctx = canvasRef.current.getContext('2d');
           if (ctx) ctx.drawImage(frames[0], 0, 0, 1280, 720);
         }
       };
+
+      if (frames[0].complete) {
+        drawInitial();
+      } else {
+        frames[0].onload = drawInitial;
+      }
     };
     loadImages();
   }, []);

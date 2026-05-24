@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { X, Zap } from "lucide-react";
+import { Menu, X, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
@@ -242,6 +242,24 @@ export default function Navbar() {
             Book Now
           </Link>
         </nav>
+
+        {/* ── Mobile Hamburger ── */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          style={{
+            background: "rgba(255,255,255,0.06)",
+            border: "1px solid rgba(255,255,255,0.10)",
+            borderRadius: "9999px",
+            cursor: "pointer",
+            padding: "0.45rem",
+            color: "rgba(240,242,255,0.8)",
+            transition: "all 0.2s",
+          }}
+          aria-label="Toggle menu"
+          className="flex md:hidden items-center justify-center"
+        >
+          {isOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
 
 
       </motion.header>
