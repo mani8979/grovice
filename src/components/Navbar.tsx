@@ -21,7 +21,6 @@ export default function Navbar() {
     { name: "Home", href: "/" },
     { name: "Engine A", href: "/engine-a" },
     { name: "Engine B", href: "/engine-b" },
-    { name: "Book Call", href: "/book" },
   ];
 
   return (
@@ -206,42 +205,6 @@ export default function Navbar() {
               </Link>
             );
           })}
-
-          <Link
-            href="/book"
-            style={{
-              marginLeft: "0.5rem",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.4rem",
-              padding: "0.55rem 1.4rem",
-              borderRadius: "9999px",
-              background: "linear-gradient(135deg, #FF9E00 0%, #FF4069 55%, #7000FF 100%)",
-              color: "#000",
-              fontSize: "0.72rem",
-              fontFamily: "var(--font-outfit), monospace",
-              fontWeight: 700,
-              letterSpacing: "0.10em",
-              textTransform: "uppercase",
-              textDecoration: "none",
-              transition: "all 0.25s cubic-bezier(0.16,1,0.3,1)",
-              boxShadow: "0 4px 20px rgba(255,158,0,0.22)",
-              whiteSpace: "nowrap",
-            }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.transform = "translateY(-2px) scale(1.03)";
-              el.style.boxShadow = "0 8px 30px rgba(255,158,0,0.35)";
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.transform = "translateY(0) scale(1)";
-              el.style.boxShadow = "0 4px 20px rgba(255,158,0,0.22)";
-            }}
-          >
-            <Zap size={10} />
-            Book Now
-          </Link>
         </nav>
 
         {/* ── Mobile Hamburger ── */}

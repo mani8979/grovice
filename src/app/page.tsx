@@ -55,7 +55,7 @@ export default function LandingPage() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState(0);
+
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -139,16 +139,7 @@ export default function LandingPage() {
     }
   });
 
-  // Track active section
-  useEffect(() => {
-    if (isMobile) return;
-    return scrollYProgress.on("change", (latest) => {
-      if (latest < 0.22) setActiveSection(0);
-      else if (latest >= 0.22 && latest < 0.48) setActiveSection(1);
-      else if (latest >= 0.48 && latest < 0.78) setActiveSection(2);
-      else setActiveSection(3);
-    });
-  }, [scrollYProgress, isMobile]);
+
 
   /* ── Scroll Transforms ── */
   const bgY = useTransform(smoothScroll, [0, 0.25], ["0px", "-40px"]);
@@ -172,12 +163,7 @@ export default function LandingPage() {
   const s4Y = useTransform(smoothScroll, [0.80, 0.86], ["35px", "0px"]);
   const s4PointerEvents = useTransform(smoothScroll, (v) => (v >= 0.80) ? "auto" : "none");
 
-  const sections = [
-    { label: "Origin", desc: "Starting coordinate: Convergence of form & automation.", href: 0 },
-    { label: "Identity", desc: "Integrated Core: Where software engineering meets luxury visual assets.", href: 0.3 },
-    { label: "Engines", desc: "Decision Gateway: Activate custom backend code or production visuals.", href: 0.6 },
-    { label: "Systems", desc: "Operating System sync: Book strategy consultations & roadmap scoping.", href: 0.9 },
-  ];
+
 
   const handleScrollTo = (progress: number) => {
     if (containerRef.current) {
@@ -802,30 +788,7 @@ export default function LandingPage() {
           }}
         />
 
-        {/* ── LATERAL NAV ── */}
-        <div className="lateral-menu">
-          {sections.map((sec, idx) => (
-            <div
-              key={idx}
-              onClick={() => handleScrollTo(sec.href)}
-              className={`lateral-menu-item ${activeSection === idx ? "active" : ""}`}
-            >
-              <div className="lateral-menu-line" />
-              <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                <span className="lateral-menu-label">{sec.label}</span>
-                {activeSection === idx && (
-                  <motion.span
-                    initial={{ opacity: 0, x: -5 }}
-                    animate={{ opacity: 0.4, x: 0 }}
-                    style={{ fontSize: "0.52rem", color: "rgba(240,242,255,0.4)", fontFamily: "var(--font-outfit), monospace", letterSpacing: "0.05em", maxWidth: "180px" }}
-                  >
-                    {sec.desc}
-                  </motion.span>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+
 
         {/* ── Scroll Discover ── */}
         <div className="scroll-discover">
