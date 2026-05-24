@@ -49,17 +49,6 @@ export default function LandingPage() {
     else if (latest < 0.5) setActiveSection(1);
     else if (latest < 0.75) setActiveSection(2);
     else setActiveSection(3);
-
-    if (videoRef.current) {
-      const dur = videoRef.current.duration;
-      if (dur && !isNaN(dur)) {
-        requestAnimationFrame(() => {
-          if (videoRef.current) {
-            videoRef.current.currentTime = latest * dur;
-          }
-        });
-      }
-    }
   });
 
   /* ── Scroll Transforms ── */
@@ -98,7 +87,7 @@ export default function LandingPage() {
     <div
       ref={containerRef}
       className="relative w-full bg-[#040308] text-[#F0F2FF]"
-      style={{ height: isMobile ? "auto" : "400vh", overflowX: "hidden" }}
+      style={{ height: isMobile ? "auto" : "400vh" }}
     >
       {/* ── Loader ── */}
       <AnimatePresence>
@@ -141,6 +130,8 @@ export default function LandingPage() {
           >
             <video
               ref={videoRef}
+              autoPlay
+              loop
               muted
               playsInline
               preload="auto"
