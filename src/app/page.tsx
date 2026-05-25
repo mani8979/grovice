@@ -6,9 +6,13 @@ import { useRouter } from "next/navigation";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence, useMotionValueEvent } from "framer-motion";
 import { ArrowRight, Phone, Mail, MapPin } from "lucide-react";
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+import HUD from "@/components/HUD";
+import EngineCard from "@/components/EngineCard";
+import Magnetic from "@/components/Magnetic";
+
+/* ══════════════════════════════════════════════════════════
    MAIN PAGE - SIDEWAVE AESTHETIC EDITION
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ══════════════════════════════════════════════════════════ */
 export default function LandingPage() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -20,6 +24,7 @@ export default function LandingPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
+  const [activeEngine, setActiveEngine] = useState<"A" | "B">("A");
 
   useEffect(() => {
     setMounted(true);
@@ -186,8 +191,15 @@ export default function LandingPage() {
   useMotionValueEvent(smoothScroll, "change", (latest) => {
     if (latest < 0.25) setActiveSection(0);
     else if (latest < 0.5) setActiveSection(1);
-    else if (latest < 0.75) setActiveSection(2);
-    else setActiveSection(3);
+    else if (latest < 0.75) {
+      setActiveSection(2);
+      // Determine active engine based on mid-point of Section 2 (Engines)
+      if (latest < 0.625) setActiveEngine("A");
+      else setActiveEngine("B");
+    }
+    else {
+      setActiveSection(3);
+    }
   });
 
   /* â”€â”€ Scroll Transforms â”€â”€ */
@@ -295,6 +307,9 @@ export default function LandingPage() {
           <div className="absolute inset-0 z-[2] bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(4,3,8,0.6)_100%)] pointer-events-none" />
         </div>
 
+        {/* ── PREMIUM HUD OVERLAY ── */}
+        <HUD activeEngine={activeEngine} />
+
         {/* ── LATERAL HUD NAVIGATION (DESKTOP) ── */}
         {!isMobile && (
           <div className="absolute left-8 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col gap-6 mix-blend-difference pointer-events-auto">
@@ -312,7 +327,12 @@ export default function LandingPage() {
                   style={{
                     width: "2px",
                     height: activeSection === sec.id ? "32px" : "12px",
-                    background: activeSection === sec.id ? "#FF9E00" : "rgba(255,255,255,0.2)",
+                    background: activeSection === sec.id 
+                      ? (sec.id === 2 ? (activeEngine === 'A' ? 'var(--engine-a-accent)' : 'var(--engine-b-accent)') : "#FF9E00")
+                      : "rgba(255,255,255,0.2)",
+                    boxShadow: activeSection === sec.id 
+                      ? `0 0 10px ${sec.id === 2 ? (activeEngine === 'A' ? 'var(--engine-a-accent)' : 'var(--engine-b-accent)') : "#FF9E00"}`
+                      : "none",
                     transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)"
                   }}
                 />
@@ -322,8 +342,10 @@ export default function LandingPage() {
                     fontSize: "0.6rem",
                     letterSpacing: "0.25em",
                     fontWeight: 700,
-                    color: activeSection === sec.id ? "#F0F2FF" : "rgba(240,242,255,0.3)",
-                    transition: "color 0.4s ease",
+                    color: activeSection === sec.id 
+                      ? (sec.id === 2 ? (activeEngine === 'A' ? 'var(--engine-a-accent)' : 'var(--engine-b-accent)') : "#F0F2FF") 
+                      : "rgba(240,242,255,0.3)",
+                    transition: "all 0.4s ease",
                     transform: activeSection === sec.id ? "translateX(4px)" : "translateX(0)",
                   }}
                   className="group-hover:text-white group-hover:translate-x-1"
@@ -421,44 +443,52 @@ export default function LandingPage() {
           className={`${isMobile ? 'relative min-h-screen py-20' : 'absolute inset-0'} z-10 flex flex-col justify-center px-6`}
           style={{ opacity: isMobile ? 1 : s3Opacity, y: isMobile ? "0vh" : s3Y, pointerEvents: isMobile ? "auto" : s3PointerEvents }}
         >
-          <div className="w-full max-w-6xl mx-auto flex flex-col md:flex-row gap-12 md:gap-24 items-center mix-blend-screen">
-            <div className="md:w-1/3 flex flex-col gap-4 text-center md:text-left">
-               <h2 style={{ fontSize: isMobile ? "clamp(2rem, 6vw, 3rem)" : "clamp(2rem, 5vw, 4rem)", fontWeight: 900, lineHeight: 1, textTransform: "uppercase" }}>WHERE FORM<br/>BEGINS.</h2>
-               <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.9rem" }}>Two distinct engines. One unified operating framework deployed from Visakhapatnam.</p>
+          <div className="w-full max-w-7xl mx-auto flex flex-col gap-12 items-center mix-blend-screen">
+            <div className="flex flex-col gap-4 text-center max-w-2xl">
+               <span 
+                 className="font-mono-tech text-[10px] tracking-[0.4em] uppercase transition-colors duration-700"
+                 style={{ color: activeEngine === 'A' ? 'var(--engine-a-accent)' : 'var(--engine-b-accent)' }}
+               >
+                 Core Engines
+               </span>
+               <h2 
+                 style={{ 
+                   fontSize: isMobile ? "clamp(2.5rem, 6vw, 4rem)" : "clamp(3rem, 5vw, 6rem)", 
+                   fontWeight: 900, 
+                   lineHeight: 0.9, 
+                   textTransform: "uppercase", 
+                   letterSpacing: "-0.04em" 
+                 }}
+               >
+                 CHOOSE YOUR<br/>
+                 <span 
+                   className="transition-all duration-700"
+                   style={{ 
+                     color: "transparent", 
+                     WebkitTextStroke: `1px ${activeEngine === 'A' ? 'var(--engine-a-accent)' : 'var(--engine-b-accent)'}` 
+                   }}
+                 >
+                   FREQUENCY.
+                 </span>
+               </h2>
+               <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.95rem", maxWidth: "500px", margin: "0 auto" }}>
+                 Two distinct operating engines built to handle the spectrum of modern digital value—from deep technical architecture to high-end cinematic aesthetics.
+               </p>
             </div>
 
-            <div className="md:w-2/3 flex flex-col gap-8 md:gap-12 w-full">
-              {/* Floating Engine A */}
-              <div 
-                className="group cursor-pointer flex flex-col gap-3 pb-8" 
-                style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}
-                onClick={() => router.push("/engine-a")}
-              >
-                <div className="flex justify-between items-end">
-                  <span style={{ fontSize: "0.7rem", color: "#FF9E00", letterSpacing: "0.2em" }}>ENGINE A</span>
-                  <ArrowRight size={20} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-4 transition-all text-[#FF9E00]" />
-                </div>
-                <h3 style={{ fontSize: isMobile ? "clamp(1.5rem, 4vw, 2.5rem)" : "clamp(2rem, 4vw, 3rem)", fontWeight: 800, textTransform: "uppercase", transition: "color 0.3s" }} className="group-hover:text-[#FF9E00]">
-                  SOFTWARE &amp; AI SYSTEMS
-                </h3>
-                <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.4)" }}>Intelligence unfolds, absorbing the unseen. AI workflows, voice bots, CRMs, and custom pipelines.</p>
-              </div>
-
-              {/* Floating Engine B */}
-              <div 
-                className="group cursor-pointer flex flex-col gap-3 pb-8" 
-                style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}
-                onClick={() => router.push("/engine-b")}
-              >
-                <div className="flex justify-between items-end">
-                  <span style={{ fontSize: "0.7rem", color: "#FF4069", letterSpacing: "0.2em" }}>ENGINE B</span>
-                  <ArrowRight size={20} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-4 transition-all text-[#FF4069]" />
-                </div>
-                <h3 style={{ fontSize: isMobile ? "clamp(1.5rem, 4vw, 2.5rem)" : "clamp(2rem, 4vw, 3rem)", fontWeight: 800, textTransform: "uppercase", transition: "color 0.3s" }} className="group-hover:text-[#FF4069]">
-                  CREATIVE MUSCLE
-                </h3>
-                <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.4)" }}>Aesthetic converted to gravity. Cinematics, brand identity, fashion editorial, and premium visual assets.</p>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl mt-8">
+              <EngineCard 
+                engineType="A"
+                title="Software AI Systems"
+                description="Deep technical architecture meets intelligent automation. We build the pipelines that power the future of business operations."
+                href="/engine-a"
+              />
+              <EngineCard 
+                engineType="B"
+                title="Creative Visual Muscle"
+                description="Premium cinematic aesthetics and high-fidelity brand systems designed to command attention in a saturated digital landscape."
+                href="/engine-b"
+              />
             </div>
           </div>
         </motion.div>
@@ -485,27 +515,53 @@ export default function LandingPage() {
             </h2>
 
             <div className="flex flex-col md:flex-row items-center gap-8 w-full justify-center">
-              <Link
-                href="/book"
-                style={{ 
-                  display: "inline-flex", 
-                  alignItems: "center", 
-                  gap: "12px", 
-                  background: "#F0F2FF", 
-                  color: "#040308", 
-                  padding: "16px 32px", 
-                  borderRadius: "99px", 
-                  fontSize: "0.8rem", 
-                  fontWeight: 800, 
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  transition: "transform 0.3s"
-                }}
-                className="hover:scale-105"
-              >
-                Book Strategic Scoping
-                <ArrowRight size={16} />
-              </Link>
+              <Magnetic>
+                <Link
+                  href="/book"
+                  style={{ 
+                    display: "inline-flex", 
+                    alignItems: "center", 
+                    gap: "12px", 
+                    background: "#F0F2FF", 
+                    color: "#040308", 
+                    padding: "16px 32px", 
+                    borderRadius: "99px", 
+                    fontSize: "0.8rem", 
+                    fontWeight: 800, 
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    fontFamily: "var(--font-outfit), monospace",
+                    boxShadow: "0 20px 40px rgba(0,0,0,0.4)"
+                  }}
+                  className="hover:scale-105 transition-transform active:scale-95"
+                >
+                  Book Deployment <ArrowRight size={18} />
+                </Link>
+              </Magnetic>
+
+              <Magnetic strength={0.3}>
+                <button
+                  onClick={() => router.push("/engine-a")}
+                  style={{ 
+                    display: "inline-flex", 
+                    alignItems: "center", 
+                    gap: "12px", 
+                    background: "rgba(255,255,255,0.05)", 
+                    color: "#F0F2FF", 
+                    padding: "16px 32px", 
+                    borderRadius: "99px", 
+                    fontSize: "0.8rem", 
+                    fontWeight: 800, 
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    fontFamily: "var(--font-outfit), monospace",
+                  }}
+                  className="hover:bg-white/10 transition-colors"
+                >
+                  Explore Systems
+                </button>
+              </Magnetic>
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-6 mt-8">
