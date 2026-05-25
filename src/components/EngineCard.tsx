@@ -38,7 +38,7 @@ export default function EngineCard({ title, description, engineType, href }: Eng
             WebkitMaskComposite: "xor",
             maskComposite: "exclude",
             borderRadius: "inherit",
-          } as any}
+          } as React.CSSProperties}
         />
 
         {/* Specialized Hover Effects Background Layer */}
